@@ -1,5 +1,6 @@
 ﻿using App.DataAccessLayer.Entities.Base;
 using App.DataAccessLayer.Entities.Enum;
+using System.Collections.Generic;
 
 namespace App.DataAccessLayer.Entities
 {
@@ -11,6 +12,9 @@ namespace App.DataAccessLayer.Entities
         public Status Status { get; set; }
         public Currency Currency { get; set; }
         public Types Type { get; set; }
+        public ICollection<AuthorInPrintingEdition> AuthorInPrintingEditions { get; set; }
+
+
 
 
     }
