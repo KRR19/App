@@ -109,15 +109,15 @@ namespace App.DataAccessLayer.Migrations
                     IsRemoved = table.Column<bool>(nullable: false),
                     Amount = table.Column<int>(nullable: false),
                     Currency = table.Column<int>(nullable: false),
-                    PrintingEditionIdId = table.Column<int>(nullable: true),
+                    PrintingEditionId = table.Column<int>(nullable: true),
                     Count = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItems_PrintingEditions_PrintingEditionIdId",
-                        column: x => x.PrintingEditionIdId,
+                        name: "FK_OrderItems_PrintingEditions_PrintingEditionId",
+                        column: x => x.PrintingEditionId,
                         principalTable: "PrintingEditions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -132,22 +132,22 @@ namespace App.DataAccessLayer.Migrations
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    UserIdId = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    PaymentIdId = table.Column<int>(nullable: true)
+                    PaymentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Payments_PaymentIdId",
-                        column: x => x.PaymentIdId,
+                        name: "FK_Orders_Payments_PaymentId",
+                        column: x => x.PaymentId,
                         principalTable: "Payments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Orders_Users_UserIdId",
-                        column: x => x.UserIdId,
+                        name: "FK_Orders_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -159,19 +159,19 @@ namespace App.DataAccessLayer.Migrations
                 column: "PrintingEditionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_PrintingEditionIdId",
+                name: "IX_OrderItems_PrintingEditionId",
                 table: "OrderItems",
-                column: "PrintingEditionIdId");
+                column: "PrintingEditionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_PaymentIdId",
+                name: "IX_Orders_PaymentId",
                 table: "Orders",
-                column: "PaymentIdId");
+                column: "PaymentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserIdId",
+                name: "IX_Orders_UserId",
                 table: "Orders",
-                column: "UserIdId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -77,17 +77,17 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PaymentIdId")
+                    b.Property<int?>("PaymentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserIdId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymentIdId");
+                    b.HasIndex("PaymentId");
 
-                    b.HasIndex("UserIdId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -114,12 +114,12 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PrintingEditionIdId")
+                    b.Property<int?>("PrintingEditionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PrintingEditionIdId");
+                    b.HasIndex("PrintingEditionId");
 
                     b.ToTable("OrderItems");
                 });
@@ -225,20 +225,20 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>
                 {
-                    b.HasOne("App.DataAccessLayer.Entities.Payment", "PaymentId")
+                    b.HasOne("App.DataAccessLayer.Entities.Payment", "Payment")
                         .WithMany()
-                        .HasForeignKey("PaymentIdId");
+                        .HasForeignKey("PaymentId");
 
-                    b.HasOne("App.DataAccessLayer.Entities.User", "UserId")
+                    b.HasOne("App.DataAccessLayer.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserIdId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.OrderItem", b =>
                 {
-                    b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEditionId")
+                    b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEdition")
                         .WithMany()
-                        .HasForeignKey("PrintingEditionIdId");
+                        .HasForeignKey("PrintingEditionId");
                 });
 #pragma warning restore 612, 618
         }

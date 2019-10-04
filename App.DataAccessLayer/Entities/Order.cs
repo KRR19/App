@@ -6,8 +6,8 @@ namespace App.DataAccessLayer.Entities
     public class Order : Essence
     {
         public string Description { get; set; }
-        public User UserId { get; set; }
+        public User User { get; set; }
         public DateTime Date { get; set; }
-        public Payment PaymentId { get; set; }
+        public Payment Payment { get; set; }
     }
 }
