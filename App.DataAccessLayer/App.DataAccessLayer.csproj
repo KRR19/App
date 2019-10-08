@@ -7,9 +7,16 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191004070951_First.cs" />
     <Compile Remove="Migrations\20191004070951_First.Designer.cs" />
+    <Compile Remove="Migrations\20191004071626_Create.cs" />
+    <Compile Remove="Migrations\20191004071626_Create.Designer.cs" />
+    <Compile Remove="Migrations\20191007072841_AddIdentity.cs" />
+    <Compile Remove="Migrations\20191007072841_AddIdentity.Designer.cs" />
+    <Compile Remove="Migrations\20191007073234_AddIdentity.cs" />
+    <Compile Remove="Migrations\20191007073234_AddIdentity.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
