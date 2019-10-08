@@ -15,17 +15,22 @@ namespace App.BussinesLogicLayer.Services
         {
             _context = context;
         }
-        public string Create(AuthorModel newAuthor)
+
+      
+        public void Create(AuthorModel newAuthor)
         {
-            string createName;
-            
-            Author author = new Author();
-            IAuthorRepository authorRepository = new AuthorRepository(_context);
-            author.Name = newAuthor.Name;
-            author.CreationData = DateTime.Now;
-            author.IsRemoved = false;
-            createName =  authorRepository.Create(author);
-            return createName;
+
+            if (newAuthor != null)
+            {
+                Author author = new Author();
+                IAuthorRepository authorRepository = new AuthorRepository(_context);
+                author.Name = newAuthor.Name;
+                author.DateBirth = author.DateBirth;
+                author.DateDeath = author.DateDeath;
+                author.CreationData = DateTime.Now;
+                author.IsRemoved = false;
+                authorRepository.Create(author);
+            }       
         }
     }
 }

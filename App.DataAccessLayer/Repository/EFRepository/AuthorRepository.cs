@@ -5,6 +5,7 @@ using App.DataAccessLayer.Repository.Interfaces;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Repository.Base;
+using System.Linq;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -15,11 +16,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             DB = db;
         }
-       public string Create (Author author)
-        {                       
+       public void Create (Author author)
+        {
             DB.Authors.AddAsync(author);
             DB.SaveChangesAsync();
-            return author.Name.ToString();
         }
 
         public void Delete(int id)
