@@ -1,4 +1,5 @@
-﻿using App.BussinesLogicLayer.Services;
+﻿using App.BussinesLogicLayer.models.Authors;
+using App.BussinesLogicLayer.Services;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
 using Microsoft.AspNetCore.Mvc;
@@ -9,18 +10,23 @@ namespace App.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private ApplicationContext Context;
+        private ApplicationContext _context;
         public AuthorController(ApplicationContext context)
         {
-            this.Context = context;
+            _context = context;
         }
-
-        
-        public string Post(string name)
+        [HttpPost]
+        public string Post([FromBody]AuthorModel newAuthor)
         {
-           AuthorService authorService = new AuthorService(Context);
-           authorService.Create(name);
-           return "You add " + name;
+            if (newAuthor == null)
+            {
+                return "You send NULL!!!";
+            }
+
+            string createName;
+            IAuthorService authorService = new AuthorService(_context);
+            createName = authorService.Create(newAuthor);
+            return $"You add new author - {createName}";
         }
     }
 }
