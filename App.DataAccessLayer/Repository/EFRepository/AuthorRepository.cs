@@ -15,15 +15,11 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             DB = db;
         }
-       public void Create (string name)
-        {
-            Author author = new Author();
-            author.Name = name;
-            author.CreationData = DateTime.Now;
-            author.IsRemoved = false;            
-            DB.Authors.Add(author);
-            DB.SaveChanges();
-            
+       public string Create (Author author)
+        {                       
+            DB.Authors.AddAsync(author);
+            DB.SaveChangesAsync();
+            return author.Name.ToString();
         }
 
         public void Delete(int id)

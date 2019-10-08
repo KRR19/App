@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using App.DataAccessLayer.Repository.Interfaces;
+﻿using App.BussinesLogicLayer.models.Authors;
 
 
 namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAuthorService
     {
-        public void Create(string Name);
+        public string Create(AuthorModel newAuthor);
     }
 }

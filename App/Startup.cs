@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using App.BussinesLogicLayer.Services.Interfaces;
 
 namespace App
 {
@@ -29,7 +30,7 @@ namespace App
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 
-            services.AddScoped<AuthorService>();
+            services.AddScoped<IAuthorService, AuthorService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
