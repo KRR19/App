@@ -15,7 +15,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public async Task<string> Create(Author author)
         {
             string result = "You add new author - ";
-             await DB.Authors.AddAsync(author);
+            await DB.Authors.AddAsync(author);
             await DB.SaveChangesAsync();
             result += author.Name;
             return result;
