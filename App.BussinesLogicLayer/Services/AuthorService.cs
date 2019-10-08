@@ -12,29 +12,57 @@ namespace App.BussinesLogicLayer.Services
     public class AuthorService : IAuthorService
     {
         private ApplicationContext _context;
+        
+
         public AuthorService(ApplicationContext context)
         {
-            _context = context;
+            _context = context;            
         }
 
       
         public async Task<BaseResponseModel> Create(AuthorModel newAuthor)
         {
             BaseResponseModel report = new BaseResponseModel();
+            IAuthorRepository authorRepository = new AuthorRepository(_context);
 
-            if (newAuthor != null)
+            report =  Validation(newAuthor);
+
+            if (string.IsNullOrEmpty(report.Message))
             {
                 Author author = new Author();
-                IAuthorRepository authorRepository = new AuthorRepository(_context);
-
                 author.Name = newAuthor.Name;
-                author.DateBirth = author.DateBirth;
-                author.DateDeath = author.DateDeath;
+                author.DateBirth = newAuthor.DateBirth;
+                author.DateDeath = newAuthor.DateDeath;
                 author.CreationData = DateTime.Now;
                 author.IsRemoved = false;
                 report.Message = await authorRepository.Create(author);
+            }  
+
+            return report;
+        }
+
+        private BaseResponseModel Validation(AuthorModel author)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+            if(author == null)
+            {
+                report.Message = "You send NULL!";
+                return report;
+            }
+
+            if(string.IsNullOrEmpty(author.Name) ||string.IsNullOrWhiteSpace(author.Name))
+            {
+                report.Message = "Author name are empty!";
+                return report;
+            }
+
+            if(author.DateBirth>=author.DateDeath)
+            {
+                report.Message = "Plese check the dates!";
+                return report;
             }
             return report;
+
         }
     }
 }
