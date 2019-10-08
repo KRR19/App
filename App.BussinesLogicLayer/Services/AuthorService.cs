@@ -6,6 +6,7 @@ using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -61,6 +62,15 @@ namespace App.BussinesLogicLayer.Services
                 report.Message = "Plese check the dates!";
                 return report;
             }
+
+            var x = _context.Authors.Where(x => x.Name == author.Name).Select(x => x.Id).ToList();
+            if(x.Count != 0)
+            {
+                report.Message = "This author already exists.";
+                return report;
+            }
+            
+
             return report;
 
         }
