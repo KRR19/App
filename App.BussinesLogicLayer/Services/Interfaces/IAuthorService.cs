@@ -1,10 +1,10 @@
 ﻿using App.BussinesLogicLayer.models.Authors;
-
+using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAuthorService
     {
-        public void Create(AuthorModel newAuthor);
+        public Task<BaseResponseModel> Create(AuthorModel newAuthor);
     }
 }

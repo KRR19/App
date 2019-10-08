@@ -21,10 +21,9 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Author", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationData")
                         .HasColumnType("datetime2");
@@ -48,11 +47,11 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.AuthorInPrintingEdition", b =>
                 {
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("PrintingEditionId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PrintingEditionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -66,10 +65,9 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationData")
                         .HasColumnType("datetime2");
@@ -83,8 +81,8 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PaymentId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PaymentId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -100,10 +98,9 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.OrderItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -120,8 +117,8 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PrintingEditionId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PrintingEditionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -132,10 +129,9 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Payment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationData")
                         .HasColumnType("datetime2");
@@ -153,10 +149,9 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.PrintingEdition", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationData")
                         .HasColumnType("datetime2");
