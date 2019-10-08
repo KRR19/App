@@ -11,22 +11,16 @@ namespace App.Controllers
     public class AuthorController : ControllerBase
     {
         private ApplicationContext _context;
-        public AuthorController(ApplicationContext context)
+        private IAuthorService _service;
+        public AuthorController(ApplicationContext context, IAuthorService service)
         {
             _context = context;
+            _service = service;
         }
         [HttpPost]
-        public string Post([FromBody]AuthorModel newAuthor)
-        {
-            if (newAuthor == null)
-            {
-                return "You send NULL!!!";
-            }
-
-            string createName;
-            IAuthorService authorService = new AuthorService(_context);
-            createName = authorService.Create(newAuthor);
-            return $"You add new author - {createName}";
+        public void Post([FromBody]AuthorModel newAuthor)
+        {            
+            _service.Create(newAuthor);            
         }
     }
 }

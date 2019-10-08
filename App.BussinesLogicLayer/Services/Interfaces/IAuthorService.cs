@@ -5,6 +5,6 @@ namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAuthorService
     {
-        public string Create(AuthorModel newAuthor);
+        public void Create(AuthorModel newAuthor);
     }
 }

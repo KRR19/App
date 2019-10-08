@@ -8,6 +8,6 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IAuthorRepository : IBaseRepository<Author>
     {
-        public string Create(Author author);
+        public void Create(Author author);
     }
 }
