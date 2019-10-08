@@ -1,9 +1,10 @@
 ﻿using App.DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace App.DataAccessLayer.AppContext
 {
-    public class ApplicationContext : DbContext
+    public class ApplicationContext : IdentityDbContext
     {
         public DbSet<Author> Authors { get; set; }
         public DbSet<AuthorInPrintingEdition> AuthorInPrintingEditions { get; set; }
@@ -21,6 +22,8 @@ namespace App.DataAccessLayer.AppContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             //modelBuilder.Entity<AuthorInPrintingEdition>().HasNoKey();
             modelBuilder.Entity<AuthorInPrintingEdition>().HasKey(t => new { t.AuthorId, t.PrintingEditionId });
 
