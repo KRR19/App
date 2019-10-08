@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using App.DataAccessLayer.Repository.Interfaces;
+﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
-using App.DataAccessLayer.AppContext;
-using App.DataAccessLayer.Repository.Base;
-using System.Linq;
+using App.DataAccessLayer.Repository.Interfaces;
+using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -16,10 +12,13 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             DB = db;
         }
-       public void Create (Author author)
+        public async Task<string> Create(Author author)
         {
-            DB.Authors.AddAsync(author);
-            DB.SaveChangesAsync();
+            string result = "You add new author - ";
+             await DB.Authors.AddAsync(author);
+            await DB.SaveChangesAsync();
+            result += author.Name;
+            return result;
         }
 
         public void Delete(int id)
@@ -33,15 +32,15 @@ namespace App.DataAccessLayer.Repository.EFRepository
             }
         }
 
-        public  Author Read(int id)
+        public Author Read(int id)
         {
             return DB.Authors.Find(id);
-            
+
         }
 
         public void Update(Author item)
-        {            
-            if(item!=null)
+        {
+            if (item != null)
             {
                 DB.Authors.Update(item);
                 DB.SaveChanges();

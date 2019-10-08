@@ -5,6 +5,7 @@ using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -17,20 +18,23 @@ namespace App.BussinesLogicLayer.Services
         }
 
       
-        public void Create(AuthorModel newAuthor)
+        public async Task<BaseResponseModel> Create(AuthorModel newAuthor)
         {
+            BaseResponseModel report = new BaseResponseModel();
 
             if (newAuthor != null)
             {
                 Author author = new Author();
                 IAuthorRepository authorRepository = new AuthorRepository(_context);
+
                 author.Name = newAuthor.Name;
                 author.DateBirth = author.DateBirth;
                 author.DateDeath = author.DateDeath;
                 author.CreationData = DateTime.Now;
                 author.IsRemoved = false;
-                authorRepository.Create(author);
-            }       
+                report.Message = await authorRepository.Create(author);
+            }
+            return report;
         }
     }
 }

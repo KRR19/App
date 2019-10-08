@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace App.DataAccessLayer.Migrations
 {
-    public partial class AddIdentity : Migration
+    public partial class Create : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -53,11 +53,12 @@ namespace App.DataAccessLayer.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    DateBirth = table.Column<DateTime>(nullable: false),
+                    DateDeath = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,8 +69,7 @@ namespace App.DataAccessLayer.Migrations
                 name: "Payments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
                     TransactionId = table.Column<string>(nullable: true)
@@ -83,8 +83,7 @@ namespace App.DataAccessLayer.Migrations
                 name: "PrintingEditions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
@@ -209,14 +208,13 @@ namespace App.DataAccessLayer.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    PaymentId = table.Column<int>(nullable: true)
+                    PaymentId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,8 +237,8 @@ namespace App.DataAccessLayer.Migrations
                 name: "AuthorInPrintingEditions",
                 columns: table => new
                 {
-                    AuthorId = table.Column<int>(nullable: false),
-                    PrintingEditionId = table.Column<int>(nullable: false),
+                    AuthorId = table.Column<Guid>(nullable: false),
+                    PrintingEditionId = table.Column<Guid>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -264,13 +262,12 @@ namespace App.DataAccessLayer.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(nullable: false),
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
                     Amount = table.Column<int>(nullable: false),
                     Currency = table.Column<int>(nullable: false),
-                    PrintingEditionId = table.Column<int>(nullable: true),
+                    PrintingEditionId = table.Column<Guid>(nullable: true),
                     Count = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
