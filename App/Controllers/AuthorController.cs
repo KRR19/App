@@ -14,7 +14,7 @@ namespace App.Controllers
         private IAuthorService _service;
 
 
-        public AuthorController(ApplicationContext context, IAuthorService service)
+        public AuthorController(IAuthorService service)
         {
             _service = service;
         }
@@ -24,6 +24,30 @@ namespace App.Controllers
             BaseResponseModel report = await _service.Create(newAuthor);
 
             return report;
+        }
+
+        [HttpDelete]
+        public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
+        {
+            BaseResponseModel report = await _service.Delete(newAuthor.Id);
+
+            return report;
+        }
+
+        [HttpPut]
+        public BaseResponseModel Put([FromBody]AuthorModel newAuthor)
+        {
+            BaseResponseModel report = _service.Update(newAuthor);
+
+            return report;
+        }
+
+        [HttpGet]
+        public async Task<AuthorModel> Get([FromBody]AuthorModel newAuthor)
+        {
+            AuthorModel author = await _service.Read(newAuthor.Id);
+
+            return author;
         }
     }
 }

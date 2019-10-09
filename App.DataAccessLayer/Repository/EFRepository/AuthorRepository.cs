@@ -2,12 +2,13 @@
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System.Threading.Tasks;
+using System;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
     public class AuthorRepository : IAuthorRepository
     {
-        private ApplicationContext DB;
+        private readonly ApplicationContext DB;
         public AuthorRepository(ApplicationContext db)
         {
             DB = db;
@@ -21,31 +22,28 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return result;
         }
 
-        public void Delete(int id)
+        public async Task<string> Delete(Author item)
         {
-            Author item = DB.Authors.Find(id);
-            if (item != null)
-            {
-                item.IsRemoved = true;
-                DB.Authors.Update(item);
-                DB.SaveChanges();
-            }
-        }
-
-        public Author Read(int id)
-        {
-            return DB.Authors.Find(id);
+            string result;
+            DB.Authors.Update(item);
+            await DB.SaveChangesAsync();
+            result = $"You delete {item.Name}";
+            return result;
 
         }
 
-        public void Update(Author item)
+        public string Update(Author item)
         {
-            if (item != null)
-            {
-                DB.Authors.Update(item);
-                DB.SaveChanges();
-            }
+            string result = $"You update {item.Name}";
+            DB.Authors.Update(item);
+            DB.SaveChanges();
+            return result;
+        }
 
+        public async  Task<Author> Read(Guid id)
+        {
+            Author author = await DB.Authors.FindAsync(id);
+            return author;
         }
     }
 }
