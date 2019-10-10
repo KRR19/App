@@ -5,5 +5,6 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IPrintingEditionsRepository : IBaseRepository<PrintingEdition>
     {
+
     }
 }

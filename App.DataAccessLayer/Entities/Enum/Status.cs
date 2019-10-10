@@ -2,9 +2,9 @@
 {
     public enum Status
     {
-        InStock,
-        OutOfStock,
-        Awaiting
-
+        None = 0,
+        InStock = 1,
+        OutOfStock = 2,
+        Awaiting = 3
     }
 }

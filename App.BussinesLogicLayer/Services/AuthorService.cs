@@ -21,19 +21,19 @@ namespace App.BussinesLogicLayer.Services
 
         public async Task<BaseResponseModel> Create(AuthorModel newAuthor)
         {
-            BaseResponseModel report = new BaseResponseModel();
+            BaseResponseModel report = Validation(newAuthor);
             IAuthorRepository authorRepository = new AuthorRepository(_context);
-
-            report = Validation(newAuthor);
-
+                        
             if (string.IsNullOrEmpty(report.Message))
             {
-                Author author = new Author();
-                author.Name = newAuthor.Name;
-                author.DateBirth = newAuthor.DateBirth;
-                author.DateDeath = newAuthor.DateDeath;
-                author.CreationData = DateTime.Now;
-                author.IsRemoved = false;
+                Author author = new Author
+                {
+                    Name = newAuthor.Name,
+                    DateBirth = newAuthor.DateBirth,
+                    DateDeath = newAuthor.DateDeath,
+                    CreationData = DateTime.Now,
+                    IsRemoved = false
+                };
                 report.Message = await authorRepository.Create(author);
             }
 
@@ -57,20 +57,20 @@ namespace App.BussinesLogicLayer.Services
 
         public BaseResponseModel Update(AuthorModel UpdateAuthor)
         {
-            BaseResponseModel report = new BaseResponseModel();
+            BaseResponseModel report = Validation(UpdateAuthor);
             IAuthorRepository authorRepository = new AuthorRepository(_context);
-
-            report = Validation(UpdateAuthor);
 
             if (string.IsNullOrEmpty(report.Message))
             {
-                Author author = new Author();
-                author.Id = UpdateAuthor.Id;
-                author.Name = UpdateAuthor.Name;
-                author.DateBirth = UpdateAuthor.DateBirth;
-                author.DateDeath = UpdateAuthor.DateDeath;
-                author.CreationData = DateTime.Now;
-                author.IsRemoved = false;
+                Author author = new Author
+                {
+                    Id = UpdateAuthor.Id,
+                    Name = UpdateAuthor.Name,
+                    DateBirth = UpdateAuthor.DateBirth,
+                    DateDeath = UpdateAuthor.DateDeath,
+                    CreationData = DateTime.Now,
+                    IsRemoved = false
+                };
                 report.Message = authorRepository.Update(author);
             }
 
