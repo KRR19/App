@@ -31,14 +31,18 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return result;
         }
 
-        public Task<PrintingEdition> Read(Guid id)
+        public async Task<PrintingEdition> Read(Guid id)
         {
-            throw new NotImplementedException();
+            PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
+            return printingEdition;
         }
 
         public string Update(PrintingEdition item)
         {
-            throw new NotImplementedException();
+            string result = $"You update {item.Name}";
+            _context.PrintingEditions.Update(item);
+            _context.SaveChanges();
+            return result;
         }
     }
 }

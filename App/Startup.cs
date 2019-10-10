@@ -35,6 +35,9 @@ namespace App
 
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
+
+            services.AddTransient<IPrintingEditionService, PrintingEditionService>();
+            services.AddTransient<IPrintingEditionsRepository, PrintingEditionsRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
