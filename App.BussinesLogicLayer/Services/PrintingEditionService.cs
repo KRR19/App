@@ -60,14 +60,47 @@ namespace App.BussinesLogicLayer.Services
             return report;
         }
 
-        public Task<PrintingEditionModel> Read(Guid id)
+        public async Task<PrintingEditionModel> Read(Guid id)
         {
-            throw new NotImplementedException();
+            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
+            PrintingEdition printingEdition = await printingEditionsRepository.Read(id);
+
+            PrintingEditionModel printingEditionModel = new PrintingEditionModel
+            {
+                Name = printingEdition.Name,
+                Description = printingEdition.Description,
+                Type = printingEdition.Type,
+                Currency = printingEdition.Currency,
+                Price = printingEdition.Price,
+                Status = printingEdition.Status
+            };
+
+            return printingEditionModel;
+
         }
 
-        public BaseResponseModel Update(PrintingEditionModel UpdateAuthor)
+        public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
         {
-            throw new NotImplementedException();
+            BaseResponseModel report = Validation(UpdatePrintingEdition);
+            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
+            if (!string.IsNullOrEmpty(report.Message))
+            {
+                return report;
+            }
+
+            PrintingEdition printingEdition = new PrintingEdition
+            {
+                Id = UpdatePrintingEdition.Id,
+                Name = UpdatePrintingEdition.Name,
+                Description = UpdatePrintingEdition.Description,
+                Price = UpdatePrintingEdition.Price,
+                Status = UpdatePrintingEdition.Status,
+                Currency = UpdatePrintingEdition.Currency,
+                Type = UpdatePrintingEdition.Type
+            };
+
+            report.Message = printingEditionsRepository.Update(printingEdition);
+            return report;
         }
 
         private BaseResponseModel Validation(PrintingEditionModel printingEdition)
@@ -88,19 +121,19 @@ namespace App.BussinesLogicLayer.Services
                 report.Message = "Price cannot be negative!";
                 return report;
             }
-            if (Enum.IsDefined(typeof(Status),printingEdition.Status))
+            if (!Enum.IsDefined(typeof(Status),printingEdition.Status))
             {
                 report.Message = "Enter status of publication!";
                 return report;
             }
 
-            if (Enum.IsDefined(typeof(Currency), printingEdition.Currency))
+            if (!Enum.IsDefined(typeof(Currency), printingEdition.Currency))
             {
                 report.Message = "Enter currency!";
                 return report;
             }
 
-            if (Enum.IsDefined(typeof(Status), printingEdition.Type))
+            if (!Enum.IsDefined(typeof(Types), printingEdition.Type))
             {
                 report.Message = "Enter type of publication!";
                 return report;

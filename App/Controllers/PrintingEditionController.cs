@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using App.BussinesLogicLayer.Services.Interfaces;
+﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.Models.PrintingEdition;
-using App.BussinesLogicLayer;
+using App.BussinesLogicLayer.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace App.Controllers
 {
@@ -34,6 +31,19 @@ namespace App.Controllers
         {
             BaseResponseModel report = await _service.Delete(printingEdition.Id);
 
+            return report;
+        }
+        [HttpGet]
+        public async Task<PrintingEditionModel> Get(Guid Id)
+        {
+            PrintingEditionModel printingEdition = await _service.Read(Id);
+            return printingEdition;
+        }
+
+        [HttpPut]
+        public BaseResponseModel Put([FromBody]PrintingEditionModel newPrintingEdition)
+        {
+            BaseResponseModel report = _service.Update(newPrintingEdition);
             return report;
         }
 

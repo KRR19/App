@@ -8,7 +8,7 @@ namespace App.BussinesLogicLayer.Services.Interfaces
     {
         public Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition);
         public Task<BaseResponseModel> Delete(Guid id);
-        public BaseResponseModel Update(PrintingEditionModel UpdateAuthor);
+        public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition);
         public Task<PrintingEditionModel> Read(Guid id);
     }
 }

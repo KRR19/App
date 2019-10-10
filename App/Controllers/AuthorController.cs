@@ -3,6 +3,7 @@ using App.BussinesLogicLayer.models.Authors;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -11,7 +12,7 @@ namespace App.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private IAuthorService _service;
+        private readonly IAuthorService  _service;
 
 
         public AuthorController(IAuthorService service)
@@ -43,9 +44,9 @@ namespace App.Controllers
         }
 
         [HttpGet]
-        public async Task<AuthorModel> Get([FromBody]AuthorModel newAuthor)
+        public async Task<AuthorModel> Get(Guid Id)
         {
-            AuthorModel author = await _service.Read(newAuthor.Id);
+            AuthorModel author = await _service.Read(Id);
 
             return author;
         }
