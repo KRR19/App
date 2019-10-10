@@ -1,6 +1,9 @@
 using App.BussinesLogicLayer.Services;
+using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
+using App.DataAccessLayer.Repository.EFRepository;
+using App.DataAccessLayer.Repository.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,10 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using App.BussinesLogicLayer.Services.Interfaces;
-using App.DataAccessLayer.Repository.Interfaces;
-using App.DataAccessLayer.Repository.EFRepository;
 
 namespace App
 {
@@ -29,7 +28,6 @@ namespace App
         {
             services.AddControllers();
 
-
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 
@@ -38,6 +36,9 @@ namespace App
 
             services.AddTransient<IPrintingEditionService, PrintingEditionService>();
             services.AddTransient<IPrintingEditionsRepository, PrintingEditionsRepository>();
+
+            services.AddTransient<IOrderItemService, OrderItemService>();
+            services.AddTransient<IOrderItemRepository, OrderItemRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
