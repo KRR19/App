@@ -2,6 +2,7 @@
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
@@ -44,5 +45,11 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context.SaveChanges();
             return result;
         }
+
+        //public var Read(string name)
+        //{
+        //    var printingEdition = _context.PrintingEditions.Where(n => n.Name == name);
+        //    return printingEdition;
+        //}              
     }
 }
