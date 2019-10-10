@@ -14,8 +14,5 @@ namespace App.DataAccessLayer.Entities
         public Types Type { get; set; }
         public ICollection<AuthorInPrintingEdition> AuthorInPrintingEditions { get; set; }
 
-
-
-
     }
 }

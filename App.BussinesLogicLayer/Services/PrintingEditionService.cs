@@ -2,6 +2,7 @@
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
+using App.DataAccessLayer.Entities.Enum;
 using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
@@ -71,6 +72,40 @@ namespace App.BussinesLogicLayer.Services
 
         private BaseResponseModel Validation(PrintingEditionModel printingEdition)
         {
+            BaseResponseModel report = new BaseResponseModel();
+            if(printingEdition == null)
+            {
+                report.Message = "You send NULL!";
+                return report;
+            }
+            if(string.IsNullOrEmpty(printingEdition.Name)||string.IsNullOrWhiteSpace(printingEdition.Name))
+            {
+                report.Message = "Enter title of publication!";
+                return report;
+            }
+            if(printingEdition.Price < 0)
+            {
+                report.Message = "Price cannot be negative!";
+                return report;
+            }
+            if (Enum.IsDefined(typeof(Status),printingEdition.Status))
+            {
+                report.Message = "Enter status of publication!";
+                return report;
+            }
+
+            if (Enum.IsDefined(typeof(Currency), printingEdition.Currency))
+            {
+                report.Message = "Enter currency!";
+                return report;
+            }
+
+            if (Enum.IsDefined(typeof(Status), printingEdition.Type))
+            {
+                report.Message = "Enter type of publication!";
+                return report;
+            }
+
             return new BaseResponseModel();
         }
     }
