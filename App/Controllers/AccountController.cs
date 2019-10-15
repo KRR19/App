@@ -29,14 +29,14 @@ namespace App.Controllers
         [HttpPost]
         public async Task<object> Login([FromBody] UserModel model)
         {
-            var result = _accountService.Login(model);
+            var result = await _accountService.Login(model);
             return result;
         }
 
         [HttpPost]
         public async Task<object> Register([FromBody] UserModel model)
         {
-            var token = _accountService.Register(model);
+            var token = await _accountService.Register(model);
             return token;
         }
 
