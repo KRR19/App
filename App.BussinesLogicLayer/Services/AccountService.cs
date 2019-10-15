@@ -2,7 +2,6 @@
 using App.BussinesLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -28,31 +27,35 @@ namespace App.BussinesLogicLayer.Services
             this._configuration = configuration;
         }
 
-        public async Task<object> Register( UserModel model)
+        public async Task<object> Register(UserModel model)
         {
             var user = new IdentityUser
             {
                 UserName = model.Email,
-                Email = model.Email
+                Email = model.Email,
+
+
             };
-            var result = await _userManager.CreateAsync(user, model.PasswordHash);
+            var result = await _userManager.CreateAsync(model, model.Password);
+
 
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                return await GenerateJwtToken(model.Email, user);
+                var token = await GenerateJwtToken(model.Email, user);
+                return token;
             }
             throw new ApplicationException("UNKNOWN_ERROR");
         }
 
-        public async Task<object> Login( UserModel model)
+        public async Task<object> Login(UserModel model)
         {
             var result = await _signInManager.PasswordSignInAsync(model.Email, model.PasswordHash, false, false);
 
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return await GenerateJwtToken(model.Email, appUser);
+                //return await GenerateJwtToken(model.Email, appUser);
             }
 
             throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
@@ -82,6 +85,6 @@ namespace App.BussinesLogicLayer.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-      
+
     }
 }

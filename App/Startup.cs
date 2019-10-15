@@ -29,7 +29,9 @@ namespace App
             services.AddControllers();
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+
+
 
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
@@ -39,6 +41,8 @@ namespace App
 
             services.AddTransient<IOrderItemService, OrderItemService>();
             services.AddTransient<IOrderItemRepository, OrderItemRepository>();
+
+            services.AddTransient<IAccountService, AccountService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

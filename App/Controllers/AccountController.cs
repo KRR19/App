@@ -26,7 +26,7 @@ namespace App.Controllers
             this._accountService = accountService;
         }
 
-        [HttpPost]
+        [HttpPost]        
         public async Task<object> Login([FromBody] UserModel model)
         {
             var result = await _accountService.Login(model);
