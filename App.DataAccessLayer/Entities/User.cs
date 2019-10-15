@@ -13,6 +13,10 @@ namespace App.DataAccessLayer.Entities
         {
             UserName = userName;
         }
+        public User()
+        {
+            
+        }
 
     }
 }
