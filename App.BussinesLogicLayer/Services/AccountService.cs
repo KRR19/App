@@ -43,23 +43,32 @@ namespace App.BussinesLogicLayer.Services
             {
                 await _signInManager.SignInAsync(user, false);
                 var token = await GenerateJwtToken(model.Email, user);
-                return token;
+                return token;                
             }
             throw new ApplicationException("UNKNOWN_ERROR");
         }
 
         public async Task<object> Login(UserModel model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.PasswordHash, false, false);
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
 
             if (result.Succeeded)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                //return await GenerateJwtToken(model.Email, appUser);
+                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email && r.UserName == model.UserName);
+                return await GenerateJwtToken(model.Email, appUser);
             }
 
             throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
         }
+
+        public async Task<string> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            string result = "You have successfully logged out";
+            return result;
+        }
+
+
 
         public async Task<object> GenerateJwtToken(string email, IdentityUser user)
         {

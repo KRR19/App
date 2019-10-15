@@ -29,8 +29,8 @@ namespace App.Controllers
         [HttpPost]        
         public async Task<object> Login([FromBody] UserModel model)
         {
-            var result = await _accountService.Login(model);
-            return result;
+            var token = await _accountService.Login(model);
+            return token;
         }
 
         [HttpPost]
@@ -38,6 +38,13 @@ namespace App.Controllers
         {
             var token = await _accountService.Register(model);
             return token;
+        }
+
+        [HttpPost]
+        public async Task<string> Logout()
+        {
+            string result = await _accountService.LogOut();
+            return result;
         }
 
 
