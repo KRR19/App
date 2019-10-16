@@ -1,11 +1,10 @@
-﻿using App.BussinesLogicLayer.Helper;
+﻿using App.BussinesLogicLayer;
+using App.BussinesLogicLayer.Helper;
 using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -24,45 +23,67 @@ namespace App.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-            this._accountService = accountService;
+            _accountService = accountService;
         }
 
-        [HttpPost]        
+        [HttpPost]
         public async Task<object> Login([FromBody] UserModel model)
         {
             var token = await _accountService.Login(model);
-
-           
-
             return token;
         }
 
         [HttpPost]
         public async Task<object> Register([FromBody] UserModel model)
         {
-            EmailHelper emailService = new EmailHelper();
             var token = await _accountService.Register(model);
 
-            IdentityUser user = await _userManager.FindByNameAsync(model.UserName);
-            var code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
-            var callbackUrl = Url.Action(
-                "ConfirmEmail",
-                "Account",
-                new { userId = user.Id, code = code },
-                protocol: HttpContext.Request.Scheme);
 
-            emailService.SendEmail(user.Email, "Confirm your account", $"Confirm registration by clicking on the link: <a href='{callbackUrl}'>link</a>");
+            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+            string code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
+
+            EmailLink(user, code, "ConfirmEmail");
 
             return token;
+        }
+
+
+        [HttpPost]
+        public async Task ForgotPassword([FromBody] UserModel model)
+        {
+            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            EmailLink(user, code, "ResetPassword");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<string> ResetPassword(ResetPasswordModel model)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+
+            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                report.Message = "ResetPasswordConfirmation";
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return report.Message;
         }
 
         [HttpGet]
         public async Task ConfirmEmail(string userId, string code)
         {
-            
-            var user = await _userManager.FindByIdAsync(userId);            
+
+            var user = await _userManager.FindByIdAsync(userId);
             var result = await _userManager.ConfirmEmailAsync(user, code);
-           
+
         }
 
         [HttpPost]
@@ -70,6 +91,19 @@ namespace App.Controllers
         {
             string result = await _accountService.LogOut();
             return result;
+        }
+
+
+        void EmailLink(IdentityUser user, string code, string action)
+        {
+            EmailHelper emailService = new EmailHelper();
+            var callbackUrl = Url.Action(
+                action,
+                "Account",
+                new { userId = user.Id, code = code },
+                protocol: HttpContext.Request.Scheme);
+
+            emailService.SendEmail(user.Email, "Confirm your account", $"Confirm registration by clicking on the link: {callbackUrl}");
         }
 
 
