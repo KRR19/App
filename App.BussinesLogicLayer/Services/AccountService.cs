@@ -1,6 +1,11 @@
-﻿using App.BussinesLogicLayer.Models.Users;
+﻿using App.BussinesLogicLayer.Helper;
+using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -8,6 +13,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
@@ -19,12 +25,14 @@ namespace App.BussinesLogicLayer.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+      
 
         public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
             this._configuration = configuration;
+
         }
 
         public async Task<object> Register(UserModel model)
@@ -33,17 +41,17 @@ namespace App.BussinesLogicLayer.Services
             {
                 UserName = model.Email,
                 Email = model.Email,
-
+                
 
             };
             var result = await _userManager.CreateAsync(model, model.Password);
 
 
             if (result.Succeeded)
-            {
+            {             
                 await _signInManager.SignInAsync(user, false);
                 var token = await GenerateJwtToken(model.Email, user);
-                return token;                
+                return token;
             }
             throw new ApplicationException("UNKNOWN_ERROR");
         }

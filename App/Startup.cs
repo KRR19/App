@@ -1,3 +1,4 @@
+using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
@@ -29,7 +30,7 @@ namespace App
             services.AddControllers();
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
 
 
@@ -43,6 +44,8 @@ namespace App
             services.AddTransient<IOrderItemRepository, OrderItemRepository>();
 
             services.AddTransient<IAccountService, AccountService>();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
