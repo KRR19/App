@@ -1,26 +1,29 @@
-﻿using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
+﻿using System;
+using System.Net;
+using SmtpClient = System.Net.Mail.SmtpClient;
 
 namespace App.BussinesLogicLayer.Helper
 {
     public class EmailHelper
     {
-
-
-        public async Task<bool> SendEmail(string toAdress, string subject, string body)
+       
+        public string SendEmail(string inputEmail, string subject, string body)
         {
-            MailAddress from = new MailAddress("testappdel123@gmail.com");
-            MailAddress to = new MailAddress(toAdress);
-            MailMessage m = new MailMessage(from, to);
-            m.Subject = subject;
-            m.Body = body;
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
-            smtp.Credentials = new NetworkCredential(from.Address, "123testappdel123");
-            smtp.EnableSsl = true;
-            await smtp.SendMailAsync(m);
-            return true;
+            string returnString = "";
+            try
+            {
+                var client = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("appanuitextest@gmail.com", "AppAnuitexTest123!"),
+                    EnableSsl = true
+                };
+                client.Send("appanuitextest@gmail.com",inputEmail, subject, body);
+            }
+            catch (Exception ex)
+            {
+                returnString = "Error: " + ex.ToString();
+            }
+            return returnString;
         }
-
     }
 }

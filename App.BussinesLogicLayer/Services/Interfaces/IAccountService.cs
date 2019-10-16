@@ -1,7 +1,4 @@
 ﻿using App.BussinesLogicLayer.Models.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services.Interfaces
