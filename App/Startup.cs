@@ -55,7 +55,7 @@ namespace App
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Go",
+                    Title = "Go", 
                     Version = "v1"
                 });
             });
