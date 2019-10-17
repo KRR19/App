@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace App.DataAccessLayer.Entities
 {
-    public class PrintingEdition : Essence
+    public class PrintingEdition : Base.Base
     {
         public string Name { get; set; }
         public string Description { get; set; }

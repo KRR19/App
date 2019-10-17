@@ -13,24 +13,20 @@ namespace App.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IConfiguration _configuration;
         private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IAccountService accountService)
+        public AccountController(UserManager<IdentityUser> userManager, IAccountService accountService)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
             _accountService = accountService;
         }
 
         [HttpPost]
-        public async Task<object> Login([FromBody] UserModel model)
+        public async Task<string> Login([FromBody] UserModel model)
         {
             var token = await _accountService.Login(model);
-            return token;
+            return token.ToString();
         }
 
         [HttpPost]
@@ -41,20 +37,24 @@ namespace App.Controllers
 
             IdentityUser user = await _userManager.FindByNameAsync(model.Email);
             string code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
-
-            EmailLink(user, code, "ConfirmEmail");
-
+            
             return token;
         }
 
 
         [HttpPost]
-        public async Task ForgotPassword([FromBody] UserModel model)
+        public async Task<string> ForgotPassword([FromBody] UserModel model)
         {
             IdentityUser user = await _userManager.FindByNameAsync(model.Email);
             string code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            EmailLink(user, code, "ResetPassword");
+            //EmailLink(user, code, "ResetPassword");
+
+            BaseResponseModel response = new BaseResponseModel
+            {
+                Message = "The email has been sent."
+            };
+            return response.Message;
         }
 
         [HttpPost]
@@ -80,10 +80,8 @@ namespace App.Controllers
         [HttpGet]
         public async Task ConfirmEmail(string userId, string code)
         {
-
             var user = await _userManager.FindByIdAsync(userId);
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-
+            await _userManager.ConfirmEmailAsync(user, code);
         }
 
         [HttpPost]
@@ -94,21 +92,7 @@ namespace App.Controllers
         }
 
 
-        void EmailLink(IdentityUser user, string code, string action)
-        {
-            EmailHelper emailService = new EmailHelper();
-            var callbackUrl = Url.Action(
-                action,
-                "Account",
-                new { userId = user.Id, code = code },
-                protocol: HttpContext.Request.Scheme);
-
-            emailService.SendEmail(user.Email, "Confirm your account", $"Confirm registration by clicking on the link: {callbackUrl}");
-        }
-
-
-
-
+        
 
     }
 }

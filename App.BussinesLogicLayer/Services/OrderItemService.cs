@@ -30,7 +30,7 @@ namespace App.BussinesLogicLayer.Services
 
 
 
-            var s = _context.PrintingEditions.Where(n => n.Name == newOrderItem.PrintingEdition);
+            var name = _context.PrintingEditions.Where(x => x.Name == newOrderItem.PrintingEdition);
 
             OrderItem orderItem = new OrderItem
             {
@@ -38,7 +38,7 @@ namespace App.BussinesLogicLayer.Services
                 Currency = newOrderItem.Currency,
                 Count = newOrderItem.Count,
                 CreationData = DateTime.Now,
-                PrintingEdition =s.FirstOrDefault(),
+                PrintingEdition =name.FirstOrDefault(),
                 IsRemoved = false
             };
 

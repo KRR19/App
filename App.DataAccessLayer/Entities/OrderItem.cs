@@ -4,7 +4,7 @@ using App.DataAccessLayer.Entities.Enum;
 
 namespace App.DataAccessLayer.Entities
 {
-    public class OrderItem : Essence
+    public class OrderItem : Base.Base
     {
         public int Amount { get; set; }
         public Currency Currency { get; set; }

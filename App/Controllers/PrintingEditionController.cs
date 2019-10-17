@@ -37,6 +37,7 @@ namespace App.Controllers
         public async Task<PrintingEditionModel> Get(Guid Id)
         {
             PrintingEditionModel printingEdition = await _service.Read(Id);
+            
             return printingEdition;
         }
 
@@ -44,6 +45,7 @@ namespace App.Controllers
         public BaseResponseModel Put([FromBody]PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = _service.Update(newPrintingEdition);
+            
             return report;
         }
 

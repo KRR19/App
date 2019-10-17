@@ -8,25 +8,26 @@ namespace App.DataAccessLayer.Repository.EFRepository
 {
     public class AuthorRepository : IAuthorRepository
     {
-        private readonly ApplicationContext DB;
-        public AuthorRepository(ApplicationContext db)
+        private readonly ApplicationContext _context;
+        public AuthorRepository(ApplicationContext context)
         {
-            DB = db;
+            _context = context;
         }
         public async Task<string> Create(Author author)
         {
-            string result = "You add new author - ";
-            await DB.Authors.AddAsync(author);
-            await DB.SaveChangesAsync();
-            result += author.Name;
+            await _context.Authors.AddAsync(author);
+            await _context.SaveChangesAsync();
+            
+            string result;
+            result = $"You add new author -  {author.Name}";
             return result;
         }
 
         public async Task<string> Delete(Author item)
         {
             string result;
-            DB.Authors.Update(item);
-            await DB.SaveChangesAsync();
+            _context.Authors.Update(item);
+            await _context.SaveChangesAsync();
             result = $"You delete {item.Name}";
             return result;
 
@@ -35,14 +36,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public string Update(Author item)
         {
             string result = $"You update {item.Name}";
-            DB.Authors.Update(item);
-            DB.SaveChanges();
+            _context.Authors.Update(item);
+            _context.SaveChanges();
             return result;
         }
 
         public async  Task<Author> Read(Guid id)
         {
-            Author author = await DB.Authors.FindAsync(id);
+            Author author = await _context.Authors.FindAsync(id);
             return author;
         }
     }

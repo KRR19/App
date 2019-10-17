@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using App.BussinesLogicLayer;
+﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.Models.Orders;
 using App.BussinesLogicLayer.Services.Interfaces;
-using App.BussinesLogicLayer.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace App.Controllers
 {
@@ -30,7 +26,7 @@ namespace App.Controllers
             return report;
         }
 
-         [HttpDelete]
+        [HttpDelete]
         public async Task<BaseResponseModel> Delete([FromBody]OrderItemModel orderItemModel)
         {
             BaseResponseModel report = await _service.Delete(orderItemModel.Id);
