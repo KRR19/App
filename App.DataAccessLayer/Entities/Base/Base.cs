@@ -2,7 +2,7 @@
 
 namespace App.DataAccessLayer.Entities.Base
 {
-    public class Essence
+    public class Base
     {
         public Guid Id { get; set; }
         public DateTime CreationData { get; set; }

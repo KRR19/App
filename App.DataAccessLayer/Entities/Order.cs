@@ -3,7 +3,7 @@ using System;
 
 namespace App.DataAccessLayer.Entities
 {
-    public class Order : Essence
+    public class Order : Base.Base
     {
         public string Description { get; set; }
         public User User { get; set; }

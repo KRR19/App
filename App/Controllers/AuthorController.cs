@@ -1,7 +1,6 @@
 ﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.models.Authors;
 using App.BussinesLogicLayer.Services.Interfaces;
-using App.DataAccessLayer.AppContext;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ namespace App.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private readonly IAuthorService  _service;
+        private readonly IAuthorService _service;
 
 
         public AuthorController(IAuthorService service)
@@ -20,6 +19,7 @@ namespace App.Controllers
             _service = service;
         }
         [HttpPost]
+
         public async Task<BaseResponseModel> Post([FromBody]AuthorModel newAuthor)
         {
             BaseResponseModel report = await _service.Create(newAuthor);

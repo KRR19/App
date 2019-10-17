@@ -6,7 +6,6 @@ namespace App.DataAccessLayer.Repository.Base
     {
 
         public Task<string> Create(T item);
-        public Task<string> Delete(T item);
         public string Update(T item);
         public Task<T> Read(Guid Id);
     }

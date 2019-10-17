@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace App.DataAccessLayer.Entities
 {
-    public class Author : Essence
+    public class Author : Base.Base
     {
         [Required]
         public string Name { get; set; }

@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
@@ -25,32 +24,33 @@ namespace App.BussinesLogicLayer.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
-      
+        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IUrlHelperFactory _urlHelper;
+        private readonly ActionContextAccessor _actionContextAccessor;
 
-        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, ActionContextAccessor  actionContextAccessor)
         {
-            this._userManager = userManager;
-            this._signInManager = signInManager;
-            this._configuration = configuration;
-
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _configuration = configuration;
+            _contextAccessor = contextAccessor;
+            _urlHelper = urlHelper;
+            _actionContextAccessor = actionContextAccessor;
         }
 
         public async Task<object> Register(UserModel model)
         {
-            var user = new IdentityUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                
+            IdentityUser user = new IdentityUser();
+            user.UserName = model.Email;
+            user.Email = model.Email;
 
-            };
             var result = await _userManager.CreateAsync(model, model.Password);
 
 
             if (result.Succeeded)
-            {             
+            {
                 await _signInManager.SignInAsync(user, false);
-                var token = await GenerateJwtToken(model.Email, user);
+                var token = GenerateJwtToken(model.Email, user);
                 return token;
             }
             throw new ApplicationException("UNKNOWN_ERROR");
@@ -63,7 +63,7 @@ namespace App.BussinesLogicLayer.Services
             if (result.Succeeded)
             {
                 var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email && r.UserName == model.UserName);
-                return await GenerateJwtToken(model.Email, appUser);
+                return GenerateJwtToken(model.Email, appUser);
             }
 
             throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
@@ -75,10 +75,7 @@ namespace App.BussinesLogicLayer.Services
             string result = "You have successfully logged out";
             return result;
         }
-
-
-
-        public async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        public JwtSecurityToken GenerateJwtToken(string email, IdentityUser user)
         {
             var claims = new List<Claim>
             {
@@ -91,7 +88,7 @@ namespace App.BussinesLogicLayer.Services
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
 
-            var token = new JwtSecurityToken(
+            JwtSecurityToken token = new JwtSecurityToken(
                 _configuration["JwtIssuer"],
                 _configuration["JwtIssuer"],
                 claims,
@@ -99,9 +96,20 @@ namespace App.BussinesLogicLayer.Services
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return token;
         }
 
+        public string CreateLink(Guid id, string code, string action)
+        {
 
+            EmailHelper emailService = new EmailHelper();
+            var callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
+                action,
+                "Account",
+                new { userId = id, code },
+                protocol: _contextAccessor.HttpContext.Request.Scheme);
+
+            return callbackUrl.ToString();
+        }
     }
 }
