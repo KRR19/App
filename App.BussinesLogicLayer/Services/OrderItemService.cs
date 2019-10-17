@@ -42,10 +42,13 @@ namespace App.BussinesLogicLayer.Services
                 IsRemoved = false
             };
 
-            BaseResponseModel report = new BaseResponseModel
+            BaseResponseModel report = new BaseResponseModel();
+
+            bool result = await orderItemRepository.Create(orderItem);
+            if(result)
             {
-                Message = await orderItemRepository.Create(orderItem)
-            };
+                report.Message = $"{orderItem.Id} has been create.";
+            }
             return report;
         }
 
@@ -60,7 +63,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
             orderItem.IsRemoved = true;
-            report.Message = await orderItemRepository.Delete(orderItem);
+            await orderItemRepository.Delete(orderItem);
             return report;
         }
 
@@ -96,11 +99,9 @@ namespace App.BussinesLogicLayer.Services
                 Currency = UpdateOrderItem.Currency
             };
 
-            BaseResponseModel report = new BaseResponseModel
-            {
+            BaseResponseModel report = new BaseResponseModel();
+            orderItemRepository.Update(orderItem);
 
-                Message = orderItemRepository.Update(orderItem)
-            };
             return report;
         }
 

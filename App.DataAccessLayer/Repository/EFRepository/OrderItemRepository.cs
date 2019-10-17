@@ -15,23 +15,23 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(OrderItem item)
+        public async Task<bool> Create(OrderItem item)
         {
-            string result;
+            bool result;
 
             await _context.OrderItems.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            result = result = $"You add - {item.Id}";
+            result = true;
             return result;
         }
 
-        public async Task<string> Delete(OrderItem item)
+        public async Task<bool> Delete(OrderItem item)
         {
-            string result;
+            bool result;
             _context.OrderItems.Update(item);
             await _context.SaveChangesAsync();
-            result = $"You delete {item.Id}";
+            result =true;
             return result;
         }
 
@@ -41,11 +41,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return orderItem;
         }
 
-        public string Update(OrderItem item)
+        public bool Update(OrderItem item)
         {
-            string result = $"You update {item.Id}";
+            bool result;
             _context.OrderItems.Update(item);
             _context.SaveChanges();
+            result = true;
             return result;
         }
     }

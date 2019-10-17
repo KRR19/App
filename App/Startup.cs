@@ -5,7 +5,10 @@ using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +53,9 @@ namespace App
             services.AddTransient<IOrderItemRepository, OrderItemRepository>();
 
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IUrlHelperFactory, UrlHelperFactory>();
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
             services.AddSwaggerGen(c =>
             {

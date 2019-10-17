@@ -36,7 +36,7 @@ namespace App.Controllers
         [HttpGet]
         public async Task<PrintingEditionModel> Get(Guid Id)
         {
-            PrintingEditionModel printingEdition = await _service.Read(Id);
+            PrintingEditionModel printingEdition = await _service.GetById(Id);
             
             return printingEdition;
         }

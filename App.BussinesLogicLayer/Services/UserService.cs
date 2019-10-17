@@ -36,7 +36,7 @@ namespace App.BussinesLogicLayer.Services
                 PasswordHash = userModel.PasswordHash                               
             };
 
-            report.Message = await userRepository.Create(user);
+            await userRepository.Create(user);
             
             return report;
         }
@@ -53,7 +53,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
             
-            report.Message = await authorRepository.Delete(user);
+            await authorRepository.Delete(user);
             return report;
         }
 
@@ -85,7 +85,7 @@ namespace App.BussinesLogicLayer.Services
                 UserName = userModel.Email,
                 PasswordHash = userModel.PasswordHash
             };
-            report.Message = userRepository.Update(user);
+            userRepository.Update(user);
             return report;
 
         }
