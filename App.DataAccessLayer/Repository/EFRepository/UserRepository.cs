@@ -15,25 +15,25 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(User item)
+        public async Task<bool> Create(User item)
         {
 
-            string result;
+            bool result;
             
             await _context.Users.AddAsync(item);
             await _context.SaveChangesAsync();
-            result = $"You add new user - {item.UserName}";
+            result = true;
 
             return result;
 
         }
 
-        public async Task<string> Delete(User item)
+        public async Task<bool> Delete(User item)
         {
-            string result;
+            bool result;
             _context.Users.Remove(item);
             await _context.SaveChangesAsync();
-            result = $"You delete {item.UserName}";
+            result = true;
             return result;
         }
 
@@ -43,11 +43,13 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return user;
         }
 
-        public string Update(User item)
+        public bool Update(User item)
         {
-            string result = $"You update {item.UserName}";
+            bool result;
             _context.Users.Update(item);
             _context.SaveChanges();
+
+            result = true;
             return result;
         }
     }

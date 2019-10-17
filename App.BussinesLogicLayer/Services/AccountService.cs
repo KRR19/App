@@ -26,9 +26,9 @@ namespace App.BussinesLogicLayer.Services
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUrlHelperFactory _urlHelper;
-        private readonly ActionContextAccessor _actionContextAccessor;
+        private readonly IActionContextAccessor _actionContextAccessor;
 
-        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, ActionContextAccessor  actionContextAccessor)
+        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor  actionContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -40,6 +40,10 @@ namespace App.BussinesLogicLayer.Services
 
         public async Task<object> Register(UserModel model)
         {
+            if(model == null)
+            {
+                return new ApplicationException("You passed an empty object!");
+            }
             IdentityUser user = new IdentityUser();
             user.UserName = model.Email;
             user.Email = model.Email;
@@ -47,13 +51,22 @@ namespace App.BussinesLogicLayer.Services
             var result = await _userManager.CreateAsync(model, model.Password);
 
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                await _signInManager.SignInAsync(user, false);
-                var token = GenerateJwtToken(model.Email, user);
-                return token;
+                return new ApplicationException("UNKNOWN_ERROR");
             }
-            throw new ApplicationException("UNKNOWN_ERROR");
+
+            await _signInManager.SignInAsync(user, false);
+            var token = GenerateJwtToken(model.Email, user);
+
+            string code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
+            string confirmEmailLink= CreateLink(user.Id, code, "ConfirmEmail");
+            
+            EmailHelper email = new EmailHelper();
+            email.SendEmail(user.Email, "ConfirmEmail", confirmEmailLink);
+
+            return token;
+            
         }
 
         public async Task<object> Login(UserModel model)
@@ -75,6 +88,37 @@ namespace App.BussinesLogicLayer.Services
             string result = "You have successfully logged out";
             return result;
         }
+
+        public async Task<string> ForgotPassword(UserModel model)
+        {
+            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            string passwordEmailLink = CreateLink(user.Id, code, "ResetPassword");
+
+            EmailHelper email = new EmailHelper();
+            email.SendEmail(user.Email, "ResetPassword", passwordEmailLink);
+
+            BaseResponseModel response = new BaseResponseModel();
+            response.Message = "The email has been sent.";
+            return response.Message;
+        }
+
+        public async Task<string> ResetPassword(ResetPasswordModel model)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+
+            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (!result.Succeeded)
+            {
+                report.Message = "You were unable to change your password!";
+            }
+            report.Message = "You have successfully changed your password!";
+            return report.Message;
+        }
+
         public JwtSecurityToken GenerateJwtToken(string email, IdentityUser user)
         {
             var claims = new List<Claim>
@@ -99,7 +143,7 @@ namespace App.BussinesLogicLayer.Services
             return token;
         }
 
-        public string CreateLink(Guid id, string code, string action)
+        public string CreateLink(string id, string code, string action)
         {
 
             EmailHelper emailService = new EmailHelper();

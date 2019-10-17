@@ -46,7 +46,7 @@ namespace App.Controllers
         [HttpGet]
         public async Task<AuthorModel> Get(Guid Id)
         {
-            AuthorModel author = await _service.Read(Id);
+            AuthorModel author = await _service.GetById(Id);
 
             return author;
         }

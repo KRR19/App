@@ -7,35 +7,32 @@ using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
-    public class AuthorInPrintingEditions : IAuthorInPrintingEditions
+    public class AuthorInPrintingEditionsRepository : IAuthorInPrintingEditionsRepository
     {
         private readonly ApplicationContext _context;
 
-        public AuthorInPrintingEditions(ApplicationContext context)
+        public AuthorInPrintingEditionsRepository(ApplicationContext context)
         {
             _context = context;
         }
-        public async Task<string> Create(AuthorInPrintingEdition item)
+        public async Task<bool> Create(AuthorInPrintingEdition item)
         {
             await _context.AuthorInPrintingEditions.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            string result;
-            result = $"You have united {item.Author} and {item.PrintingEdition}";
+            bool result;
+            result = true;
             return result;
         }
 
+              
 
-        public Task<AuthorInPrintingEdition> Read(Guid Id)
+        public bool Update(AuthorInPrintingEdition item)
         {
-            throw new NotImplementedException();
-        }
-
-        public string Update(AuthorInPrintingEdition item)
-        {
-            string result = $"You update {item.Author} and {item.PrintingEdition}";
+            bool result;
             _context.AuthorInPrintingEditions.Update(item);
             _context.SaveChanges();
+            result = true;
             return result;
         }
     }

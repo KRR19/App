@@ -8,6 +8,7 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IAuthorRepository : IBaseRepository<Author>
     {
-        public  Task<string> Delete(Author item);
+        public Task<bool> Delete(Author item);
+        public Task<Author> GetById(Guid id);
     }
 }

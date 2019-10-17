@@ -6,6 +6,7 @@ using App.DataAccessLayer.Entities.Enum;
 using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
@@ -38,7 +39,7 @@ namespace App.BussinesLogicLayer.Services
                 };
 
 
-                report.Message = await printingEditionsRepository.Create(printingEdition);
+                await printingEditionsRepository.Create(printingEdition);
             }
 
             return report;
@@ -60,10 +61,10 @@ namespace App.BussinesLogicLayer.Services
             return report;
         }
 
-        public async Task<PrintingEditionModel> Read(Guid id)
+        public async Task<PrintingEditionModel> GetById(Guid id)
         {
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
-            PrintingEdition printingEdition = await printingEditionsRepository.Read(id);
+            PrintingEdition printingEdition = await printingEditionsRepository.GetById(id);
 
             PrintingEditionModel printingEditionModel = new PrintingEditionModel
             {
@@ -79,7 +80,7 @@ namespace App.BussinesLogicLayer.Services
 
         }
 
-        public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
+            public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
         {
             BaseResponseModel report = Validation(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
@@ -100,7 +101,7 @@ namespace App.BussinesLogicLayer.Services
                 Type = UpdatePrintingEdition.Type
             };
 
-            report.Message = printingEditionsRepository.Update(printingEdition);
+            printingEditionsRepository.Update(printingEdition);
             return report;
         }
 

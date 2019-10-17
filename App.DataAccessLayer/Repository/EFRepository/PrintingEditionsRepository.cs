@@ -2,6 +2,7 @@
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,12 +15,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(PrintingEdition item)
+        public async Task<bool> Create(PrintingEdition item)
         {
-            string result;
+            bool result;
             await _context.PrintingEditions.AddAsync(item);
             await _context.SaveChangesAsync();
-            result = $"You add new PrintingEdition - {item.Name}";
+            result = true;
             return result;
         }
 
@@ -32,24 +33,27 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return result;
         }
 
-        public async Task<PrintingEdition> Read(Guid id)
+        public async Task<PrintingEdition> GetById(Guid id)
         {
             PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
             return printingEdition;
         }
 
-        public string Update(PrintingEdition item)
+        public List<PrintingEdition> GetAll()
         {
-            string result = $"You update {item.Name}";
+            var printingEdition = _context.PrintingEditions.ToList();
+            return printingEdition;
+        }
+
+        public bool Update(PrintingEdition item)
+        {
+            bool result;
             _context.PrintingEditions.Update(item);
             _context.SaveChanges();
+            result = true;
             return result;
         }
 
-        //public var Read(string name)
-        //{
-        //    var printingEdition = _context.PrintingEditions.Where(n => n.Name == name);
-        //    return printingEdition;
-        //}              
+                     
     }
 }

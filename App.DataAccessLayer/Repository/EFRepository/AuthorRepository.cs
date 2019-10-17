@@ -3,6 +3,8 @@ using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -13,37 +15,40 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(Author author)
+        public async Task<bool> Create(Author author)
         {
             await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
-            
-            string result;
-            result = $"You add new author -  {author.Name}";
-            return result;
+                       
+            return true;
         }
 
-        public async Task<string> Delete(Author item)
+        public async Task<bool> Delete(Author item)
         {
-            string result;
+            bool result;
             _context.Authors.Update(item);
             await _context.SaveChangesAsync();
-            result = $"You delete {item.Name}";
+            result = true;
             return result;
 
         }
 
-        public string Update(Author item)
+        public bool Update(Author item)
         {
-            string result = $"You update {item.Name}";
             _context.Authors.Update(item);
             _context.SaveChanges();
-            return result;
+            return true;
         }
 
-        public async  Task<Author> Read(Guid id)
+        public async  Task<Author> GetById(Guid id)
         {
             Author author = await _context.Authors.FindAsync(id);
+            return author;
+        }
+
+        public List<Author> GetByAll()
+        {
+            var author =_context.Authors.ToList();
             return author;
         }
     }

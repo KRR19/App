@@ -5,36 +5,40 @@ using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
 {
     public class AuthorService : IAuthorService
     {
-        private readonly ApplicationContext _context;
+        private readonly AuthorRepository _authorRepository;
 
-        public AuthorService(ApplicationContext context)
+        public AuthorService(AuthorRepository AuthorRepository)
         {
-            _context = context;
+            _authorRepository = AuthorRepository;
         }
 
 
         public async Task<BaseResponseModel> Create(AuthorModel newAuthor)
         {
-            BaseResponseModel report = Validation(newAuthor);
-            IAuthorRepository authorRepository = new AuthorRepository(_context);
-                        
-            if (string.IsNullOrEmpty(report.Message))
+            BaseResponseModel report = AuthorValidation(newAuthor);
+            Author author = new Author();
+            bool isCreate = false;
+            if (report.Validation)
             {
-                Author author = new Author
-                {
-                    Name = newAuthor.Name,
-                    DateBirth = newAuthor.DateBirth,
-                    DateDeath = newAuthor.DateDeath,
-                    CreationData = DateTime.Now,
-                    IsRemoved = false
-                };
-                report.Message = await authorRepository.Create(author);
+                author.Name = newAuthor.Name;
+                author.DateBirth = newAuthor.DateBirth;
+                author.DateDeath = newAuthor.DateDeath;
+                author.CreationData = DateTime.Now;
+                author.IsRemoved = false;
+                
+                isCreate = await _authorRepository.Create(author);
+            }
+
+            if(!isCreate)
+            {
+                report.Message = $"{author.Name} has been create";
             }
 
             return report;
@@ -42,8 +46,7 @@ namespace App.BussinesLogicLayer.Services
         public async Task<BaseResponseModel> Delete(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
-            IAuthorRepository authorRepository = new AuthorRepository(_context);
-            Author author = await _context.Authors.FindAsync(id);
+            Author author = await _authorRepository.GetById(id);
 
             if (author == null)
             {
@@ -51,16 +54,19 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
             author.IsRemoved = true;
-            report.Message = await authorRepository.Delete(author);
+            bool isDelete = await _authorRepository.Delete(author);
+            if (isDelete)
+            {
+                report.Message = "The author has been deleted";
+            }
             return report;
         }
 
         public BaseResponseModel Update(AuthorModel UpdateAuthor)
         {
-            BaseResponseModel report = Validation(UpdateAuthor);
-            IAuthorRepository authorRepository = new AuthorRepository(_context);
+            BaseResponseModel report = AuthorValidation(UpdateAuthor);
 
-            if (string.IsNullOrEmpty(report.Message))
+            if (report.Validation)
             {
                 Author author = new Author
                 {
@@ -71,17 +77,22 @@ namespace App.BussinesLogicLayer.Services
                     CreationData = DateTime.Now,
                     IsRemoved = false
                 };
-                report.Message = authorRepository.Update(author);
+                bool isUpdate = _authorRepository.Update(author);
+                
+                if(!isUpdate)
+                {
+                    report.Message = $"Failed to change {author.Name}";
+                }
+                report.Message = $"{author.Name} was changed";
             }
 
             return report;
         }
 
-        public async Task<AuthorModel> Read(Guid id)
+        public async Task<AuthorModel> GetById(Guid id)
         {
-            IAuthorRepository authorRepository = new AuthorRepository(_context);
             AuthorModel authorModel = new AuthorModel();
-            Author author = await authorRepository.Read(id);
+            Author author = await _authorRepository.GetById(id);
 
             authorModel.Id = author.Id;
             authorModel.Name = author.Name;
@@ -89,9 +100,11 @@ namespace App.BussinesLogicLayer.Services
             authorModel.DateDeath = author.DateDeath;
             return authorModel;
         }
-    
 
-        private BaseResponseModel Validation(AuthorModel author)
+      
+
+
+        private BaseResponseModel AuthorValidation(AuthorModel author)
         {
             BaseResponseModel report = new BaseResponseModel();
             if (author == null)
@@ -112,6 +125,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
 
+            report.Validation = true;
             return report;
 
         }
