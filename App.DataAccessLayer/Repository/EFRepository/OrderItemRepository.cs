@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.DataAccessLayer.AppContext;
@@ -31,7 +32,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             bool result;
             _context.OrderItems.Update(item);
             await _context.SaveChangesAsync();
-            result =true;
+            result = true;
             return result;
         }
 
@@ -40,6 +41,15 @@ namespace App.DataAccessLayer.Repository.EFRepository
             OrderItem orderItem = await _context.OrderItems.FindAsync(Id);
             return orderItem;
         }
+
+      
+
+        public OrderItem GetLast()
+        {
+            OrderItem orderItem = _context.OrderItems.ToList<OrderItem>().Last<OrderItem>();
+            return orderItem;
+        }
+
 
         public bool Update(OrderItem item)
         {

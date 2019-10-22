@@ -1,6 +1,6 @@
 ﻿using App.DataAccessLayer.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.DataAccessLayer.AppContext
 {
@@ -24,7 +24,6 @@ namespace App.DataAccessLayer.AppContext
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<AuthorInPrintingEdition>().HasNoKey();
             modelBuilder.Entity<AuthorInPrintingEdition>().HasKey(t => new { t.AuthorId, t.PrintingEditionId });
 
             modelBuilder.Entity<AuthorInPrintingEdition>().HasOne(sc => sc.Author).WithMany(s => s.AuthorInPrintingEditions).HasForeignKey(sc => sc.AuthorId);
@@ -32,5 +31,11 @@ namespace App.DataAccessLayer.AppContext
             modelBuilder.Entity<AuthorInPrintingEdition>().HasOne(sc => sc.PrintingEdition).WithMany(c => c.AuthorInPrintingEditions).HasForeignKey(sc => sc.PrintingEditionId);
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //optionsBuilder.UseLazyLoadingProxies();
+        }
+
     }
 }
+

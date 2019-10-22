@@ -9,39 +9,52 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+
 namespace App.BussinesLogicLayer.Services
 {
    public class PrintingEditionService : IPrintingEditionService
     {
         private readonly ApplicationContext _context;
+        private readonly IAuthorInPrintingEditionsRepository _authorInPrintingEditionsRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public PrintingEditionService(ApplicationContext context)
+        public PrintingEditionService(ApplicationContext context, IAuthorInPrintingEditionsRepository authorInPrintingEditionsRepository, IAuthorRepository authorRepository)
         {
             _context = context;
+            _authorInPrintingEditionsRepository = authorInPrintingEditionsRepository;
+            _authorRepository = authorRepository;
         }
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = Validation(newPrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
 
-            if (string.IsNullOrEmpty(report.Message))
+            if (!string.IsNullOrEmpty(report.Message))
             {
-                PrintingEdition printingEdition = new PrintingEdition
-                {
-                    Name = newPrintingEdition.Name,
-                    Description = newPrintingEdition.Description,
-                    Price = newPrintingEdition.Price,
-                    Status = newPrintingEdition.Status,
-                    Type = newPrintingEdition.Type,
-                    Currency = newPrintingEdition.Currency,
-                    IsRemoved = false,
-                    CreationData = DateTime.Now
-                };
-
-
-                await printingEditionsRepository.Create(printingEdition);
+                return report;
             }
+            PrintingEdition printingEdition = new PrintingEdition();
+            printingEdition.Name = newPrintingEdition.Name;
+            printingEdition.Description = newPrintingEdition.Description;
+            printingEdition.Price = newPrintingEdition.Price;
+            printingEdition.Status = newPrintingEdition.Status;
+            printingEdition.Type = newPrintingEdition.Type;
+            printingEdition.Currency = newPrintingEdition.Currency;
+            printingEdition.IsRemoved = false;
+            printingEdition.CreationData = DateTime.Now;
 
+            
+
+            await printingEditionsRepository.Create(printingEdition);
+
+            AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
+            authorInPrintingEdition.PrintingEditionId = printingEdition.Id;
+            authorInPrintingEdition.PrintingEdition = printingEdition;
+            authorInPrintingEdition.Author = await _authorRepository.GetById(newPrintingEdition.Author);
+            
+            await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition);
+
+            report.Message = "You have successfully added a publication";
             return report;
         }
 
@@ -113,7 +126,9 @@ namespace App.BussinesLogicLayer.Services
                 report.Message = "You send NULL!";
                 return report;
             }
-            if(string.IsNullOrEmpty(printingEdition.Name)||string.IsNullOrWhiteSpace(printingEdition.Name))
+
+          
+            if (string.IsNullOrEmpty(printingEdition.Name)||string.IsNullOrWhiteSpace(printingEdition.Name))
             {
                 report.Message = "Enter title of publication!";
                 return report;

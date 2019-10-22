@@ -12,5 +12,6 @@ namespace App.BussinesLogicLayer.Services.Interfaces
         public string CreateLink(string id, string code, string action);
         public Task<string> ForgotPassword(UserModel model);
         public Task<string> ResetPassword(ResetPasswordModel model);
+        public Task CreateRole(string Role);
     }
 }

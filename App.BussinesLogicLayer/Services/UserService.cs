@@ -1,5 +1,4 @@
-﻿using App.BussinesLogicLayer.models.Authors;
-using App.BussinesLogicLayer.Models.Users;
+﻿using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
@@ -10,19 +9,20 @@ using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
 {
-    public  class UserService : IUserService
+    public class UserService : IUserService
     {
         private readonly ApplicationContext _context;
-        public UserService(ApplicationContext context)
+        IUserRepository userRepository;
+        public UserService(ApplicationContext context, IUserRepository userRepository)
         {
             _context = context;
+            this.userRepository = userRepository;
         }
         public async Task<BaseResponseModel> Create(UserModel userModel)
         {
             BaseResponseModel report = new BaseResponseModel();
-            IUserRepository userRepository = new UserRepository(_context);
 
-            if(!string.IsNullOrEmpty(report.Message))
+            if (!string.IsNullOrEmpty(report.Message))
             {
                 return report;
             }
@@ -33,18 +33,17 @@ namespace App.BussinesLogicLayer.Services
                 LastName = userModel.LastName,
                 Email = userModel.Email,
                 UserName = userModel.Email,
-                PasswordHash = userModel.PasswordHash                               
+                PasswordHash = userModel.PasswordHash
             };
 
             await userRepository.Create(user);
-            
+
             return report;
         }
 
         public async Task<BaseResponseModel> Delete(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
-            IUserRepository authorRepository = new UserRepository(_context);
             User user = await _context.Users.FindAsync(id);
 
             if (user == null)
@@ -52,14 +51,13 @@ namespace App.BussinesLogicLayer.Services
                 report.Message = $"User not found in the database!";
                 return report;
             }
-            
-            await authorRepository.Delete(user);
+
+            await userRepository.Delete(user);
             return report;
         }
 
         public async Task<UserModel> Read(Guid id)
         {
-            IUserRepository userRepository = new UserRepository(_context);
             User user = await userRepository.Read(id);
             UserModel userModel = new UserModel
             {
@@ -73,10 +71,9 @@ namespace App.BussinesLogicLayer.Services
             return userModel;
         }
 
-        public  BaseResponseModel Update(UserModel userModel)
+        public BaseResponseModel Update(UserModel userModel)
         {
             BaseResponseModel report = new BaseResponseModel();
-            IUserRepository userRepository = new UserRepository(_context);
             User user = new User
             {
                 FirstName = userModel.FirstName,
@@ -90,6 +87,6 @@ namespace App.BussinesLogicLayer.Services
 
         }
 
-       
+
     }
 }

@@ -9,5 +9,6 @@ namespace App.DataAccessLayer.Repository.Interfaces
     {
         public Task<OrderItem> Read(Guid Id);
         public Task<bool> Delete(OrderItem item);
+        public OrderItem GetLast();
     }
 }

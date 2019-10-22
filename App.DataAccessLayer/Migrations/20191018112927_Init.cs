@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace App.DataAccessLayer.Migrations
 {
-    public partial class Create : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,7 +56,7 @@ namespace App.DataAccessLayer.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     CreationData = table.Column<DateTime>(nullable: false),
                     IsRemoved = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
                     DateBirth = table.Column<DateTime>(nullable: false),
                     DateDeath = table.Column<DateTime>(nullable: false)
                 },
@@ -268,11 +268,18 @@ namespace App.DataAccessLayer.Migrations
                     Amount = table.Column<int>(nullable: false),
                     Currency = table.Column<int>(nullable: false),
                     PrintingEditionId = table.Column<Guid>(nullable: true),
-                    Count = table.Column<int>(nullable: false)
+                    Count = table.Column<int>(nullable: false),
+                    OrderId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OrderItems_PrintingEditions_PrintingEditionId",
                         column: x => x.PrintingEditionId,
@@ -326,6 +333,11 @@ namespace App.DataAccessLayer.Migrations
                 column: "PrintingEditionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_PrintingEditionId",
                 table: "OrderItems",
                 column: "PrintingEditionId");
@@ -365,13 +377,13 @@ namespace App.DataAccessLayer.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "PrintingEditions");

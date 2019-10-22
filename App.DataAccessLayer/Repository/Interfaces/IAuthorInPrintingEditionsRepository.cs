@@ -3,7 +3,7 @@ using App.DataAccessLayer.Repository.Base;
 
 namespace App.DataAccessLayer.Repository.Interfaces
 {
-    interface IAuthorInPrintingEditionsRepository : IBaseRepository<AuthorInPrintingEdition>
+    public interface IAuthorInPrintingEditionsRepository : IBaseRepository<AuthorInPrintingEdition>
     {
     }
 }

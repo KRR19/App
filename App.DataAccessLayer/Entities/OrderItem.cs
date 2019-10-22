@@ -1,14 +1,19 @@
 ﻿
 using App.DataAccessLayer.Entities.Base;
 using App.DataAccessLayer.Entities.Enum;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.DataAccessLayer.Entities
 {
     public class OrderItem : Base.Base
     {
-        public int Amount { get; set; }
+        public double Amount { get; set; }
         public Currency Currency { get; set; }
         public PrintingEdition PrintingEdition { get; set; }
         public int Count { get; set; }
+        public Order Order { get; set; }
+
     }
 }

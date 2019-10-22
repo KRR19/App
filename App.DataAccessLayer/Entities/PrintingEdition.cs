@@ -12,7 +12,7 @@ namespace App.DataAccessLayer.Entities
         public Status Status { get; set; }
         public Currency Currency { get; set; }
         public Types Type { get; set; }
-        public ICollection<AuthorInPrintingEdition> AuthorInPrintingEditions { get; set; }
+        public List<AuthorInPrintingEdition> AuthorInPrintingEditions { get; set; }
 
     }
 }
