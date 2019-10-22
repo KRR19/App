@@ -4,14 +4,16 @@ using App.DataAccessLayer.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace App.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191021091315_Update")]
+    partial class Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,9 +84,6 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("OrderItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -92,8 +91,6 @@ namespace App.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderItemId");
 
                     b.HasIndex("PaymentId");
 
@@ -123,10 +120,15 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PrintingEditionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("PrintingEditionId");
 
@@ -420,10 +422,6 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>
                 {
-                    b.HasOne("App.DataAccessLayer.Entities.OrderItem", "OrderItem")
-                        .WithMany("Order")
-                        .HasForeignKey("OrderItemId");
-
                     b.HasOne("App.DataAccessLayer.Entities.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId");
@@ -435,6 +433,12 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.OrderItem", b =>
                 {
+                    b.HasOne("App.DataAccessLayer.Entities.Order", "Order")
+                        .WithMany("OrderItem")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEdition")
                         .WithMany()
                         .HasForeignKey("PrintingEditionId");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace App.BussinesLogicLayer.models.Authors
 {
@@ -8,5 +9,6 @@ namespace App.BussinesLogicLayer.models.Authors
         public string Name { get; set; }
         public DateTime DateBirth { get; set; }
         public DateTime DateDeath { get; set; }
+        public List<Guid> Author { get; set; }
     }
 }

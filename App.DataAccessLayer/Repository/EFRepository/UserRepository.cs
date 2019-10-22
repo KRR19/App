@@ -3,7 +3,6 @@ using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -19,7 +18,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
 
             bool result;
-            
+
             await _context.Users.AddAsync(item);
             await _context.SaveChangesAsync();
             result = true;
@@ -39,7 +38,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public async Task<User> Read(Guid Id)
         {
-            User user = await _context.Users.FindAsync(Id);
+            User user = await _context.Users.FindAsync(Id.ToString());
             return user;
         }
 

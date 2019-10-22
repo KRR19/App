@@ -1,8 +1,6 @@
 ﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
-using App.DataAccessLayer.Repository.Base;
 using App.DataAccessLayer.Repository.Interfaces;
-using System;
 using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
@@ -25,7 +23,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return result;
         }
 
-              
+
 
         public bool Update(AuthorInPrintingEdition item)
         {

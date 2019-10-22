@@ -1,6 +1,7 @@
 ﻿using App.BussinesLogicLayer.Helper;
 using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
+using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -21,14 +22,15 @@ namespace App.BussinesLogicLayer.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUrlHelperFactory _urlHelper;
         private readonly IActionContextAccessor _actionContextAccessor;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor  actionContextAccessor)
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor  actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -36,6 +38,7 @@ namespace App.BussinesLogicLayer.Services
             _contextAccessor = contextAccessor;
             _urlHelper = urlHelper;
             _actionContextAccessor = actionContextAccessor;
+            _roleManager = roleManager;
         }
 
         public async Task<object> Register(UserModel model)
@@ -44,11 +47,11 @@ namespace App.BussinesLogicLayer.Services
             {
                 return new ApplicationException("You passed an empty object!");
             }
-            IdentityUser user = new IdentityUser();
+            User user = new User();
             user.UserName = model.Email;
             user.Email = model.Email;
 
-            var result = await _userManager.CreateAsync(model, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
 
 
             if (!result.Succeeded)
@@ -58,6 +61,8 @@ namespace App.BussinesLogicLayer.Services
 
             await _signInManager.SignInAsync(user, false);
             var token = GenerateJwtToken(model.Email, user);
+
+            await _userManager.AddToRoleAsync(user, "user");
 
             string code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
             string confirmEmailLink= CreateLink(user.Id, code, "ConfirmEmail");
@@ -75,7 +80,7 @@ namespace App.BussinesLogicLayer.Services
 
             if (result.Succeeded)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email && r.UserName == model.UserName);
+                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                 return GenerateJwtToken(model.Email, appUser);
             }
 
@@ -91,7 +96,7 @@ namespace App.BussinesLogicLayer.Services
 
         public async Task<string> ForgotPassword(UserModel model)
         {
-            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+            User user = await _userManager.FindByNameAsync(model.Email);
             string code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             string passwordEmailLink = CreateLink(user.Id, code, "ResetPassword");
@@ -108,7 +113,7 @@ namespace App.BussinesLogicLayer.Services
         {
             BaseResponseModel report = new BaseResponseModel();
 
-            IdentityUser user = await _userManager.FindByNameAsync(model.Email);
+            User user = await _userManager.FindByNameAsync(model.Email);
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (!result.Succeeded)
@@ -146,7 +151,6 @@ namespace App.BussinesLogicLayer.Services
         public string CreateLink(string id, string code, string action)
         {
 
-            EmailHelper emailService = new EmailHelper();
             var callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
                 action,
                 "Account",
@@ -154,6 +158,12 @@ namespace App.BussinesLogicLayer.Services
                 protocol: _contextAccessor.HttpContext.Request.Scheme);
 
             return callbackUrl.ToString();
+        }
+
+        public async Task CreateRole(string name)
+        {
+            IdentityRole role = new IdentityRole(name);
+            await _roleManager.CreateAsync(role);
         }
     }
 }

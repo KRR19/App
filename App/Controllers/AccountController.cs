@@ -1,22 +1,20 @@
-﻿using App.BussinesLogicLayer;
-using App.BussinesLogicLayer.Helper;
-using App.BussinesLogicLayer.Models.Users;
+﻿using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
+using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace App.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<IdentityUser> userManager, IAccountService accountService)
+        public AccountController(UserManager<User> userManager, IAccountService accountService)
         {
             _userManager = userManager;
             _accountService = accountService;
@@ -29,10 +27,10 @@ namespace App.Controllers
             return token.ToString();
         }
 
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<object> Register([FromBody] UserModel model)
         {
-            var token = await _accountService.Register(model);            
+            var token = await _accountService.Register(model);
             return token;
         }
 
@@ -66,8 +64,12 @@ namespace App.Controllers
             return result;
         }
 
+        [HttpGet("CreateRole")]
+        public async Task CreateRole([FromQuery]string role)
+        {
+            await _accountService.CreateRole(role);
+        }
 
-        
 
     }
 }

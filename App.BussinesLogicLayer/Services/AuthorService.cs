@@ -1,20 +1,17 @@
 ﻿using App.BussinesLogicLayer.models.Authors;
 using App.BussinesLogicLayer.Services.Interfaces;
-using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
-using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
 {
     public class AuthorService : IAuthorService
     {
-        private readonly AuthorRepository _authorRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public AuthorService(AuthorRepository AuthorRepository)
+        public AuthorService(IAuthorRepository AuthorRepository)
         {
             _authorRepository = AuthorRepository;
         }
@@ -32,11 +29,11 @@ namespace App.BussinesLogicLayer.Services
                 author.DateDeath = newAuthor.DateDeath;
                 author.CreationData = DateTime.Now;
                 author.IsRemoved = false;
-                
+
                 isCreate = await _authorRepository.Create(author);
             }
 
-            if(!isCreate)
+            if (!isCreate)
             {
                 report.Message = $"{author.Name} has been create";
             }
@@ -78,8 +75,8 @@ namespace App.BussinesLogicLayer.Services
                     IsRemoved = false
                 };
                 bool isUpdate = _authorRepository.Update(author);
-                
-                if(!isUpdate)
+
+                if (!isUpdate)
                 {
                     report.Message = $"Failed to change {author.Name}";
                 }
@@ -101,7 +98,7 @@ namespace App.BussinesLogicLayer.Services
             return authorModel;
         }
 
-      
+
 
 
         private BaseResponseModel AuthorValidation(AuthorModel author)

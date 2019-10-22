@@ -18,7 +18,7 @@ namespace App.Controllers
             _service = service;
         }
 
-        [HttpPost]
+        [HttpPost("Post")]
         public async Task<BaseResponseModel> Post([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Create(printingEdition);

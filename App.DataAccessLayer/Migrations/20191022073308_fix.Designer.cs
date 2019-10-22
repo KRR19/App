@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20191009084242_Required")]
-    partial class Required
+    [Migration("20191022073308_fix")]
+    partial class fix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,6 +84,9 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("OrderItemId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
@@ -91,6 +94,8 @@ namespace App.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderItemId");
 
                     b.HasIndex("PaymentId");
 
@@ -105,8 +110,8 @@ namespace App.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -417,6 +422,10 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>
                 {
+                    b.HasOne("App.DataAccessLayer.Entities.OrderItem", "OrderItem")
+                        .WithMany("Order")
+                        .HasForeignKey("OrderItemId");
+
                     b.HasOne("App.DataAccessLayer.Entities.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId");
