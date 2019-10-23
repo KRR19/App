@@ -9,6 +9,6 @@ namespace App.BussinesLogicLayer.Services.Interfaces
         public Task<BaseResponseModel> Create(UserModel userModel);
         public Task<BaseResponseModel> Delete(Guid id);
         public BaseResponseModel Update(UserModel userModel);
-        public Task<UserModel> Read(Guid id);
+        public Task<UserModel> GetById(Guid id);
     }
 }

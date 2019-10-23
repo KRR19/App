@@ -15,9 +15,9 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<bool> Create(Order item)
+        public async Task<string> Create(Order item)
         {
-            bool result = true;
+            string result = "Order was create";
             await _context.Orders.AddAsync(item);
             await _context.SaveChangesAsync();
 
@@ -52,9 +52,9 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return order;
         }
 
-        public bool Update(Order item)
+        public string Update(Order item)
         {
-            bool result=true;
+            string result="Order was update";
             _context.Orders.Update(item);
             _context.SaveChanges();
             return result;

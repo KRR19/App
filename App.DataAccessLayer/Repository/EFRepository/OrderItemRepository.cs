@@ -16,14 +16,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<bool> Create(OrderItem item)
+        public async Task<string> Create(OrderItem item)
         {
-            bool result;
+            string result;
 
             await _context.OrderItems.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            result = true;
+            result = $"orderItem was create";
             return result;
         }
 
@@ -51,12 +51,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
         }
 
 
-        public bool Update(OrderItem item)
+        public string Update(OrderItem item)
         {
-            bool result;
+            string result;
             _context.OrderItems.Update(item);
             _context.SaveChanges();
-            result = true;
+            result = $"OrderItem wac update";
             return result;
         }
     }

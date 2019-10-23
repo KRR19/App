@@ -15,12 +15,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<bool> Create(PrintingEdition item)
+        public async Task<string> Create(PrintingEdition item)
         {
-            bool result;
+            string result;
+
             await _context.PrintingEditions.AddAsync(item);
             await _context.SaveChangesAsync();
-            result = true;
+
+            result = $"{item.Name} was created";
             return result;
         }
 
@@ -45,15 +47,16 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return printingEdition;
         }
 
-        public bool Update(PrintingEdition item)
+        public string Update(PrintingEdition item)
         {
-            bool result;
+            string result;
+
             _context.PrintingEditions.Update(item);
             _context.SaveChanges();
-            result = true;
+            result = $"{item.Name} was update";
             return result;
         }
 
-                     
+
     }
 }
