@@ -6,30 +6,30 @@ using App.DataAccessLayer.Entities.Enum;
 using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
 namespace App.BussinesLogicLayer.Services
 {
-   public class PrintingEditionService : IPrintingEditionService
+    public class PrintingEditionService : IPrintingEditionService
     {
         private readonly ApplicationContext _context;
         private readonly IAuthorInPrintingEditionsRepository _authorInPrintingEditionsRepository;
         private readonly IAuthorRepository _authorRepository;
+        private readonly IPrintingEditionsRepository _printingEditionsRepository;
 
-        public PrintingEditionService(ApplicationContext context, IAuthorInPrintingEditionsRepository authorInPrintingEditionsRepository, IAuthorRepository authorRepository)
+        public PrintingEditionService(ApplicationContext context, IAuthorInPrintingEditionsRepository authorInPrintingEditionsRepository, IAuthorRepository authorRepository, IPrintingEditionsRepository printingEditionsRepository)
         {
             _context = context;
             _authorInPrintingEditionsRepository = authorInPrintingEditionsRepository;
             _authorRepository = authorRepository;
+            _printingEditionsRepository = printingEditionsRepository;
         }
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
-            BaseResponseModel report = Validation(newPrintingEdition);
-            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
+            BaseResponseModel report = IsValidation(newPrintingEdition);
 
-            if (!string.IsNullOrEmpty(report.Message))
+            if (report.Validation)
             {
                 return report;
             }
@@ -41,23 +41,20 @@ namespace App.BussinesLogicLayer.Services
             printingEdition.Type = newPrintingEdition.Type;
             printingEdition.Currency = newPrintingEdition.Currency;
             printingEdition.IsRemoved = false;
-            printingEdition.CreationData = DateTime.Now;
+            printingEdition.CreationDate = DateTime.Now;
 
-            
-
-            await printingEditionsRepository.Create(printingEdition);
+            report.Message.Add(await _printingEditionsRepository.Create(printingEdition));
 
             AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
             authorInPrintingEdition.PrintingEditionId = printingEdition.Id;
             authorInPrintingEdition.PrintingEdition = printingEdition;
             authorInPrintingEdition.Author = await _authorRepository.GetById(newPrintingEdition.Author);
-            
-            await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition);
 
-            report.Message = "You have successfully added a publication";
+            report.Message.Add(await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition));
+
+            report.Message.Add("You have successfully added a publication");
             return report;
         }
-
         public async Task<BaseResponseModel> Delete(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
@@ -66,11 +63,12 @@ namespace App.BussinesLogicLayer.Services
 
             if (printingEdition == null)
             {
-                report.Message = $"Printing Edition not found in the database!";
+                report.Message.Add("Printing Edition not found in the database!");
                 return report;
             }
             printingEdition.IsRemoved = true;
-            report.Message = await printingEditionsRepository.Delete(printingEdition);
+            report.Message.Add(await printingEditionsRepository.Delete(printingEdition));
+
             return report;
         }
 
@@ -90,15 +88,14 @@ namespace App.BussinesLogicLayer.Services
             };
 
             return printingEditionModel;
-
         }
 
-            public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
+        public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
         {
-            BaseResponseModel report = Validation(UpdatePrintingEdition);
+            BaseResponseModel report = IsValidation(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
-            
-            if (!string.IsNullOrEmpty(report.Message))
+
+            if (report.Validation)
             {
                 return report;
             }
@@ -118,41 +115,41 @@ namespace App.BussinesLogicLayer.Services
             return report;
         }
 
-        private BaseResponseModel Validation(PrintingEditionModel printingEdition)
+        private BaseResponseModel IsValidation(PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = new BaseResponseModel();
-            if(printingEdition == null)
+            if (printingEdition == null)
             {
-                report.Message = "You send NULL!";
+                report.Message.Add("You send NULL!");
                 return report;
             }
 
-          
-            if (string.IsNullOrEmpty(printingEdition.Name)||string.IsNullOrWhiteSpace(printingEdition.Name))
+
+            if (string.IsNullOrEmpty(printingEdition.Name) || string.IsNullOrWhiteSpace(printingEdition.Name))
             {
-                report.Message = "Enter title of publication!";
+                report.Message.Add("Enter title of publication!");
                 return report;
             }
-            if(printingEdition.Price < 0)
+            if (printingEdition.Price < 0)
             {
-                report.Message = "Price cannot be negative!";
+                report.Message.Add("Price cannot be negative!");
                 return report;
             }
-            if (!Enum.IsDefined(typeof(Status),printingEdition.Status))
+            if (!Enum.IsDefined(typeof(Status), printingEdition.Status))
             {
-                report.Message = "Enter status of publication!";
+                report.Message.Add("Enter status of publication!");
                 return report;
             }
 
             if (!Enum.IsDefined(typeof(Currency), printingEdition.Currency))
             {
-                report.Message = "Enter currency!";
+                report.Message.Add("Enter currency!");
                 return report;
             }
 
             if (!Enum.IsDefined(typeof(Types), printingEdition.Type))
             {
-                report.Message = "Enter type of publication!";
+                report.Message.Add("Enter type of publication!");
                 return report;
             }
 

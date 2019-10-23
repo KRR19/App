@@ -1,9 +1,8 @@
 ﻿using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
-using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
-using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -11,21 +10,17 @@ namespace App.BussinesLogicLayer.Services
 {
     public class UserService : IUserService
     {
-        private readonly ApplicationContext _context;
-        IUserRepository userRepository;
-        public UserService(ApplicationContext context, IUserRepository userRepository)
+
+        private readonly IUserRepository userRepository;
+        private readonly UserManager<User> _userManager;
+        public UserService(IUserRepository userRepository, UserManager<User> userManager)
         {
-            _context = context;
             this.userRepository = userRepository;
+            _userManager = userManager;
         }
         public async Task<BaseResponseModel> Create(UserModel userModel)
         {
             BaseResponseModel report = new BaseResponseModel();
-
-            if (!string.IsNullOrEmpty(report.Message))
-            {
-                return report;
-            }
 
             User user = new User
             {
@@ -40,23 +35,21 @@ namespace App.BussinesLogicLayer.Services
 
             return report;
         }
-
         public async Task<BaseResponseModel> Delete(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
-            User user = await _context.Users.FindAsync(id);
+            User user = await _userManager.FindByIdAsync(id.ToString());
 
             if (user == null)
             {
-                report.Message = $"User not found in the database!";
+                report.Message.Add("User not found in the database!");
                 return report;
             }
 
             await userRepository.Delete(user);
             return report;
         }
-
-        public async Task<UserModel> Read(Guid id)
+        public async Task<UserModel> GetById(Guid id)
         {
             User user = await userRepository.Read(id);
             UserModel userModel = new UserModel
@@ -84,9 +77,6 @@ namespace App.BussinesLogicLayer.Services
             };
             userRepository.Update(user);
             return report;
-
         }
-
-
     }
 }

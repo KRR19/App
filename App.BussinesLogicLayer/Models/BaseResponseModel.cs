@@ -4,7 +4,7 @@ namespace App.BussinesLogicLayer
 {
     public class BaseResponseModel
     {
-        public string Message { get; set; }
-        public bool Validation {get; set;}
+        public List<string> Message { get; set; }
+        public bool Validation { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using App.BussinesLogicLayer.Helper;
 using App.BussinesLogicLayer.Models.Orders;
+using App.BussinesLogicLayer.Models.Payments;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
@@ -36,19 +37,27 @@ namespace App.BussinesLogicLayer.Services
             PaymentHelper paymentHelper = new PaymentHelper();
             Payment payment = new Payment();
             OrderItem orderItem = new OrderItem();
+            PaymentModel paymentModel = new PaymentModel();
 
-            payment.TransactionId = paymentHelper.Charge(orderModel.PaymentEmail, orderModel.PaymentToken);
-            payment.CreationData = DateTime.Now;
+            paymentModel.Amount = orderModel.Amount;
+            paymentModel.Currency = orderModel.Currency;
+            paymentModel.Description = orderModel.Description;
+            paymentModel.Email = orderModel.PaymentEmail;
+            paymentModel.Source = orderModel.PaymentSource;
+
+
+            payment.TransactionId = paymentHelper.Charge(paymentModel);
+            payment.CreationDate = DateTime.Now;
             await _paymentRepository.Create(payment);
 
-            order.CreationData = order.Date = DateTime.Now;
+            order.CreationDate = order.Date = DateTime.Now;
             order.IsRemoved = false;
             order.Description = orderModel.Description;
             order.Payment = _paymentRepository.GetLast();
-            order.User = await _userManager.FindByEmailAsync(orderModel.User.ToString());
+            order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
             await _orderRepository.Create(order);
 
-            orderItem.CreationData = DateTime.Now;
+            orderItem.CreationDate = DateTime.Now;
             orderItem.IsRemoved = false;
             orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition);
             orderItem.Count = orderModel.Count;
@@ -74,14 +83,14 @@ namespace App.BussinesLogicLayer.Services
             OrderItem orderItem = new OrderItem();
 
 
-            order.CreationData = order.Date = DateTime.Now;
+            order.CreationDate = order.Date = DateTime.Now;
             order.IsRemoved = false;
             order.Description = orderModel.Description;
             order.Payment = _paymentRepository.GetLast();
-            order.User = await _userManager.FindByEmailAsync(orderModel.User.ToString());
+            order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
             _orderRepository.Update(order);
 
-            orderItem.CreationData = DateTime.Now;
+            orderItem.CreationDate = DateTime.Now;
             orderItem.IsRemoved = false;
             orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition);
             orderItem.Count = orderModel.Count;
@@ -101,9 +110,9 @@ namespace App.BussinesLogicLayer.Services
             order.IsRemoved = true;
             bool result = await _orderRepository.Delete(order);
 
-            if(result)
+            if (result)
             {
-                report.Message = "You have successfully deleted";
+                report.Message.Add("You have successfully deleted");
             }
 
             return report;

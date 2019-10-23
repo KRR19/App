@@ -1,6 +1,7 @@
 ﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
 
@@ -9,20 +10,21 @@ namespace App.DataAccessLayer.Repository.EFRepository
     public class UserRepository : IUserRepository
     {
         private readonly ApplicationContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public UserRepository(ApplicationContext context)
+        public UserRepository(ApplicationContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-        public async Task<bool> Create(User item)
+        public async Task<string> Create(User item)
         {
-
-            bool result;
+            string result;
 
             await _context.Users.AddAsync(item);
             await _context.SaveChangesAsync();
-            result = true;
 
+            result = "User was create";
             return result;
 
         }
@@ -38,17 +40,17 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public async Task<User> Read(Guid Id)
         {
-            User user = await _context.Users.FindAsync(Id.ToString());
+            User user = await _userManager.FindByIdAsync(Id.ToString());
             return user;
         }
 
-        public bool Update(User item)
+        public string Update(User item)
         {
-            bool result;
+            string result;
             _context.Users.Update(item);
             _context.SaveChanges();
 
-            result = true;
+            result = "User was update";
             return result;
         }
     }

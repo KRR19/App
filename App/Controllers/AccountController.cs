@@ -1,8 +1,10 @@
-﻿using App.BussinesLogicLayer.Models.Users;
+﻿using App.BussinesLogicLayer;
+using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -20,33 +22,25 @@ namespace App.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost]
-        public async Task<string> Login([FromBody] UserModel model)
-        {
-            var token = await _accountService.Login(model);
-            return token.ToString();
-        }
-
         [HttpPost("Register")]
-        public async Task<object> Register([FromBody] UserModel model)
+        public async Task<JwtSecurityToken> Register([FromBody] UserModel model)
         {
             var token = await _accountService.Register(model);
             return token;
         }
 
-
         [HttpPost]
-        public async Task<string> ForgotPassword([FromBody] UserModel model)
+        public async Task<BaseResponseModel> ForgotPassword([FromBody] UserModel model)
         {
-            string result = await _accountService.ForgotPassword(model);
+            BaseResponseModel result = await _accountService.ForgotPassword(model);
             return result;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<string> ResetPassword(ResetPasswordModel model)
+        public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
         {
-            string result = await _accountService.ResetPassword(model);
+            BaseResponseModel result = await _accountService.ResetPassword(model);
             return result;
         }
 
@@ -57,19 +51,11 @@ namespace App.Controllers
             await _userManager.ConfirmEmailAsync(user, code);
         }
 
-        [HttpPost]
-        public async Task<string> Logout()
+        [HttpGet("CreateRole")]
+        public async Task<IdentityResult> CreateRole([FromQuery]string role)
         {
-            string result = await _accountService.LogOut();
+            IdentityResult result = await _accountService.CreateRole(role);
             return result;
         }
-
-        [HttpGet("CreateRole")]
-        public async Task CreateRole([FromQuery]string role)
-        {
-            await _accountService.CreateRole(role);
-        }
-
-
     }
 }

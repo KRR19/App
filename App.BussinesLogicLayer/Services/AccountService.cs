@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace App.BussinesLogicLayer.Services
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor  actionContextAccessor, RoleManager<IdentityRole> roleManager)
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,75 +40,45 @@ namespace App.BussinesLogicLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<object> Register(UserModel model)
+        public async Task<JwtSecurityToken> Register(UserModel model)
         {
-            if(model == null)
-            {
-                return new ApplicationException("You passed an empty object!");
-            }
+
             User user = new User();
             user.UserName = model.Email;
             user.Email = model.Email;
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-
-            if (!result.Succeeded)
-            {
-                return new ApplicationException("UNKNOWN_ERROR");
-            }
+            await _userManager.CreateAsync(user, model.Password);
 
             await _signInManager.SignInAsync(user, false);
-            var token = GenerateJwtToken(model.Email, user);
+            JwtSecurityToken token = GenerateJwtToken(model.Email, user);
 
             await _userManager.AddToRoleAsync(user, "user");
 
             string code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
-            string confirmEmailLink= CreateLink(user.Id, code, "ConfirmEmail");
-            
-            EmailHelper email = new EmailHelper();
+            string confirmEmailLink = CreateLink(user.Id, code, "ConfirmEmail");
+
+            EmailHelper email = new EmailHelper(_configuration);
             email.SendEmail(user.Email, "ConfirmEmail", confirmEmailLink);
 
             return token;
-            
         }
 
-        public async Task<object> Login(UserModel model)
-        {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-
-            if (result.Succeeded)
-            {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                return GenerateJwtToken(model.Email, appUser);
-            }
-
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
-        }
-
-        public async Task<string> LogOut()
-        {
-            await _signInManager.SignOutAsync();
-            string result = "You have successfully logged out";
-            return result;
-        }
-
-        public async Task<string> ForgotPassword(UserModel model)
+        public async Task<BaseResponseModel> ForgotPassword(UserModel model)
         {
             User user = await _userManager.FindByNameAsync(model.Email);
             string code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             string passwordEmailLink = CreateLink(user.Id, code, "ResetPassword");
 
-            EmailHelper email = new EmailHelper();
+            EmailHelper email = new EmailHelper(_configuration);
             email.SendEmail(user.Email, "ResetPassword", passwordEmailLink);
 
             BaseResponseModel response = new BaseResponseModel();
-            response.Message = "The email has been sent.";
-            return response.Message;
+            response.Message.Add("The email has been sent.");
+            return response;
         }
 
-        public async Task<string> ResetPassword(ResetPasswordModel model)
+        public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
         {
             BaseResponseModel report = new BaseResponseModel();
 
@@ -118,10 +87,10 @@ namespace App.BussinesLogicLayer.Services
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (!result.Succeeded)
             {
-                report.Message = "You were unable to change your password!";
+                report.Message.Add("You were unable to change your password!");
             }
-            report.Message = "You have successfully changed your password!";
-            return report.Message;
+            report.Message.Add("You have successfully changed your password!");
+            return report;
         }
 
         public JwtSecurityToken GenerateJwtToken(string email, IdentityUser user)
@@ -160,10 +129,12 @@ namespace App.BussinesLogicLayer.Services
             return callbackUrl.ToString();
         }
 
-        public async Task CreateRole(string name)
+        public async Task<IdentityResult> CreateRole(string name)
         {
             IdentityRole role = new IdentityRole(name);
-            await _roleManager.CreateAsync(role);
+            IdentityResult result = await _roleManager.CreateAsync(role);
+
+            return result;
         }
     }
 }
