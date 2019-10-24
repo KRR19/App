@@ -3,7 +3,7 @@ namespace App.DataAccessLayer.Repository.Base
 {
     public interface IBaseRepository<T> where T : class
     {
-        public Task<string> Create(T item);
-        public string Update(T item);
+        public Task<T> Create(T item);
+        public T Update(T item);
     }
 }

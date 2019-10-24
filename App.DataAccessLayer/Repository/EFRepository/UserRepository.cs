@@ -17,18 +17,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context = context;
             _userManager = userManager;
         }
-        public async Task<string> Create(User item)
+        public async Task<User> Create(User item)
         {
-            string result;
-
             await _context.Users.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            result = "User was create";
-            return result;
+            return item;
 
         }
-
         public async Task<bool> Delete(User item)
         {
             bool result;
@@ -37,21 +33,17 @@ namespace App.DataAccessLayer.Repository.EFRepository
             result = true;
             return result;
         }
-
         public async Task<User> Read(Guid Id)
         {
             User user = await _userManager.FindByIdAsync(Id.ToString());
             return user;
         }
-
-        public string Update(User item)
+        public User Update(User item)
         {
-            string result;
             _context.Users.Update(item);
             _context.SaveChanges();
 
-            result = "User was update";
-            return result;
+            return item;
         }
     }
 }
