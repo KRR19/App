@@ -4,7 +4,6 @@ using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
@@ -16,22 +15,17 @@ namespace App.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
-        private readonly ILogger<AccountController> logger;
 
-        public AccountController(UserManager<User> userManager, IAccountService accountService, ILogger<AccountController> logger)
+
+        public AccountController(UserManager<User> userManager, IAccountService accountService)
         {
             _userManager = userManager;
             _accountService = accountService;
-            this.logger = logger;
         }
 
         [HttpPost("Register")]
         public async Task<JwtSecurityToken> Register([FromBody] UserModel model)
         {
-            logger.LogTrace("OTLOCHNO!!!!!!!!!!!!!!!!");
-            logger.LogWarning("VSE NORM!!!!!!!!!!!!!!!!");
-            logger.LogError("Oshibka!!!!!!!!!!!!!!!");
-            logger.LogCritical("YA ZDOH!!!!!!!!!!!!!!");
             var token = await _accountService.Register(model);
             return token;
         }

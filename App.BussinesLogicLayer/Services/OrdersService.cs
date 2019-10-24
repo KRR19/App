@@ -73,7 +73,6 @@ namespace App.BussinesLogicLayer.Services
         {
             List<Order> order = _orderRepository.GetAll();
             return order;
-
         }
 
         public async Task<BaseResponseModel> Update(OrderModel orderModel)

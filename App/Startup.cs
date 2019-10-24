@@ -15,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Stripe;
 using AccountService = App.BussinesLogicLayer.Services.AccountService;
@@ -35,7 +34,6 @@ namespace App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
@@ -82,7 +80,7 @@ namespace App
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Go", 
+                    Title = "Go",
                     Version = "v1"
                 });
             });
@@ -93,7 +91,8 @@ namespace App
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            StripeConfiguration.ApiKey=Configuration.GetSection("Stripe")["SecretKey"];
+            app.UseMiddleware<LogService>();
+            StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
 
             if (env.IsDevelopment())
             {

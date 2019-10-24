@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using App.DataAccessLayer.AppContext;
+﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -16,15 +14,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(OrderItem item)
+        public async Task<OrderItem> Create(OrderItem item)
         {
-            string result;
-
             await _context.OrderItems.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            result = $"orderItem was create";
-            return result;
+            return item;
         }
 
         public async Task<bool> Delete(OrderItem item)
@@ -42,22 +37,18 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return orderItem;
         }
 
-      
-
         public OrderItem GetLast()
         {
             OrderItem orderItem = _context.OrderItems.ToList<OrderItem>().Last<OrderItem>();
             return orderItem;
         }
 
-
-        public string Update(OrderItem item)
+        public OrderItem Update(OrderItem item)
         {
-            string result;
             _context.OrderItems.Update(item);
             _context.SaveChanges();
-            result = $"OrderItem wac update";
-            return result;
+
+            return item;
         }
     }
 }

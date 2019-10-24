@@ -15,15 +15,13 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(Order item)
+        public async Task<Order> Create(Order item)
         {
-            string result = "Order was create";
             await _context.Orders.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            return result;
+            return item;
         }
-
         public async Task<bool> Delete(Order item)
         {
             bool result;
@@ -38,26 +36,21 @@ namespace App.DataAccessLayer.Repository.EFRepository
             var order = _context.Orders.ToList();
             return order;
         }
-
         public Order GetLast()
         {
             Order order = _context.Orders.ToList<Order>().Last<Order>();
             return order;
         }
-
-
         public async Task<Order> GetById(Guid id)
         {
-           Order order = await _context.Orders.FindAsync(id);
+            Order order = await _context.Orders.FindAsync(id);
             return order;
         }
-
-        public string Update(Order item)
+        public Order Update(Order item)
         {
-            string result="Order was update";
             _context.Orders.Update(item);
             _context.SaveChanges();
-            return result;
+            return item;
         }
     }
 }

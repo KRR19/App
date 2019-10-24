@@ -13,24 +13,20 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(AuthorInPrintingEdition item)
+        public async Task<AuthorInPrintingEdition> Create(AuthorInPrintingEdition item)
         {
             await _context.AuthorInPrintingEditions.AddAsync(item);
             await _context.SaveChangesAsync();
 
-            string result;
-            result = $"connection was created";
-            return result;
+            return item;
         }
 
-
-
-        public string Update(AuthorInPrintingEdition item)
+        public AuthorInPrintingEdition Update(AuthorInPrintingEdition item)
         {
             _context.AuthorInPrintingEditions.Update(item);
             _context.SaveChanges();
-            string result = "connection was update";
-            return result;
+
+            return item;
         }
     }
 }

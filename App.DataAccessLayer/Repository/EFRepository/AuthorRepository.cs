@@ -15,13 +15,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<string> Create(Author author)
+        public async Task<Author> Create(Author author)
         {
             await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
 
-            string result = $"{author.Name} was create";
-            return result;
+            return author;
         }
 
         public async Task<bool> Delete(Author item)
@@ -34,13 +33,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         }
 
-        public string Update(Author item)
+        public Author Update(Author item)
         {
             _context.Authors.Update(item);
             _context.SaveChanges();
 
-            string result = $"{item.Name} was update";
-            return result;
+            return item;
         }
 
         public async  Task<Author> GetById(Guid id)
