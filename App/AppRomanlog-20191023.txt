@@ -1,7 +1,0 @@
-2019-10-23T12:50:40.8798675+03:00  [INF] Application started. Press Ctrl+C to shut down. (dcaefe54)
-2019-10-23T12:50:40.8932991+03:00  [INF] Hosting environment: "Development" (c3307c92)
-2019-10-23T12:50:40.8951922+03:00  [INF] Content root path: "C:\Users\Anuitex\source\repos\App\App" (b5d60022)
-2019-10-23T12:50:40.9451176+03:00 80000038-0003-fd00-b63f-84710c7967bb [INF] Request starting HTTP/2.0 GET https://localhost:44378/weatherforecast   (ca22a1cb)
-2019-10-23T12:50:41.0335610+03:00 80000038-0003-fd00-b63f-84710c7967bb [INF] Request finished in 90.946ms 404  (791a596a)
-2019-10-23T12:50:41.1272056+03:00 80000036-0001-fd00-b63f-84710c7967bb [INF] Request starting HTTP/2.0 GET https://localhost:44378/favicon.ico   (ca22a1cb)
-2019-10-23T12:50:41.1544424+03:00 80000036-0001-fd00-b63f-84710c7967bb [INF] Request finished in 8.3579ms 404  (791a596a)
