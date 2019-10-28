@@ -43,14 +43,14 @@ namespace App.BussinesLogicLayer.Services
             printingEdition.IsRemoved = false;
             printingEdition.CreationDate = DateTime.Now;
 
-            report.Message.Add(await _printingEditionsRepository.Create(printingEdition));
+            await _printingEditionsRepository.Create(printingEdition);
 
             AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
             authorInPrintingEdition.PrintingEditionId = printingEdition.Id;
             authorInPrintingEdition.PrintingEdition = printingEdition;
             authorInPrintingEdition.Author = await _authorRepository.GetById(newPrintingEdition.Author);
 
-            report.Message.Add(await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition));
+            await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition);
 
             report.Message.Add("You have successfully added a publication");
             return report;

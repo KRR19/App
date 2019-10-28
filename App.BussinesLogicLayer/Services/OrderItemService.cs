@@ -19,7 +19,7 @@ namespace App.BussinesLogicLayer.Services
             _context = context;
         }
 
-        public async Task<BaseResponseModel> Create(OrderItemModel newOrderItem)
+        public async Task<OrderItemModel> Create(OrderItemModel newOrderItem)
         {
             IOrderItemRepository orderItemRepository = new OrderItemRepository(_context);
             PrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
@@ -38,9 +38,9 @@ namespace App.BussinesLogicLayer.Services
 
             BaseResponseModel report = new BaseResponseModel();
 
-            report.Message.Add(await orderItemRepository.Create(orderItem));
+            await orderItemRepository.Create(orderItem);
 
-            return report;
+            return newOrderItem;
         }
 
         public async Task<BaseResponseModel> Delete(Guid id)

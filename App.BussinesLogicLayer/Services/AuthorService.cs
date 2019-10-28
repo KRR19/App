@@ -16,7 +16,7 @@ namespace App.BussinesLogicLayer.Services
             _authorRepository = AuthorRepository;
         }
 
-        public async Task<BaseResponseModel> Create(AuthorModel newAuthor)
+        public async Task<AuthorModel> Create(AuthorModel newAuthor)
         {
             BaseResponseModel report = IsValidation(newAuthor);
             Author author = new Author();
@@ -29,10 +29,10 @@ namespace App.BussinesLogicLayer.Services
                 author.CreationDate = DateTime.Now;
                 author.IsRemoved = false;
 
-                report.Message.Add(await _authorRepository.Create(author));
+                await _authorRepository.Create(author);
             }
 
-            return report;
+            return newAuthor;
         }
         public async Task<BaseResponseModel> Delete(Guid id)
         {
@@ -52,7 +52,7 @@ namespace App.BussinesLogicLayer.Services
             }
             return report;
         }
-        public BaseResponseModel Update(AuthorModel UpdateAuthor)
+        public AuthorModel Update(AuthorModel UpdateAuthor)
         {
             BaseResponseModel report = IsValidation(UpdateAuthor);
 
@@ -67,10 +67,10 @@ namespace App.BussinesLogicLayer.Services
                     CreationDate = DateTime.Now,
                     IsRemoved = false
                 };
-                report.Message.Add(_authorRepository.Update(author));
+                _authorRepository.Update(author);
             }
 
-            return report;
+            return UpdateAuthor;
         }
         public async Task<AuthorModel> GetById(Guid id)
         {
