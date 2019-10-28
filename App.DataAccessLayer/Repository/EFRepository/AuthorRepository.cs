@@ -33,10 +33,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         }
 
-        public Author Update(Author item)
+        public async Task<Author> Update(Author item)
         {
             _context.Authors.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return item;
         }

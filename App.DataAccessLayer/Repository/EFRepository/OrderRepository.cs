@@ -46,10 +46,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
             Order order = await _context.Orders.FindAsync(id);
             return order;
         }
-        public Order Update(Order item)
+        public async Task<Order> Update(Order item)
         {
             _context.Orders.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return item;
         }
     }

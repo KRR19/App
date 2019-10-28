@@ -7,7 +7,7 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IOrderItemRepository : IBaseRepository<OrderItem>
     {
-        public Task<OrderItem> Read(Guid Id);
+        public Task<OrderItem> GetById(Guid Id);
         public Task<bool> Delete(OrderItem item);
         public OrderItem GetLast();
     }

@@ -29,7 +29,7 @@ namespace App.BussinesLogicLayer.Services
         {
             BaseResponseModel report = IsValidation(newPrintingEdition);
 
-            if (report.Validation)
+            if (report.IsValidation)
             {
                 return report;
             }
@@ -95,7 +95,7 @@ namespace App.BussinesLogicLayer.Services
             BaseResponseModel report = IsValidation(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
 
-            if (report.Validation)
+            if (report.IsValidation)
             {
                 return report;
             }

@@ -20,6 +20,13 @@ namespace App.Controllers
         {
             _service = service;
         }
+        [HttpGet("Get")]
+        public List<Order> Get()
+        {
+            List<Order> order = _service.GetAll();
+            return order;
+        }
+
         [HttpPost("Create")]
         public async Task<BaseResponseModel> Create([FromBody]OrderModel orderModel)
         {
@@ -44,11 +51,6 @@ namespace App.Controllers
             return report;
         }
 
-        [HttpGet("Get")]
-        public List<Order> Get()
-        {
-            List<Order> order = _service.GetAll();
-            return order;
-        }
+       
     }
 }

@@ -44,10 +44,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return printingEdition;
         }
 
-        public PrintingEdition Update(PrintingEdition item)
+        public async Task<PrintingEdition> Update(PrintingEdition item)
         {
             _context.PrintingEditions.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return item;
         }

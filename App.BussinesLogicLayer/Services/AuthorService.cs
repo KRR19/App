@@ -18,10 +18,10 @@ namespace App.BussinesLogicLayer.Services
 
         public async Task<AuthorModel> Create(AuthorModel newAuthor)
         {
-            BaseResponseModel report = IsValidation(newAuthor);
+            BaseResponseModel report = ValidationAuthor(newAuthor);
             Author author = new Author();
 
-            if (report.Validation)
+            if (report.IsValidation)
             {
                 author.Name = newAuthor.Name;
                 author.DateBirth = newAuthor.DateBirth;
@@ -54,9 +54,9 @@ namespace App.BussinesLogicLayer.Services
         }
         public AuthorModel Update(AuthorModel UpdateAuthor)
         {
-            BaseResponseModel report = IsValidation(UpdateAuthor);
+            BaseResponseModel report = ValidationAuthor(UpdateAuthor);
 
-            if (report.Validation)
+            if (report.IsValidation)
             {
                 Author author = new Author
                 {
@@ -83,28 +83,28 @@ namespace App.BussinesLogicLayer.Services
             authorModel.DateDeath = author.DateDeath;
             return authorModel;
         }
-        private BaseResponseModel IsValidation(AuthorModel author)
+        private BaseResponseModel ValidationAuthor(AuthorModel author)
         {
             BaseResponseModel report = new BaseResponseModel();
             if (author == null)
             {
-                report.Message.Add("You send NULL!");
+                report.Message.Add("Author model is empty.");
                 return report;
             }
 
             if (string.IsNullOrEmpty(author.Name) || string.IsNullOrWhiteSpace(author.Name))
             {
-                report.Message.Add("Author name are empty!");
+                report.Message.Add("Author name is empty.");
                 return report;
             }
 
             if (author.DateBirth >= author.DateDeath)
             {
-                report.Message.Add("Plese check the dates!");
+                report.Message.Add("Invalid dates range.");
                 return report;
             }
 
-            report.Validation = true;
+            report.IsValidation = true;
             return report;
         }
     }

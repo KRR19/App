@@ -17,6 +17,13 @@ namespace App.Controllers
         {
             _service = service;
         }
+        [HttpGet("Get /{Id}")]
+        public async Task<PrintingEditionModel> Get(Guid Id)
+        {
+            PrintingEditionModel printingEdition = await _service.GetById(Id);
+
+            return printingEdition;
+        }
 
         [HttpPost("Post")]
         public async Task<BaseResponseModel> Post([FromBody]PrintingEditionModel printingEdition)
@@ -25,29 +32,20 @@ namespace App.Controllers
 
             return report;
         }
+        [HttpPut("Update")]
+        public BaseResponseModel Update([FromBody]PrintingEditionModel newPrintingEdition)
+        {
+            BaseResponseModel report = _service.Update(newPrintingEdition);
 
-        [HttpDelete]
+            return report;
+        }
+
+        [HttpDelete("Delete")]
         public async Task<BaseResponseModel> Delete([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Delete(printingEdition.Id);
 
             return report;
         }
-        [HttpGet]
-        public async Task<PrintingEditionModel> Get(Guid Id)
-        {
-            PrintingEditionModel printingEdition = await _service.GetById(Id);
-            
-            return printingEdition;
-        }
-
-        [HttpPut]
-        public BaseResponseModel Put([FromBody]PrintingEditionModel newPrintingEdition)
-        {
-            BaseResponseModel report = _service.Update(newPrintingEdition);
-            
-            return report;
-        }
-
     }
 }

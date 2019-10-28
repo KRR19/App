@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,45 +23,51 @@ namespace App.BussinesLogicLayer.Services
     public class AccountService : IAccountService
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUrlHelperFactory _urlHelper;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
+
+        private string SentMsg = "The email has been sent.";
+        private string chnPassErrMsg = "You were unable to change your password!";
+        private string chnPassMsg = "You have successfully changed your password!";
+
+        public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
             _configuration = configuration;
             _contextAccessor = contextAccessor;
             _urlHelper = urlHelper;
             _actionContextAccessor = actionContextAccessor;
             _roleManager = roleManager;
+
+            if(!_roleManager.Roles.Any())
+            {
+                IdentityRole role = new IdentityRole("user");
+                _roleManager.CreateAsync(role);
+            }
         }
 
-        public async Task<JwtSecurityToken> Register(UserModel model)
+        public async Task<IdentityResult> Register(UserModel model)
         {
-
             User user = new User();
             user.UserName = model.Email;
             user.Email = model.Email;
+            string role = _roleManager.Roles.First().ToString();
 
-            await _userManager.CreateAsync(user, model.Password);
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
-            await _signInManager.SignInAsync(user, false);
-            JwtSecurityToken token = GenerateJwtToken(model.Email, user);
+            await _userManager.AddToRoleAsync(user, role);
 
-            await _userManager.AddToRoleAsync(user, "user");
-
-            string code = _userManager.GenerateEmailConfirmationTokenAsync(user).Result;
+            string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string confirmEmailLink = CreateLink(user.Id, code, "ConfirmEmail");
 
             EmailHelper email = new EmailHelper(_configuration);
             email.SendEmail(user.Email, "ConfirmEmail", confirmEmailLink);
 
-            return token;
+            return result;
         }
 
         public async Task<BaseResponseModel> ForgotPassword(UserModel model)
@@ -74,7 +81,7 @@ namespace App.BussinesLogicLayer.Services
             email.SendEmail(user.Email, "ResetPassword", passwordEmailLink);
 
             BaseResponseModel response = new BaseResponseModel();
-            response.Message.Add("The email has been sent.");
+            response.Message.Add(SentMsg);
             return response;
         }
 
@@ -87,9 +94,9 @@ namespace App.BussinesLogicLayer.Services
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (!result.Succeeded)
             {
-                report.Message.Add("You were unable to change your password!");
+                report.Message.Add(chnPassErrMsg);
             }
-            report.Message.Add("You have successfully changed your password!");
+            report.Message.Add(chnPassMsg);
             return report;
         }
 
@@ -120,13 +127,13 @@ namespace App.BussinesLogicLayer.Services
         public string CreateLink(string id, string code, string action)
         {
 
-            var callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
+            string callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
                 action,
                 "Account",
                 new { userId = id, code },
                 protocol: _contextAccessor.HttpContext.Request.Scheme);
 
-            return callbackUrl.ToString();
+            return callbackUrl;
         }
 
         public async Task<IdentityResult> CreateRole(string name)

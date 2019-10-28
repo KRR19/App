@@ -21,10 +21,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public AuthorInPrintingEdition Update(AuthorInPrintingEdition item)
+        public async Task<AuthorInPrintingEdition> Update(AuthorInPrintingEdition item)
         {
             _context.AuthorInPrintingEditions.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return item;
         }

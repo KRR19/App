@@ -13,26 +13,23 @@ namespace App.Controllers
     {
         private readonly IAuthorService _service;
 
-
         public AuthorController(IAuthorService service)
         {
             _service = service;
         }
-        [HttpPost]
+        [HttpGet("Get/{Id}")]
+        public async Task<AuthorModel> Get(Guid Id)
+        {
+            AuthorModel author = await _service.GetById(Id);
 
-        public async Task<AuthorModel> Post([FromBody]AuthorModel newAuthor)
+            return author;
+        }
+        [HttpPost("Create")]
+        public async Task<AuthorModel> Create([FromBody]AuthorModel newAuthor)
         {
             AuthorModel model = await _service.Create(newAuthor);
 
             return model;
-        }
-
-        [HttpDelete]
-        public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
-        {
-            BaseResponseModel report = await _service.Delete(newAuthor.Id);
-
-            return report;
         }
 
         [HttpPut]
@@ -43,12 +40,12 @@ namespace App.Controllers
             return model;
         }
 
-        [HttpGet]
-        public async Task<AuthorModel> Get(Guid Id)
+        [HttpDelete]
+        public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
         {
-            AuthorModel author = await _service.GetById(Id);
+            BaseResponseModel report = await _service.Delete(newAuthor.Id);
 
-            return author;
+            return report;
         }
     }
 }

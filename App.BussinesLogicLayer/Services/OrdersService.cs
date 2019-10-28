@@ -1,13 +1,15 @@
-﻿using App.BussinesLogicLayer.Helper;
-using App.BussinesLogicLayer.Models.Orders;
+﻿using App.BussinesLogicLayer.Models.Orders;
 using App.BussinesLogicLayer.Models.Payments;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Order = App.DataAccessLayer.Entities.Order;
+using OrderItem = App.DataAccessLayer.Entities.OrderItem;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -34,7 +36,6 @@ namespace App.BussinesLogicLayer.Services
         {
             BaseResponseModel report = new BaseResponseModel();
             Order order = new Order();
-            PaymentHelper paymentHelper = new PaymentHelper();
             Payment payment = new Payment();
             OrderItem orderItem = new OrderItem();
             PaymentModel paymentModel = new PaymentModel();
@@ -45,15 +46,14 @@ namespace App.BussinesLogicLayer.Services
             paymentModel.Email = orderModel.PaymentEmail;
             paymentModel.Source = orderModel.PaymentSource;
 
-
-            payment.TransactionId = paymentHelper.Charge(paymentModel);
+            payment.TransactionId = Charge(paymentModel);
             payment.CreationDate = DateTime.Now;
             await _paymentRepository.Create(payment);
 
             order.CreationDate = order.Date = DateTime.Now;
             order.IsRemoved = false;
             order.Description = orderModel.Description;
-            order.Payment = _paymentRepository.GetLast();
+            order.Payment = payment;
             order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
             await _orderRepository.Create(order);
 
@@ -63,7 +63,7 @@ namespace App.BussinesLogicLayer.Services
             orderItem.Count = orderModel.Count;
             orderItem.Currency = orderModel.Currency;
             orderItem.Amount = orderItem.PrintingEdition.Price * orderItem.Count;
-            orderItem.Order = _orderRepository.GetLast();
+            orderItem.Order = order;
             await _orderItemRepository.Create(orderItem);
 
             return report;
@@ -87,7 +87,7 @@ namespace App.BussinesLogicLayer.Services
             order.Description = orderModel.Description;
             order.Payment = _paymentRepository.GetLast();
             order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
-            _orderRepository.Update(order);
+            order = await _orderRepository.Update(order);
 
             orderItem.CreationDate = DateTime.Now;
             orderItem.IsRemoved = false;
@@ -95,8 +95,8 @@ namespace App.BussinesLogicLayer.Services
             orderItem.Count = orderModel.Count;
             orderItem.Currency = orderModel.Currency;
             orderItem.Amount = orderItem.PrintingEdition.Price * orderItem.Count;
-            orderItem.Order = _orderRepository.GetLast();
-            _orderItemRepository.Update(orderItem);
+            orderItem.Order = order;
+            await _orderItemRepository.Update(orderItem);
 
             return report;
         }
@@ -115,6 +115,29 @@ namespace App.BussinesLogicLayer.Services
             }
 
             return report;
+        }
+
+        public string Charge(PaymentModel model)
+        {
+            var customerService = new CustomerService();
+            var chargeService = new ChargeService();
+
+            var customer = customerService.Create(new CustomerCreateOptions
+            {
+                Email = model.Email,
+                Source = model.Source
+            });
+
+            var charge = chargeService.Create(new ChargeCreateOptions
+            {
+                Amount = Convert.ToInt64(model.Amount),
+                Description = model.Description,
+                Currency = model.Currency.ToString(),
+                Customer = customer.Id
+
+            });
+
+            return charge.BalanceTransactionId;
         }
     }
 }

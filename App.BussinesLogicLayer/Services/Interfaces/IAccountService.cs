@@ -7,7 +7,7 @@ namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAccountService
     {
-        public Task<JwtSecurityToken> Register(UserModel model);
+        public Task<IdentityResult> Register(UserModel model);
         public string CreateLink(string id, string code, string action);
         public Task<BaseResponseModel> ForgotPassword(UserModel model);
         public Task<BaseResponseModel> ResetPassword(ResetPasswordModel model);

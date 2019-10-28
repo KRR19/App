@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Net;
-using SmtpClient = System.Net.Mail.SmtpClient;
+using System.Net.Mail;
 
 namespace App.BussinesLogicLayer.Helper
 {
@@ -16,14 +16,19 @@ namespace App.BussinesLogicLayer.Helper
 
         public string SendEmail(string inputEmail, string subject, string body)
         {
-            string returnString = "";
+            string returnString = string.Empty;
+            string smtp = Configuration.GetSection("Email")["smtp"];
+            int port = Convert.ToInt32(Configuration.GetSection("Email")["port"]);
+            string user = Configuration.GetSection("Email")["user"];
+            string psw = Configuration.GetSection("Email")["password"];
+
             try
             {
-                using (var client = new SmtpClient(Configuration.GetSection("Email")["smtp"], Convert.ToInt32(Configuration.GetSection("Email")["port"])))
+                using (var client = new SmtpClient(smtp, port))
                 {
-                    client.Credentials = new NetworkCredential(Configuration.GetSection("Email")["user"], Configuration.GetSection("Email")["password"]);
+                    client.Credentials = new NetworkCredential(user, psw);
                     client.EnableSsl = true;
-                    client.Send(Configuration.GetSection("Email")["user"], inputEmail, subject, body);
+                    client.Send(user, inputEmail, subject, body);
                 };
 
             }

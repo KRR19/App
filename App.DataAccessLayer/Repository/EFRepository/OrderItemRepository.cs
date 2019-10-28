@@ -31,7 +31,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return result;
         }
 
-        public async Task<OrderItem> Read(Guid Id)
+        public async Task<OrderItem> GetById(Guid Id)
         {
             OrderItem orderItem = await _context.OrderItems.FindAsync(Id);
             return orderItem;
@@ -43,10 +43,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return orderItem;
         }
 
-        public OrderItem Update(OrderItem item)
+        public async Task<OrderItem> Update(OrderItem item)
         {
             _context.OrderItems.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return item;
         }

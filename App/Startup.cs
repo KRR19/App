@@ -52,9 +52,6 @@ namespace App
             services.AddTransient<IPrintingEditionService, PrintingEditionService>();
             services.AddTransient<IPrintingEditionsRepository, PrintingEditionsRepository>();
 
-            services.AddTransient<IOrderItemService, OrderItemService>();
-            services.AddTransient<IOrderItemRepository, OrderItemRepository>();
-
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IOrderRepository, OrderRepository>();
 

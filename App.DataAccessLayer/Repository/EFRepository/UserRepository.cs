@@ -38,10 +38,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
             User user = await _userManager.FindByIdAsync(Id.ToString());
             return user;
         }
-        public User Update(User item)
+        public async Task<User> Update(User item)
         {
             _context.Users.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return item;
         }

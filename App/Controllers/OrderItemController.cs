@@ -1,6 +1,5 @@
 ﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.Models.Orders;
-using App.BussinesLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -17,15 +16,8 @@ namespace App.Controllers
         {
             _service = service;
         }
-        [HttpPut]
-        public BaseResponseModel Put([FromBody]OrderItemModel orderItemModel)
-        {
-            BaseResponseModel report = _service.Update(orderItemModel);
 
-            return report;
-        }
-
-        [HttpGet]
+        [HttpGet("Get/{Id}")]
         public async Task<OrderItemModel> Get(Guid Id)
         {
             OrderItemModel author = await _service.Read(Id);
@@ -33,15 +25,22 @@ namespace App.Controllers
             return author;
         }
 
-        [HttpPost]
-        public async Task<OrderItemModel> Post([FromBody]OrderItemModel newOrderItem)
+        [HttpPost("Create")]
+        public async Task<OrderItemModel> Create([FromBody]OrderItemModel newOrderItem)
         {
             OrderItemModel model = await _service.Create(newOrderItem);
 
             return model;
         }
+        [HttpPut("Update")]
+        public BaseResponseModel Update([FromBody]OrderItemModel orderItemModel)
+        {
+            BaseResponseModel report = _service.Update(orderItemModel);
 
-        [HttpDelete]
+            return report;
+        }
+
+        [HttpDelete("Delete")]
         public async Task<BaseResponseModel> Delete([FromBody]OrderItemModel orderItemModel)
         {
             BaseResponseModel report = await _service.Delete(orderItemModel.Id);

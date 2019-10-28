@@ -4,8 +4,6 @@ using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 
@@ -18,7 +16,19 @@ namespace App.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
 
+        [HttpGet("ConfirmEmail")]
+        public async Task ConfirmEmail(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.ConfirmEmailAsync(user, code);
+        }
 
+        [HttpGet("CreateRole")]
+        public async Task<IdentityResult> CreateRole([FromQuery]string role)
+        {
+            IdentityResult result = await _accountService.CreateRole(role);
+            return result;
+        }
         public AccountController(UserManager<User> userManager, IAccountService accountService)
         {
             _userManager = userManager;
@@ -26,12 +36,10 @@ namespace App.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<JwtSecurityToken> Register([FromBody] UserModel model)
+        public async Task<IdentityResult> Register([FromBody] UserModel model)
         {
-            throw new NullReferenceException();
-
-            var token = await _accountService.Register(model);
-            return token;
+            IdentityResult result = await _accountService.Register(model);
+            return result;
         }
 
         [HttpPost("ForgotPassword")]
@@ -46,20 +54,6 @@ namespace App.Controllers
         public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
         {
             BaseResponseModel result = await _accountService.ResetPassword(model);
-            return result;
-        }
-
-        [HttpGet("ConfirmEmail")]
-        public async Task ConfirmEmail(string userId, string code)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.ConfirmEmailAsync(user, code);
-        }
-
-        [HttpGet("CreateRole")]
-        public async Task<IdentityResult> CreateRole([FromQuery]string role)
-        {
-            IdentityResult result = await _accountService.CreateRole(role);
             return result;
         }
     }
