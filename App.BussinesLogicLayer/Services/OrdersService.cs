@@ -85,7 +85,6 @@ namespace App.BussinesLogicLayer.Services
             order.CreationDate = order.Date = DateTime.Now;
             order.IsRemoved = false;
             order.Description = orderModel.Description;
-            order.Payment = _paymentRepository.GetLast();
             order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
             order = await _orderRepository.Update(order);
 
