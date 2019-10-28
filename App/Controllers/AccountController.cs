@@ -4,8 +4,10 @@ using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+
 
 namespace App.Controllers
 {
@@ -26,6 +28,8 @@ namespace App.Controllers
         [HttpPost("Register")]
         public async Task<JwtSecurityToken> Register([FromBody] UserModel model)
         {
+            throw new NullReferenceException();
+
             var token = await _accountService.Register(model);
             return token;
         }

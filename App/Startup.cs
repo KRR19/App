@@ -46,7 +46,6 @@ namespace App
                 })
                 .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
 
-
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
 
@@ -91,13 +90,15 @@ namespace App
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<LogService>();
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
+
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -112,11 +113,13 @@ namespace App
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            app.UseMiddleware<LogService>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }

@@ -20,11 +20,11 @@ namespace App.Controllers
         }
         [HttpPost]
 
-        public async Task<BaseResponseModel> Post([FromBody]AuthorModel newAuthor)
+        public async Task<AuthorModel> Post([FromBody]AuthorModel newAuthor)
         {
-            BaseResponseModel report = await _service.Create(newAuthor);
+            AuthorModel model = await _service.Create(newAuthor);
 
-            return report;
+            return model;
         }
 
         [HttpDelete]
@@ -36,11 +36,11 @@ namespace App.Controllers
         }
 
         [HttpPut]
-        public BaseResponseModel Put([FromBody]AuthorModel newAuthor)
+        public AuthorModel Put([FromBody]AuthorModel newAuthor)
         {
-            BaseResponseModel report = _service.Update(newAuthor);
+            AuthorModel model = _service.Update(newAuthor);
 
-            return report;
+            return model;
         }
 
         [HttpGet]
