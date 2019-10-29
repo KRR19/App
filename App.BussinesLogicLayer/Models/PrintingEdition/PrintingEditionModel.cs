@@ -1,7 +1,5 @@
-﻿using App.DataAccessLayer.Entities;
-using App.DataAccessLayer.Entities.Enum;
+﻿using App.DataAccessLayer.Entities.Enum;
 using System;
-using System.Collections.Generic;
 
 namespace App.BussinesLogicLayer.Models.PrintingEdition
 {

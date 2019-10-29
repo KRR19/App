@@ -1,10 +1,10 @@
 ﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -29,8 +29,8 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context.Authors.Update(item);
             await _context.SaveChangesAsync();
             result = true;
-            return result;
 
+            return result;
         }
 
         public async Task<Author> Update(Author item)
@@ -41,7 +41,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async  Task<Author> GetById(Guid id)
+        public async Task<Author> GetById(Guid id)
         {
             Author author = await _context.Authors.FindAsync(id);
             return author;
@@ -49,7 +49,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public List<Author> GetByAll()
         {
-            var author =_context.Authors.ToList();
+            var author = _context.Authors.ToList();
             return author;
         }
     }

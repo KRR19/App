@@ -1,6 +1,5 @@
 ﻿using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Base;
-
 using System;
 using System.Threading.Tasks;
 
@@ -10,6 +9,5 @@ namespace App.DataAccessLayer.Repository.Interfaces
     {
         public Task<Author> GetById(Guid id);
         public Task<bool> Delete(Author item);
-
     }
 }

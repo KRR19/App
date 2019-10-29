@@ -30,9 +30,9 @@ namespace App.BussinesLogicLayer.Services
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
-        private string SentMsg = "The email has been sent.";
-        private string chnPassErrMsg = "You were unable to change your password!";
-        private string chnPassMsg = "You have successfully changed your password!";
+        private readonly string SentMsg = "The email has been sent.";
+        private readonly string chnPassMsg = "You have successfully changed your password!";
+        private readonly string chnPassErrMsg = "You were unable to change your password!";
 
         public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
@@ -43,7 +43,7 @@ namespace App.BussinesLogicLayer.Services
             _actionContextAccessor = actionContextAccessor;
             _roleManager = roleManager;
 
-            if(!_roleManager.Roles.Any())
+            if (!_roleManager.Roles.Any())
             {
                 IdentityRole role = new IdentityRole("user");
                 _roleManager.CreateAsync(role);
@@ -82,6 +82,7 @@ namespace App.BussinesLogicLayer.Services
 
             BaseResponseModel response = new BaseResponseModel();
             response.Message.Add(SentMsg);
+
             return response;
         }
 
@@ -97,6 +98,7 @@ namespace App.BussinesLogicLayer.Services
                 report.Message.Add(chnPassErrMsg);
             }
             report.Message.Add(chnPassMsg);
+
             return report;
         }
 
@@ -126,7 +128,6 @@ namespace App.BussinesLogicLayer.Services
 
         public string CreateLink(string id, string code, string action)
         {
-
             string callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
                 action,
                 "Account",

@@ -23,7 +23,6 @@ namespace App.DataAccessLayer.Repository.EFRepository
             await _context.SaveChangesAsync();
 
             return item;
-
         }
         public async Task<bool> Delete(User item)
         {

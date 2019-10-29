@@ -10,7 +10,6 @@ namespace App.BussinesLogicLayer.Services
 {
     public class UserService : IUserService
     {
-
         private readonly IUserRepository userRepository;
         private readonly UserManager<User> _userManager;
         public UserService(IUserRepository userRepository, UserManager<User> userManager)
@@ -76,6 +75,7 @@ namespace App.BussinesLogicLayer.Services
                 PasswordHash = userModel.PasswordHash
             };
             userRepository.Update(user);
+
             return report;
         }
     }

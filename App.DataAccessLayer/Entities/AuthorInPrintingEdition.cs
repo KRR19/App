@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace App.DataAccessLayer.Entities
 {
     public class AuthorInPrintingEdition
     {
-
         public Guid AuthorId { get; set; }
         public Author Author { get; set; }
 

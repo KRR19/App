@@ -27,7 +27,7 @@ namespace App.BussinesLogicLayer.Services
         }
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
-            BaseResponseModel report = IsValidation(newPrintingEdition);
+            BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
 
             if (report.IsValidation)
             {
@@ -92,7 +92,7 @@ namespace App.BussinesLogicLayer.Services
 
         public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
         {
-            BaseResponseModel report = IsValidation(UpdatePrintingEdition);
+            BaseResponseModel report = ValidationPrintingEdition(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
 
             if (report.IsValidation)
@@ -115,7 +115,7 @@ namespace App.BussinesLogicLayer.Services
             return report;
         }
 
-        private BaseResponseModel IsValidation(PrintingEditionModel printingEdition)
+        private BaseResponseModel ValidationPrintingEdition(PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = new BaseResponseModel();
             if (printingEdition == null)

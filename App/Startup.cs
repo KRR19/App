@@ -1,4 +1,4 @@
-using App.BussinesLogicLayer.Helper;
+using App.BussinesLogicLayer.Models.Payments;
 using App.BussinesLogicLayer.Services;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.AppContext;
@@ -60,7 +60,6 @@ namespace App
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IUserService, UserService>();
 
-
             services.AddTransient<IAuthorInPrintingEditionsRepository, AuthorInPrintingEditionsRepository>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
 
@@ -70,7 +69,7 @@ namespace App
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
-            services.Configure<PaymentHelper>(Configuration.GetSection("Stripe"));
+            services.Configure<PaymentModel>(Configuration.GetSection("Stripe"));
 
             services.AddSwaggerGen(c =>
             {
@@ -80,8 +79,6 @@ namespace App
                     Version = "v1"
                 });
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,13 +86,10 @@ namespace App
         {
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
 
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -115,8 +109,6 @@ namespace App
             {
                 endpoints.MapControllers();
             });
-
-
         }
     }
 }

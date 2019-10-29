@@ -22,25 +22,26 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return item;
         }
-
         public async Task<string> Delete(PrintingEdition item)
         {
             string result;
             _context.PrintingEditions.Update(item);
             await _context.SaveChangesAsync();
             result = $"You delete {item.Name}";
+
             return result;
         }
-
         public async Task<PrintingEdition> GetById(Guid id)
         {
             PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
+
             return printingEdition;
         }
 
         public List<PrintingEdition> GetAll()
         {
             var printingEdition = _context.PrintingEditions.ToList();
+
             return printingEdition;
         }
 
@@ -51,7 +52,5 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return item;
         }
-
-
     }
 }

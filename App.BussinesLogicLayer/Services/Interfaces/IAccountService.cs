@@ -1,6 +1,5 @@
 ﻿using App.BussinesLogicLayer.Models.Users;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services.Interfaces

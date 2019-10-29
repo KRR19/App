@@ -1,5 +1,4 @@
-﻿using App.DataAccessLayer.Entities.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace App.DataAccessLayer.Entities

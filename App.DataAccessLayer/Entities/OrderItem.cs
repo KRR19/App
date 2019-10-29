@@ -1,9 +1,4 @@
-﻿
-using App.DataAccessLayer.Entities.Base;
-using App.DataAccessLayer.Entities.Enum;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using App.DataAccessLayer.Entities.Enum;
 
 namespace App.DataAccessLayer.Entities
 {
@@ -14,6 +9,5 @@ namespace App.DataAccessLayer.Entities
         public PrintingEdition PrintingEdition { get; set; }
         public int Count { get; set; }
         public Order Order { get; set; }
-
     }
 }

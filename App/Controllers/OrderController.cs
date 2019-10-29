@@ -14,8 +14,6 @@ namespace App.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrdersService _service;
-
-
         public OrderController(IOrdersService service)
         {
             _service = service;
@@ -50,7 +48,5 @@ namespace App.Controllers
 
             return report;
         }
-
-       
     }
 }
