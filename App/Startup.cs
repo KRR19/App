@@ -54,6 +54,7 @@ namespace App
 
             services.AddTransient<IOrdersService, OrdersService>();
             services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IOrderItemRepository, OrderItemRepository>();
 
             services.AddTransient<IPaymentRepository, PaymentRepository>();
 
