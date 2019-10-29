@@ -21,7 +21,7 @@ namespace App.BussinesLogicLayer.Services
             BaseResponseModel report = ValidationAuthor(newAuthor);
             Author author = new Author();
 
-            if (report.IsValidation)
+            if (report.IsValid)
             {
                 author.Name = newAuthor.Name;
                 author.DateBirth = newAuthor.DateBirth;
@@ -56,7 +56,7 @@ namespace App.BussinesLogicLayer.Services
         {
             BaseResponseModel report = ValidationAuthor(UpdateAuthor);
 
-            if (report.IsValidation)
+            if (report.IsValid)
             {
                 Author author = new Author
                 {
@@ -104,7 +104,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
 
-            report.IsValidation = true;
+            report.IsValid = true;
             return report;
         }
     }

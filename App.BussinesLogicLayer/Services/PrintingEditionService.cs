@@ -18,6 +18,15 @@ namespace App.BussinesLogicLayer.Services
         private readonly IAuthorRepository _authorRepository;
         private readonly IPrintingEditionsRepository _printingEditionsRepository;
 
+        private readonly string _publicationAddedMsg = "You have successfully added a publication";
+        private readonly string _publicationNotFoundMsg = "Printing Edition not found in the database!";
+        private readonly string _sendNullMsg = "You send NULL!";
+        private readonly string _titleOfPublicationMsg = "Enter title of publication!";
+        private readonly string _negativePriceMsg = "Price cannot be negative!";
+        private readonly string _StatusMsg = "Enter status of publication!";
+        private readonly string _currencyMsg = "Enter currency!";
+        private readonly string _typeMsg = "Enter type of publication!";
+
         public PrintingEditionService(ApplicationContext context, IAuthorInPrintingEditionsRepository authorInPrintingEditionsRepository, IAuthorRepository authorRepository, IPrintingEditionsRepository printingEditionsRepository)
         {
             _context = context;
@@ -29,7 +38,7 @@ namespace App.BussinesLogicLayer.Services
         {
             BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
 
-            if (report.IsValidation)
+            if (report.IsValid)
             {
                 return report;
             }
@@ -52,7 +61,7 @@ namespace App.BussinesLogicLayer.Services
 
             await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition);
 
-            report.Message.Add("You have successfully added a publication");
+            report.Message.Add(_publicationAddedMsg);
             return report;
         }
         public async Task<BaseResponseModel> Delete(Guid id)
@@ -63,7 +72,7 @@ namespace App.BussinesLogicLayer.Services
 
             if (printingEdition == null)
             {
-                report.Message.Add("Printing Edition not found in the database!");
+                report.Message.Add(_publicationNotFoundMsg);
                 return report;
             }
             printingEdition.IsRemoved = true;
@@ -95,7 +104,7 @@ namespace App.BussinesLogicLayer.Services
             BaseResponseModel report = ValidationPrintingEdition(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
 
-            if (report.IsValidation)
+            if (report.IsValid)
             {
                 return report;
             }
@@ -120,36 +129,36 @@ namespace App.BussinesLogicLayer.Services
             BaseResponseModel report = new BaseResponseModel();
             if (printingEdition == null)
             {
-                report.Message.Add("You send NULL!");
+                report.Message.Add(_sendNullMsg);
                 return report;
             }
 
 
             if (string.IsNullOrEmpty(printingEdition.Name) || string.IsNullOrWhiteSpace(printingEdition.Name))
             {
-                report.Message.Add("Enter title of publication!");
+                report.Message.Add(_titleOfPublicationMsg);
                 return report;
             }
             if (printingEdition.Price < 0)
             {
-                report.Message.Add("Price cannot be negative!");
+                report.Message.Add(_negativePriceMsg);
                 return report;
             }
             if (!Enum.IsDefined(typeof(Status), printingEdition.Status))
             {
-                report.Message.Add("Enter status of publication!");
+                report.Message.Add(_StatusMsg);
                 return report;
             }
 
             if (!Enum.IsDefined(typeof(Currency), printingEdition.Currency))
             {
-                report.Message.Add("Enter currency!");
+                report.Message.Add(_currencyMsg);
                 return report;
             }
 
             if (!Enum.IsDefined(typeof(Types), printingEdition.Type))
             {
-                report.Message.Add("Enter type of publication!");
+                report.Message.Add(_typeMsg);
                 return report;
             }
 

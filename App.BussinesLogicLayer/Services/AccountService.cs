@@ -30,9 +30,13 @@ namespace App.BussinesLogicLayer.Services
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
-        private readonly string SentMsg = "The email has been sent.";
-        private readonly string chnPassMsg = "You have successfully changed your password!";
-        private readonly string chnPassErrMsg = "You were unable to change your password!";
+        private readonly string _sentMsg = "The email has been sent.";
+        private readonly string _chnPassMsg = "You have successfully changed your password!";
+        private readonly string _chnPassErrMsg = "You were unable to change your password!";
+        private readonly string _userNotFoundMsg = "User not found!";
+        private readonly string _emailAlreadyConfirmedMsg = "This email has already been confirmed.";
+        private readonly string _emailNotFoundMsg = "Email is not verified.";
+        private readonly string _emailConfirmedMsg = "Email confirmed.";
 
         public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
@@ -81,7 +85,7 @@ namespace App.BussinesLogicLayer.Services
             email.SendEmail(user.Email, "ResetPassword", passwordEmailLink);
 
             BaseResponseModel response = new BaseResponseModel();
-            response.Message.Add(SentMsg);
+            response.Message.Add(_sentMsg);
 
             return response;
         }
@@ -95,9 +99,9 @@ namespace App.BussinesLogicLayer.Services
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (!result.Succeeded)
             {
-                report.Message.Add(chnPassErrMsg);
+                report.Message.Add(_chnPassErrMsg);
             }
-            report.Message.Add(chnPassMsg);
+            report.Message.Add(_chnPassMsg);
 
             return report;
         }
@@ -143,6 +147,36 @@ namespace App.BussinesLogicLayer.Services
             IdentityResult result = await _roleManager.CreateAsync(role);
 
             return result;
+        }
+
+        public async Task<BaseResponseModel> ConfirmEmail(string userId, string code)
+        {
+            BaseResponseModel response = new BaseResponseModel();
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user.EmailConfirmed)
+            {
+                response.Message.Add(_emailAlreadyConfirmedMsg);
+                response.IsValid = false;
+                return response;
+            }
+            if (user == null)
+            {
+                response.Message.Add(_userNotFoundMsg);
+                response.IsValid = false;
+                return response;
+            }
+
+            IdentityResult result = await _userManager.ConfirmEmailAsync(user, code);
+            if (!result.Succeeded)
+            {
+                response.Message.Add(_emailNotFoundMsg);
+                response.IsValid = true;
+                return response;
+            }
+
+            response.Message.Add(_emailConfirmedMsg);
+            response.IsValid = true;
+            return response;
         }
     }
 }

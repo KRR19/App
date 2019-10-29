@@ -16,11 +16,17 @@ namespace App.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
 
-        [HttpGet("ConfirmEmail")]
-        public async Task ConfirmEmail(string userId, string code)
+        public AccountController(UserManager<User> userManager, IAccountService accountService)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            await _userManager.ConfirmEmailAsync(user, code);
+            _userManager = userManager;
+            _accountService = accountService;
+        }
+
+        [HttpGet("ConfirmEmail")]
+        public async Task<BaseResponseModel> ConfirmEmail(string userId, string code)
+        {
+            BaseResponseModel response = await _accountService.ConfirmEmail(userId, code);
+            return response;            
         }
 
         [HttpGet("CreateRole")]
@@ -29,11 +35,7 @@ namespace App.Controllers
             IdentityResult result = await _accountService.CreateRole(role);
             return result;
         }
-        public AccountController(UserManager<User> userManager, IAccountService accountService)
-        {
-            _userManager = userManager;
-            _accountService = accountService;
-        }
+
 
         [HttpPost("Register")]
         public async Task<IdentityResult> Register([FromBody] UserModel model)

@@ -29,7 +29,6 @@ namespace App.Controllers
         public async Task<BaseResponseModel> Create([FromBody]OrderModel orderModel)
         {
             BaseResponseModel report = await _service.Create(orderModel);
-
             return report;
         }
 
@@ -37,7 +36,6 @@ namespace App.Controllers
         public async Task<BaseResponseModel> Update([FromBody]OrderModel orderModel)
         {
             BaseResponseModel report = await _service.Update(orderModel);
-
             return report;
         }
 
@@ -45,7 +43,6 @@ namespace App.Controllers
         public async Task<BaseResponseModel> Delete([FromBody]Guid id)
         {
             BaseResponseModel report = await _service.Delete(id);
-
             return report;
         }
     }

@@ -11,5 +11,6 @@ namespace App.BussinesLogicLayer.Services.Interfaces
         public Task<BaseResponseModel> ForgotPassword(UserModel model);
         public Task<BaseResponseModel> ResetPassword(ResetPasswordModel model);
         public Task<IdentityResult> CreateRole(string Role);
+        public Task<BaseResponseModel> ConfirmEmail(string userId, string code);
     }
 }

@@ -22,6 +22,8 @@ namespace App.BussinesLogicLayer.Services
 
         private readonly UserManager<User> _userManager;
 
+        private readonly string _successDeletMsg = "You have successfully deleted";
+
         public OrdersService(IOrderRepository orderRepository, IPaymentRepository paymentRepository, IPrintingEditionsRepository printingEditionsRepository,
                              IOrderItemRepository orderItemRepository, UserManager<User> userManager)
         {
@@ -107,7 +109,7 @@ namespace App.BussinesLogicLayer.Services
 
             if (result)
             {
-                report.Message.Add("You have successfully deleted");
+                report.Message.Add(_successDeletMsg);
             }
 
             return report;

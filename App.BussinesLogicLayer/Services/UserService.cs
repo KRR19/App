@@ -12,6 +12,8 @@ namespace App.BussinesLogicLayer.Services
     {
         private readonly IUserRepository userRepository;
         private readonly UserManager<User> _userManager;
+
+        private readonly string UserNF = "User not found in the database!";
         public UserService(IUserRepository userRepository, UserManager<User> userManager)
         {
             this.userRepository = userRepository;
@@ -41,7 +43,8 @@ namespace App.BussinesLogicLayer.Services
 
             if (user == null)
             {
-                report.Message.Add("User not found in the database!");
+                report.Message.Add(UserNF);
+                report.IsValid = false;
                 return report;
             }
 
