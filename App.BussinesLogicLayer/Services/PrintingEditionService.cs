@@ -37,12 +37,13 @@ namespace App.BussinesLogicLayer.Services
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
+            AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
+            PrintingEdition printingEdition = new PrintingEdition();
 
             if (report.IsValid)
             {
                 return report;
             }
-            PrintingEdition printingEdition = new PrintingEdition();
             printingEdition.Name = newPrintingEdition.Name;
             printingEdition.Description = newPrintingEdition.Description;
             printingEdition.Price = newPrintingEdition.Price;
@@ -54,7 +55,6 @@ namespace App.BussinesLogicLayer.Services
 
             await _printingEditionsRepository.Create(printingEdition);
 
-            AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
             authorInPrintingEdition.PrintingEditionId = printingEdition.Id;
             authorInPrintingEdition.PrintingEdition = printingEdition;
             authorInPrintingEdition.Author = await _authorRepository.GetById(newPrintingEdition.Author);

@@ -1,7 +1,6 @@
 ﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
-using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -13,12 +12,10 @@ namespace App.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly IAccountService _accountService;
 
-        public AccountController(UserManager<User> userManager, IAccountService accountService)
+        public AccountController(IAccountService accountService)
         {
-            _userManager = userManager;
             _accountService = accountService;
         }
 
@@ -26,7 +23,7 @@ namespace App.Controllers
         public async Task<BaseResponseModel> ConfirmEmail(string userId, string code)
         {
             BaseResponseModel response = await _accountService.ConfirmEmail(userId, code);
-            return response;            
+            return response;
         }
 
         [HttpGet("CreateRole")]

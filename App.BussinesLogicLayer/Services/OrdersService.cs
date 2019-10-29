@@ -37,10 +37,11 @@ namespace App.BussinesLogicLayer.Services
         public async Task<BaseResponseModel> Create(OrderModel orderModel)
         {
             BaseResponseModel report = new BaseResponseModel();
+            PaymentModel paymentModel = new PaymentModel();
             Order order = new Order();
             Payment payment = new Payment();
             OrderItem orderItem = new OrderItem();
-            PaymentModel paymentModel = new PaymentModel();
+
 
             paymentModel.Amount = orderModel.Amount;
             paymentModel.Currency = orderModel.Currency;

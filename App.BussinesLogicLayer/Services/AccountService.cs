@@ -1,4 +1,5 @@
 ﻿using App.BussinesLogicLayer.Helper;
+using App.BussinesLogicLayer.Models;
 using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
@@ -37,7 +38,6 @@ namespace App.BussinesLogicLayer.Services
         private readonly string _emailAlreadyConfirmedMsg = "This email has already been confirmed.";
         private readonly string _emailNotFoundMsg = "Email is not verified.";
         private readonly string _emailConfirmedMsg = "Email confirmed.";
-
         public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -46,21 +46,18 @@ namespace App.BussinesLogicLayer.Services
             _urlHelper = urlHelper;
             _actionContextAccessor = actionContextAccessor;
             _roleManager = roleManager;
-
-            if (!_roleManager.Roles.Any())
-            {
-                IdentityRole role = new IdentityRole("user");
-                _roleManager.CreateAsync(role);
-            }
         }
 
         public async Task<IdentityResult> Register(UserModel model)
         {
             User user = new User();
+            EmailHelper email = new EmailHelper(_configuration);
+
+            IdentityRoleInitializer.SeedRoles(_roleManager);
+
             user.UserName = model.Email;
             user.Email = model.Email;
-            string role = _roleManager.Roles.First().ToString();
-
+            string role = _roleManager.Roles.FirstOrDefault(p => p.NormalizedName == DefaultRoles.User).ToString();
             IdentityResult result = await _userManager.CreateAsync(user, model.Password);
 
             await _userManager.AddToRoleAsync(user, role);
@@ -68,7 +65,6 @@ namespace App.BussinesLogicLayer.Services
             string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string confirmEmailLink = CreateLink(user.Id, code, "ConfirmEmail");
 
-            EmailHelper email = new EmailHelper(_configuration);
             email.SendEmail(user.Email, "ConfirmEmail", confirmEmailLink);
 
             return result;
