@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace App.BussinesLogicLayer.Services
 {
-    class IdentityRoleInitializer
+    public class IdentityRoleInitializer
     {
         public static void SeedRoles(RoleManager<IdentityRole> roleManager)
         {

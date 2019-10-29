@@ -53,8 +53,6 @@ namespace App.BussinesLogicLayer.Services
             User user = new User();
             EmailHelper email = new EmailHelper(_configuration);
 
-            IdentityRoleInitializer.SeedRoles(_roleManager);
-
             user.UserName = model.Email;
             user.Email = model.Email;
             string role = _roleManager.Roles.FirstOrDefault(p => p.NormalizedName == DefaultRoles.User).ToString();
