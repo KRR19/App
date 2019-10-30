@@ -25,6 +25,7 @@ namespace App.BussinesLogicLayer.Services
             {
                 string exeption = $"{ex.Data} + {ex.InnerException} + {ex.StackTrace} + {ex.Source}+ {ex.Message} + {ex.HelpLink}";
                 logger.LogInformation(exeption);
+                throw;
             }
         }
     }

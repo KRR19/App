@@ -52,11 +52,17 @@ namespace App.BussinesLogicLayer.Services
         {
             User user = new User();
             EmailHelper email = new EmailHelper(_configuration);
+            IdentityResult result = new IdentityResult();
 
             user.UserName = model.Email;
             user.Email = model.Email;
             string role = _roleManager.Roles.FirstOrDefault(p => p.NormalizedName == DefaultRoles.User).ToString();
-            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            result = await _userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return result;
+            }
 
             await _userManager.AddToRoleAsync(user, role);
 

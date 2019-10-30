@@ -29,7 +29,6 @@ namespace App.BussinesLogicLayer.Services
                 LastName = userModel.LastName,
                 Email = userModel.Email,
                 UserName = userModel.Email,
-                PasswordHash = userModel.PasswordHash
             };
 
             await userRepository.Create(user);
@@ -55,12 +54,10 @@ namespace App.BussinesLogicLayer.Services
         {
             User user = await userRepository.Read(id);
             UserModel userModel = new UserModel
-            {
-                UserName = user.UserName,
+            {                
                 Email = user.Email,
                 FirstName = user.FirstName,
-                LastName = user.LastName,
-                PasswordHash = user.PasswordHash
+                LastName = user.LastName
             };
 
             return userModel;
@@ -75,7 +72,6 @@ namespace App.BussinesLogicLayer.Services
                 LastName = userModel.LastName,
                 Email = userModel.Email,
                 UserName = userModel.Email,
-                PasswordHash = userModel.PasswordHash
             };
             userRepository.Update(user);
 
