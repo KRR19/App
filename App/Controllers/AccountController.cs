@@ -20,10 +20,10 @@ namespace App.Controllers
         }
 
         [HttpGet("ConfirmEmail")]
-        public async Task<BaseResponseModel> ConfirmEmail(string userId, string code)
+        public async Task<RedirectResult> ConfirmEmail(string userId, string code)
         {
             BaseResponseModel response = await _accountService.ConfirmEmail(userId, code);
-            return response;
+            return Redirect("http://localhost:4200/auth");
         }
 
         [HttpGet("CreateRole")]
@@ -34,10 +34,10 @@ namespace App.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IdentityResult> Register([FromBody] UserModel model)
+        public async Task<BaseResponseModel> Register([FromBody] UserModel model)
         {
-            IdentityResult result = await _accountService.Register(model);
-            return result;
+           BaseResponseModel result = await _accountService.Register(model);
+           return result;
         }
 
         [HttpPost("ForgotPassword")]

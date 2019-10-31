@@ -48,11 +48,12 @@ namespace App.BussinesLogicLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<IdentityResult> Register(UserModel model)
+        public async Task<BaseResponseModel> Register(UserModel model)
         {
             User user = new User();
             EmailHelper email = new EmailHelper(_configuration);
             IdentityResult result = new IdentityResult();
+            BaseResponseModel responseModel = new BaseResponseModel();
 
             user.UserName = model.Email;
             user.Email = model.Email;
@@ -61,7 +62,9 @@ namespace App.BussinesLogicLayer.Services
 
             if (!result.Succeeded)
             {
-                return result;
+                responseModel.IsValid = result.Succeeded;
+                responseModel.Message.Add(result.Errors.ToString());
+                return responseModel;
             }
 
             await _userManager.AddToRoleAsync(user, role);
@@ -70,8 +73,9 @@ namespace App.BussinesLogicLayer.Services
             string confirmEmailLink = CreateLink(user.Id, code, "ConfirmEmail");
 
             email.SendEmail(user.Email, "ConfirmEmail", confirmEmailLink);
+            responseModel.IsValid = true;
 
-            return result;
+            return responseModel;
         }
 
         public async Task<BaseResponseModel> ForgotPassword(UserModel model)
