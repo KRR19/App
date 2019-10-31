@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {User} from '../../../shared/interfaces';
 import {Observable} from 'rxjs';
+import {UserModel} from '../../../models/UserModel';
 
 @Injectable()
 export class AuthService {
@@ -10,8 +10,8 @@ export class AuthService {
     return  '';
   }
 
-  login(user: User): Observable<any> {
-   return  this.http.post('', user);
+  login(user: UserModel): Observable<any> {
+    return  this.http.post('', user);
   }
   logout() {
 

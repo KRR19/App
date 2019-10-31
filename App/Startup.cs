@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Stripe;
+using App.BussinesLogicLayer.middleware;
 using AccountService = App.BussinesLogicLayer.Services.AccountService;
 using OrdersService = App.BussinesLogicLayer.Services.OrdersService;
 
@@ -106,7 +107,7 @@ namespace App
             app.UseAuthentication();
             app.UseAuthorization();
             IdentityRoleInitializer.SeedRoles(roleManager);
-            app.UseMiddleware<LogService>();
+            app.UseMiddleware<LogMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

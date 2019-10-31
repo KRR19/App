@@ -130,39 +130,32 @@ namespace App.BussinesLogicLayer.Services
             if (printingEdition == null)
             {
                 report.Message.Add(_sendNullMsg);
-                return report;
             }
-
 
             if (string.IsNullOrEmpty(printingEdition.Name) || string.IsNullOrWhiteSpace(printingEdition.Name))
             {
                 report.Message.Add(_titleOfPublicationMsg);
-                return report;
             }
             if (printingEdition.Price < 0)
             {
                 report.Message.Add(_negativePriceMsg);
-                return report;
             }
             if (!Enum.IsDefined(typeof(Status), printingEdition.Status))
             {
                 report.Message.Add(_StatusMsg);
-                return report;
             }
 
             if (!Enum.IsDefined(typeof(Currency), printingEdition.Currency))
             {
                 report.Message.Add(_currencyMsg);
-                return report;
             }
 
             if (!Enum.IsDefined(typeof(Types), printingEdition.Type))
             {
                 report.Message.Add(_typeMsg);
-                return report;
             }
 
-            return new BaseResponseModel();
+            return report;
         }
     }
 }

@@ -33,7 +33,6 @@ namespace App.Controllers
             return result;
         }
 
-
         [HttpPost("Register")]
         public async Task<IdentityResult> Register([FromBody] UserModel model)
         {
