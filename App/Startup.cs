@@ -17,7 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Stripe;
-using App.BussinesLogicLayer.middleware;
+using App.BussinesLogicLayer.Middleware;
 using AccountService = App.BussinesLogicLayer.Services.AccountService;
 using OrdersService = App.BussinesLogicLayer.Services.OrdersService;
 

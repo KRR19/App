@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 
-namespace App.BussinesLogicLayer.middleware
+namespace App.BussinesLogicLayer.Middleware
 {
     public class LogMiddleware
     {
