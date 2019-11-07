@@ -1,5 +1,6 @@
 ﻿using App.BussinesLogicLayer.Helper;
 using App.BussinesLogicLayer.Models;
+using App.BussinesLogicLayer.Models.Response;
 using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
@@ -30,7 +31,6 @@ namespace App.BussinesLogicLayer.Services
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-
         private readonly string _sentMsg = "The email has been sent.";
         private readonly string _chnPassMsg = "You have successfully changed your password!";
         private readonly string _chnPassErrMsg = "You were unable to change your password!";
@@ -38,6 +38,7 @@ namespace App.BussinesLogicLayer.Services
         private readonly string _emailAlreadyConfirmedMsg = "This email has already been confirmed.";
         private readonly string _emailNotFoundMsg = "Email is not verified.";
         private readonly string _emailConfirmedMsg = "Email confirmed.";
+        private readonly string _wrongPass = "You entered an incorrect password";
         public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -48,12 +49,59 @@ namespace App.BussinesLogicLayer.Services
             _roleManager = roleManager;
         }
 
+        public async Task<LogInResponseModel> Singin(UserModel model)
+        {
+            LogInResponseModel logInResponse = new LogInResponseModel();
+            List<Claim> accessClaims = new List<Claim>();
+            List<Claim> refreshClaims = new List<Claim>();
+            string accessToken;
+            string refreshToken;
+
+            User user = await _userManager.FindByEmailAsync(model.Email);
+
+            if(user == null)
+            {
+                logInResponse.IsValid = false;
+                logInResponse.Message.Add(_userNotFoundMsg);
+                return logInResponse;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            logInResponse.Role = roles.ToList().FirstOrDefault();
+
+            bool confirm = await _userManager.CheckPasswordAsync(user, model.Password);         
+
+            if (!confirm)
+            {
+                logInResponse.IsValid = false;
+                logInResponse.Message.Add(_wrongPass);
+
+                return logInResponse;
+            }
+            
+            accessClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
+            accessClaims.Add(new Claim(ClaimTypes.Email, user.Email));
+            accessClaims.Add(new Claim(ClaimTypes.Hash, user.PasswordHash));
+            accessClaims.Add(new Claim(ClaimTypes.Role, logInResponse.Role));
+            accessToken = GenerateJwtToken(accessClaims, 5000);
+            logInResponse.accessToken = accessToken;
+
+            refreshClaims.Add(new Claim(ClaimTypes.Authentication, accessToken));
+            refreshClaims.Add(new Claim(ClaimTypes.Email, user.Email));
+            refreshToken = GenerateJwtToken(refreshClaims, 5000);
+            logInResponse.refreshToken = refreshToken;
+
+
+            return logInResponse;
+        }
+
         public async Task<BaseResponseModel> Register(UserModel model)
         {
             User user = new User();
             EmailHelper email = new EmailHelper(_configuration);
             IdentityResult result = new IdentityResult();
             BaseResponseModel responseModel = new BaseResponseModel();
+            ResetPasswordModel resetModel = new ResetPasswordModel();
 
             user.UserName = model.Email;
             user.Email = model.Email;
@@ -69,8 +117,9 @@ namespace App.BussinesLogicLayer.Services
 
             await _userManager.AddToRoleAsync(user, role);
 
-            string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            string confirmEmailLink = CreateLink(user.Id, code, "ConfirmEmail");
+            resetModel.Email = model.Email;
+            resetModel.Code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            string confirmEmailLink = CreateLink(resetModel, "ConfirmEmail");
 
             email.SendEmail(user.Email, "ConfirmEmail", confirmEmailLink);
             responseModel.IsValid = true;
@@ -78,12 +127,12 @@ namespace App.BussinesLogicLayer.Services
             return responseModel;
         }
 
-        public async Task<BaseResponseModel> ForgotPassword(UserModel model)
+        public async Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model)
         {
             User user = await _userManager.FindByNameAsync(model.Email);
-            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            model.Code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            string passwordEmailLink = CreateLink(user.Id, code, "ResetPassword");
+            string passwordEmailLink = CreateLink(model, "ResetPassword");
 
             EmailHelper email = new EmailHelper(_configuration);
             email.SendEmail(user.Email, "ResetPassword", passwordEmailLink);
@@ -98,9 +147,9 @@ namespace App.BussinesLogicLayer.Services
         {
             BaseResponseModel report = new BaseResponseModel();
 
-            User user = await _userManager.FindByNameAsync(model.Email);
+            User user = await _userManager.FindByEmailAsync(model.Email);
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.ConfirmPassword);
             if (!result.Succeeded)
             {
                 report.Message.Add(_chnPassErrMsg);
@@ -110,36 +159,31 @@ namespace App.BussinesLogicLayer.Services
             return report;
         }
 
-        public JwtSecurityToken GenerateJwtToken(string email, IdentityUser user)
+        private string GenerateJwtToken(List<Claim> claims, int expTime)
         {
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            };
+         
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["JwtExpireDays"]));
+            var expires = DateTime.Now.AddMinutes(expTime);
 
             JwtSecurityToken token = new JwtSecurityToken(
-                _configuration["JwtIssuer"],
-                _configuration["JwtIssuer"],
-                claims,
+                issuer: _configuration["JwtIssuer"],
+                audience: _configuration["JwtIssuer"],
+                claims: claims,
                 expires: expires,
                 signingCredentials: creds
             );
 
-            return token;
+            return token.ToString();
         }
 
-        public string CreateLink(string id, string code, string action)
+        public string CreateLink(ResetPasswordModel model, string action)
         {
             string callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
                 action,
                 "Account",
-                new { userId = id, code },
+                model,
                 protocol: _contextAccessor.HttpContext.Request.Scheme);
 
             return callbackUrl;
@@ -153,10 +197,10 @@ namespace App.BussinesLogicLayer.Services
             return result;
         }
 
-        public async Task<BaseResponseModel> ConfirmEmail(string userId, string code)
+        public async Task<BaseResponseModel> ConfirmEmail(ResetPasswordModel model)
         {
             BaseResponseModel response = new BaseResponseModel();
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user.EmailConfirmed)
             {
                 response.Message.Add(_emailAlreadyConfirmedMsg);
@@ -170,7 +214,7 @@ namespace App.BussinesLogicLayer.Services
                 return response;
             }
 
-            IdentityResult result = await _userManager.ConfirmEmailAsync(user, code);
+            IdentityResult result = await _userManager.ConfirmEmailAsync(user, model.Code);
             if (!result.Succeeded)
             {
                 response.Message.Add(_emailNotFoundMsg);

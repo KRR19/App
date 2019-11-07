@@ -1,5 +1,6 @@
 ﻿using App.DataAccessLayer.Entities.Enum;
 using System;
+using System.Collections.Generic;
 
 namespace App.BussinesLogicLayer.Models.PrintingEdition
 {
@@ -12,7 +13,7 @@ namespace App.BussinesLogicLayer.Models.PrintingEdition
         public Status Status { get; set; }
         public Currency Currency { get; set; }
         public Types Type { get; set; }
-        public Guid Author { get; set; }
+        public List<Guid> AuthorId { get; set; }
 
     }
 }

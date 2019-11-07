@@ -3,6 +3,7 @@ using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
@@ -16,7 +17,7 @@ namespace App.BussinesLogicLayer.Services
             _authorRepository = AuthorRepository;
         }
 
-        public async Task<AuthorModel> Create(AuthorModel newAuthor)
+        public async Task<Author> Create(AuthorModel newAuthor)
         {
             BaseResponseModel report = ValidationAuthor(newAuthor);
             Author author = new Author();
@@ -29,10 +30,10 @@ namespace App.BussinesLogicLayer.Services
                 author.CreationDate = DateTime.Now;
                 author.IsRemoved = false;
 
-                await _authorRepository.Create(author);
+                author = await _authorRepository.Create(author);
             }
 
-            return newAuthor;
+            return author;
         }
         public async Task<BaseResponseModel> Delete(Guid id)
         {
@@ -83,6 +84,14 @@ namespace App.BussinesLogicLayer.Services
             authorModel.DateDeath = author.DateDeath;
             return authorModel;
         }
+
+        public List<Author> GetAll()
+        {
+            List<Author> authors = _authorRepository.GetAll();
+
+            return authors;
+
+        }
         private BaseResponseModel ValidationAuthor(AuthorModel author)
         {
             BaseResponseModel report = new BaseResponseModel();
@@ -107,5 +116,7 @@ namespace App.BussinesLogicLayer.Services
             report.IsValid = true;
             return report;
         }
+
+       
     }
 }

@@ -1,4 +1,5 @@
 ﻿using App.BussinesLogicLayer;
+using App.BussinesLogicLayer.Models.Response;
 using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -20,9 +21,12 @@ namespace App.Controllers
         }
 
         [HttpGet("ConfirmEmail")]
-        public async Task<RedirectResult> ConfirmEmail(string userId, string code)
+        public async Task<RedirectResult> ConfirmEmail(string email, string code)
         {
-            BaseResponseModel response = await _accountService.ConfirmEmail(userId, code);
+            ResetPasswordModel model = new ResetPasswordModel();
+            model.Email = email;
+            model.Code = code;
+            await _accountService.ConfirmEmail(model);
             return Redirect("http://localhost:4200/auth");
         }
 
@@ -41,18 +45,24 @@ namespace App.Controllers
         }
 
         [HttpPost("ForgotPassword")]
-        public async Task<BaseResponseModel> ForgotPassword([FromBody] UserModel model)
+        public async Task<BaseResponseModel> ForgotPassword([FromBody] ResetPasswordModel model)
         {
             BaseResponseModel result = await _accountService.ForgotPassword(model);
             return result;
         }
 
-        [HttpPost("ResetPassword")]
-        [ValidateAntiForgeryToken]
-        public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
+        [HttpGet("ResetPassword")]
+        public async Task<RedirectResult> ResetPassword([FromQuery] ResetPasswordModel model)
         {
             BaseResponseModel result = await _accountService.ResetPassword(model);
-            return result;
+            return Redirect("http://localhost:4200/auth");
+        }
+
+        [HttpPost("SingIn")]
+        public async Task<LogInResponseModel> SingIn([FromBody] UserModel model)
+        {
+            LogInResponseModel logInResponse = await _accountService.Singin(model);
+            return logInResponse;
         }
     }
 }

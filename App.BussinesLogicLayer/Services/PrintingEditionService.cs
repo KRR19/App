@@ -7,7 +7,8 @@ using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
 using System.Threading.Tasks;
-
+using System.Linq;
+using System.Collections.Generic;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -37,13 +38,13 @@ namespace App.BussinesLogicLayer.Services
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
-            AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
             PrintingEdition printingEdition = new PrintingEdition();
 
-            if (report.IsValid)
+            if (!report.IsValid)
             {
                 return report;
             }
+
             printingEdition.Name = newPrintingEdition.Name;
             printingEdition.Description = newPrintingEdition.Description;
             printingEdition.Price = newPrintingEdition.Price;
@@ -53,13 +54,20 @@ namespace App.BussinesLogicLayer.Services
             printingEdition.IsRemoved = false;
             printingEdition.CreationDate = DateTime.Now;
 
-            await _printingEditionsRepository.Create(printingEdition);
+            var authorInPrintingEditions = new List<AuthorInPrintingEdition>();
+            foreach (Guid authorId in newPrintingEdition.AuthorId)
+            {
+                var authorInPrintingEdition = new AuthorInPrintingEdition();
+                authorInPrintingEdition.AuthorId = authorId;
 
-            authorInPrintingEdition.PrintingEditionId = printingEdition.Id;
-            authorInPrintingEdition.PrintingEdition = printingEdition;
-            authorInPrintingEdition.Author = await _authorRepository.GetById(newPrintingEdition.Author);
+                authorInPrintingEditions.Add(authorInPrintingEdition);
+            }
 
-            await _authorInPrintingEditionsRepository.Create(authorInPrintingEdition);
+            printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
+
+            PrintingEdition addedPrintingEdition = await _printingEditionsRepository.Create(printingEdition);
+
+           
 
             report.Message.Add(_publicationAddedMsg);
             return report;

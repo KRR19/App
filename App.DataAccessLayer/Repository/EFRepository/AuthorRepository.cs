@@ -19,8 +19,9 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
+            Author newAuthor = _context.Authors.ToList().Last();
 
-            return author;
+            return newAuthor;
         }
 
         public async Task<bool> Delete(Author item)
@@ -47,7 +48,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return author;
         }
 
-        public List<Author> GetByAll()
+        public List<Author> GetAll()
         {
             var author = _context.Authors.ToList();
             return author;

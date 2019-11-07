@@ -1,8 +1,10 @@
 ﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.models.Authors;
 using App.BussinesLogicLayer.Services.Interfaces;
+using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -17,6 +19,13 @@ namespace App.Controllers
             _service = service;
         }
 
+        [HttpGet("GetAll")]
+        public List<Author> GetAll()
+        {
+            List<Author> author =  _service.GetAll();
+            return author;
+        }
+
         [HttpGet("Get/{Id}")]
         public async Task<AuthorModel> Get(Guid Id)
         {
@@ -24,9 +33,9 @@ namespace App.Controllers
             return author;
         }
         [HttpPost("Create")]
-        public async Task<AuthorModel> Create([FromBody]AuthorModel newAuthor)
+        public async Task<Author> Create([FromBody]AuthorModel newAuthor)
         {
-            AuthorModel model = await _service.Create(newAuthor);
+            Author model = await _service.Create(newAuthor);
             return model;
         }
 
