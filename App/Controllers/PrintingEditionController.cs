@@ -1,8 +1,10 @@
 ﻿using App.BussinesLogicLayer;
 using App.BussinesLogicLayer.Models.PrintingEdition;
 using App.BussinesLogicLayer.Services.Interfaces;
+using App.DataAccessLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.Controllers
@@ -17,10 +19,18 @@ namespace App.Controllers
         {
             _service = service;
         }
-        [HttpGet("Get /{Id}")]
+        [HttpGet("Get/{Id}")]
         public async Task<PrintingEditionModel> Get(Guid Id)
         {
             PrintingEditionModel printingEdition = await _service.GetById(Id);
+
+            return printingEdition;
+        }
+
+        [HttpGet("GetAll")]
+        public List<PrintingEdition> GetAll()
+        {
+            List<PrintingEdition> printingEdition = _service.GetAll();
 
             return printingEdition;
         }
@@ -40,7 +50,7 @@ namespace App.Controllers
             return report;
         }
 
-        [HttpDelete("Delete")]
+        [HttpPost("Delete")]
         public async Task<BaseResponseModel> Delete([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Delete(printingEdition.Id);

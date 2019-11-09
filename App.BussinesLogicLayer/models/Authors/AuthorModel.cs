@@ -9,6 +9,7 @@ namespace App.BussinesLogicLayer.models.Authors
         public string Name { get; set; }
         public DateTime DateBirth { get; set; }
         public DateTime DateDeath { get; set; }
-        public List<Guid> Author { get; set; }
+        public List<Guid> AuthorId { get; set; }
+        public List<string> AuthorName { get; set; }
     }
 }

@@ -1,0 +1,23 @@
+<nav class="navbar bg-primary">
+  <h1></h1>
+  <ul>
+    <li routerLinkActive="active">
+      <a *ngIf="Auth && isAdmin" [routerLink]="['/printingEdition', 'create']">Add</a>
+    </li>
+    <li routerLinkActive="active">
+      <a *ngIf="!Auth" [routerLink]="['/auth', 'SingIn']">LogIn</a>
+    </li>
+    <li *ngIf="!Auth" routerLinkActive="active">
+      <a [routerLink]="['/auth', 'SingUp']">Registration</a>
+    </li>
+    <li>
+      <a>Cart</a>
+    <li>
+      <a href="#" *ngIf="Auth" (click)="submit()">LogOut</a>
+    </li>
+  </ul>
+</nav>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>

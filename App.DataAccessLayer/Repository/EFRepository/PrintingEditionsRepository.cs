@@ -40,9 +40,9 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public List<PrintingEdition> GetAll()
         {
-            var printingEdition = _context.PrintingEditions.ToList();
+            var printingEdition = _context.PrintingEditions.Where(p => (p.IsRemoved == false));
 
-            return printingEdition;
+            return printingEdition.ToList();
         }
 
         public async Task<PrintingEdition> Update(PrintingEdition item)

@@ -76,12 +76,16 @@ namespace App.BussinesLogicLayer.Services
         public async Task<AuthorModel> GetById(Guid id)
         {
             AuthorModel authorModel = new AuthorModel();
+            AuthorModel authorsModel = new AuthorModel();
             Author author = await _authorRepository.GetById(id);
 
-            authorModel.Id = author.Id;
-            authorModel.Name = author.Name;
-            authorModel.DateBirth = author.DateBirth;
-            authorModel.DateDeath = author.DateDeath;
+                authorModel.Id = author.Id;
+                authorModel.Name = author.Name;
+                authorModel.DateBirth = author.DateBirth;
+                authorModel.DateDeath = author.DateDeath;
+
+
+
             return authorModel;
         }
 

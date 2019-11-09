@@ -1,0 +1,7 @@
+<h2>{{printingEdition.name}}</h2>
+<p *ngFor="let author of printingEdition.authorName ">{{author}}</p>
+<h5>Price: {{printingEdition.price + this.printingEditionService.PriceSwitcher(printingEdition.currency)}}</h5>
+<strong>Description:</strong>
+<p>{{printingEdition.description}}</p>
+<button class="btn btn-success">Add to Cart</button>
+<button class="btn btn-danger" *ngIf="isAdmin" (click)="EditPage()">Edit</button>

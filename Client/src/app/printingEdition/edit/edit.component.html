@@ -1,0 +1,68 @@
+  <h2>New publishing</h2>
+  <div class="form-control">
+    <label for="publishingName">Publishing name:</label>
+    <input id="publishingName"  type="text" [(ngModel)]="printingEdition.name">
+  </div>
+
+  <div class="form-control">
+    <mat-select class="authorSelecter" [(value)]="selectedAuthor"   multiple>
+      <mat-option  *ngFor="let author of Authors" [value]="author.id">{{author.name}}</mat-option>
+    </mat-select>
+    <button type="submit" *ngIf="!AddAuthorForm" (click)="AddAuthorForm = !AddAuthorForm" class="btn btn-dark" >Add Author</button>
+  </div>
+
+  <div class="form-control" *ngIf="AddAuthorForm" ngNativeValidate>
+    <input id="authorName" [(ngModel)]="AuthorName" type="text">
+    <table class="DateForm">
+      <tr>
+        <td><label>Date of birth:</label><input [(ngModel)]="authorBirthDay" class="authorBirthDay" id="authorBirthDay" type="date"></td>
+        <td><label>Date of death:</label><input [(ngModel)]="authorDeathDay" class="authorDeathDay" id="authorDeathDay" type="date"></td>
+      </tr>
+    </table>
+    <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()" >Add Author</button>
+    <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthorForm = !AddAuthorForm" >Cancel</button>
+  </div>
+
+  <div class="form-control">
+    <label >Description:</label>
+    <textarea rows="10" cols="45"  [(ngModel)]="printingEdition.description"></textarea>
+  </div>
+
+  <div class="form-control price">
+    <table>
+      <tr>
+        <td>
+          <label for="price" >Price:</label>
+          <input id="price"  type="number" min="0" step="0.01"  [(ngModel)]="printingEdition.price">
+        </td>
+        <td>
+          <mat-label>Currency</mat-label>
+          <mat-select class="currencySelector" [(value)]="Currency">
+            <mat-option value="1">USD</mat-option>
+            <mat-option value="2">EUR</mat-option>
+            <mat-option value="3">UAH</mat-option>
+          </mat-select>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="form-control type">
+    <label for="type">Type:</label>
+    <mat-select id="type"   [(value)]="Type">
+      <mat-option value="1">Book</mat-option>
+      <mat-option value="2">Magazine</mat-option>
+      <mat-option value="3">Newspaper</mat-option>
+    </mat-select>
+  </div>
+
+  <div class="form-control status">
+    <label for="status">Statys:</label>
+    <mat-select id="status"  [(value)]="Status">
+      <mat-option value="1">In stock</mat-option>
+      <mat-option value="2">Out stock</mat-option>
+      <mat-option value="3">Awaiting</mat-option>
+    </mat-select>
+  </div>
+
+  <button type="submit" class="btn btn-primary"  (click)="Edit()">Edit</button>
+  <button type="submit" class="btn btn-danger"  (click)="Delete()">Delete</button>

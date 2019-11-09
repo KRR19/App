@@ -14,6 +14,7 @@ namespace App.BussinesLogicLayer.Models.PrintingEdition
         public Currency Currency { get; set; }
         public Types Type { get; set; }
         public List<Guid> AuthorId { get; set; }
+        public List<string> AuthorName { get; set; }
 
     }
 }

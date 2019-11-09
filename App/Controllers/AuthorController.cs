@@ -39,7 +39,7 @@ namespace App.Controllers
             return model;
         }
 
-        [HttpPut]
+        [HttpPut("Update")]
         public AuthorModel Put([FromBody]AuthorModel newAuthor)
         {
             AuthorModel model = _service.Update(newAuthor);

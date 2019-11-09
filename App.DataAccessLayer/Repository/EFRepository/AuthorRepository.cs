@@ -42,9 +42,19 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
+        public async Task<List<Author>> GetById(List<Guid> id)
+        {
+            List<Author> author = new List<Author>();
+            foreach (var index in id)
+            {
+                author.Add(await _context.Authors.FindAsync(index));
+            }
+            return author;
+        }
+
         public async Task<Author> GetById(Guid id)
         {
-            Author author = await _context.Authors.FindAsync(id);
+            Author author =await _context.Authors.FindAsync(id);
             return author;
         }
 

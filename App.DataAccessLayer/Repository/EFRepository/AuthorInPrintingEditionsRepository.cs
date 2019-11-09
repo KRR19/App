@@ -1,6 +1,9 @@
 ﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
@@ -19,6 +22,24 @@ namespace App.DataAccessLayer.Repository.EFRepository
             await _context.SaveChangesAsync();
 
             return item;
+        }
+
+        public List<Guid> GetAuthors(Guid id)
+        {
+            List<AuthorInPrintingEdition> authorInPrintingEditions = _context.AuthorInPrintingEditions.Where(x=> x.PrintingEditionId == id).ToList();
+            return authorInPrintingEditions.Select(p => p.AuthorId).ToList();
+        }
+
+        public List<string> GetAuthorsName(List<Guid> authorId)
+        {
+            List<Author> authorList = new List<Author>();
+            List<string> authorsName = new List<string>();
+            foreach(var author in authorId)
+            {
+                authorList.Add(_context.Authors.Where(p => p.Id == author).FirstOrDefault());
+            }
+            authorsName = authorList.Select(p => p.Name).ToList();
+            return authorsName;
         }
 
         public async Task<AuthorInPrintingEdition> Update(AuthorInPrintingEdition item)

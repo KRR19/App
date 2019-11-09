@@ -88,6 +88,12 @@ namespace App.BussinesLogicLayer.Services
 
             return report;
         }
+        public List<PrintingEdition> GetAll()
+        {
+            List<PrintingEdition> printingEdition = _printingEditionsRepository.GetAll();
+            
+            return printingEdition;
+        }
 
         public async Task<PrintingEditionModel> GetById(Guid id)
         {
@@ -96,13 +102,17 @@ namespace App.BussinesLogicLayer.Services
 
             PrintingEditionModel printingEditionModel = new PrintingEditionModel
             {
+                Id = printingEdition.Id,
                 Name = printingEdition.Name,
                 Description = printingEdition.Description,
                 Type = printingEdition.Type,
                 Currency = printingEdition.Currency,
                 Price = printingEdition.Price,
-                Status = printingEdition.Status
+                Status = printingEdition.Status,
+                AuthorId = _authorInPrintingEditionsRepository.GetAuthors(printingEdition.Id),
+              
             };
+            printingEditionModel.AuthorName = _authorInPrintingEditionsRepository.GetAuthorsName(printingEditionModel.AuthorId);
 
             return printingEditionModel;
         }
@@ -112,7 +122,7 @@ namespace App.BussinesLogicLayer.Services
             BaseResponseModel report = ValidationPrintingEdition(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
 
-            if (report.IsValid)
+            if (!report.IsValid)
             {
                 return report;
             }
