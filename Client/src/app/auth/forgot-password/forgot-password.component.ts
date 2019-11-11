@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserModel} from '../../models/UserModel';
 import {AuthService} from '../shared/services/auth.service';
 import {ResetPasswordModel} from '../../models/ResetPasswordModel';
 import {Responsemodel} from '../../models/Responsemodel';
@@ -17,7 +16,8 @@ export class ForgotPasswordComponent implements OnInit {
   private message: string[];
 
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService) {
+  }
 
   ngOnInit() {
     this.success = false;
@@ -27,7 +27,6 @@ export class ForgotPasswordComponent implements OnInit {
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
       ConfirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
-
   }
 
   public async ForgotPassword() {
@@ -35,8 +34,12 @@ export class ForgotPasswordComponent implements OnInit {
       this.passwordsMatch = false;
       return;
     }
-    const model: ResetPasswordModel = {Email: this.form.value.email, Password: this.form.value.password, ConfirmPassword:  this.form.value.ConfirmPassword};
-    const response: Responsemodel =  await this.auth.forgotPassword(model);
+    const model: ResetPasswordModel = {
+      Email: this.form.value.email,
+      Password: this.form.value.password,
+      ConfirmPassword: this.form.value.ConfirmPassword
+    };
+    const response: Responsemodel = await this.auth.forgotPassword(model);
     this.auth.logout();
     this.success = response.isValid;
     this.message = response.message;

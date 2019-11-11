@@ -4,14 +4,15 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 
 @Injectable()
-export  class AuthorService {
-  private  Api = 'api';
+export class AuthorService {
+  private Api = 'api';
   private control = 'PrintingEdition';
-  private ActionGetAll: string = 'GetAll';
-  private ActionCreate: string = 'Create';
-  private ActionGet: string = 'Get';
+  private ActionGetAll = 'GetAll';
+  private ActionCreate = 'Create';
+  private ActionGet = 'Get';
 
-  constructor(private  http: HttpClient) {}
+  constructor(private  http: HttpClient) {
+  }
 
   public async AddAuthor(model: AuthorModel) {
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionCreate;
@@ -30,7 +31,7 @@ export  class AuthorService {
   public async GetById(author: string) {
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionGet + '/';
     const authors: AuthorModel = await this.http.get<AuthorModel>(urlPath + author).toPromise();
-    console.log(authors)
+    console.log(authors);
     return authors;
   }
 }

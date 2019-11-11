@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {PrintingEditionModel} from '../../models/PrintingEditionModel';
 import {PrintingEditionService} from '../shared/service/printingEdition.service';
 import {AuthorService} from '../shared/service/author.service';
 import {AuthorModel} from '../../models/AuthorModel';
 import {Router} from '@angular/router';
-
 
 
 @Component({
@@ -27,20 +26,21 @@ export class CreateComponent implements OnInit {
   authorBirthDay: Date;
   selectedAuthor: string;
 
-  constructor(private printingEditionService: PrintingEditionService, private authorService: AuthorService, private router: Router) { }
+  constructor(private printingEditionService: PrintingEditionService, private authorService: AuthorService, private router: Router) {
+  }
 
- async ngOnInit() {
+  async ngOnInit() {
 
-        this.AddAuthorForm = false;
-        this.form = new FormGroup({
-        publishingName: new FormControl(null, [Validators.required]),
-        description: new FormControl(null, [Validators.required]),
-        price: new FormControl(),
-        authorName: new FormControl(),
-        authorBirthDay: new FormControl(),
-        authorDeathDay: new FormControl()
+    this.AddAuthorForm = false;
+    this.form = new FormGroup({
+      publishingName: new FormControl(null, [Validators.required]),
+      description: new FormControl(null, [Validators.required]),
+      price: new FormControl(),
+      authorName: new FormControl(),
+      authorBirthDay: new FormControl(),
+      authorDeathDay: new FormControl()
     });
-        this.Authors = await this.authorService.GetAll();
+    this.Authors = await this.authorService.GetAll();
   }
 
   public Create() {
@@ -59,7 +59,11 @@ export class CreateComponent implements OnInit {
 
   public async AddAuthor() {
     this.AddAuthorForm = false;
-    const newAuthor = {name: this.form.value.authorName, dateBirth: this.form.value.authorBirthDay, dateDeath: this.form.value.authorDeathDay};
+    const newAuthor = {
+      name: this.form.value.authorName,
+      dateBirth: this.form.value.authorBirthDay,
+      dateDeath: this.form.value.authorDeathDay
+    };
     this.newAuthorName = '';
     this.authorBirthDay = null;
     this.authorDeathDay = null;

@@ -13,13 +13,14 @@
     <input id="password" type="password" formControlName="password">
     <div class="validation" *ngIf="form.get('password').touched && form.get('password').invalid">
       <small *ngIf="form.get('password').errors.required">Password:</small>
-      <small *ngIf="form.get('password').errors.minlength">Password must be at least {{form.get('password').errors.minlength.requiredLength}}
+      <small *ngIf="form.get('password').errors.minlength">Password must be at
+        least {{form.get('password').errors.minlength.requiredLength}}
         characters. Now he is {{form.get('password').errors.minlength.actualLength}} characters</small>
     </div>
   </div>
-  <a [routerLink]="['/auth', 'ForgotPassword']" >Forgot password</a>
+  <a [routerLink]="['/auth', 'ForgotPassword']">Forgot password</a>
   <div class="Result" *ngIf="success">
-   <strong>{{message}}</strong>
+    <strong>{{message}}</strong>
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="form.invalid" >Enter</button>
+  <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Enter</button>
 </form>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserModel} from '../../models/UserModel';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -15,7 +15,9 @@ export class SingupComponent implements OnInit {
   FormVisible: boolean;
   successReg: boolean;
   unsuccessReg: boolean;
-  constructor(private auth: AuthService, private router: Router) { }
+
+  constructor(private auth: AuthService, private router: Router) {
+  }
 
   ngOnInit() {
     this.FormVisible = true;
@@ -39,14 +41,16 @@ export class SingupComponent implements OnInit {
       return;
     }
 
-    const  user: UserModel = {Email: this.form.value.email, Password: this.form.value.password,
-                              FirstName: this.form.value.firstName, SecondName: this.form.value.secondName};
+    const user: UserModel = {
+      Email: this.form.value.email, Password: this.form.value.password,
+      FirstName: this.form.value.firstName, SecondName: this.form.value.secondName
+    };
 
-    const result: Responsemodel =  await this.auth.SingUp(user);
+    const result: Responsemodel = await this.auth.SingUp(user);
 
     if (!result.isValid) {
-     this.unsuccessReg = true;
-     return;
+      this.unsuccessReg = true;
+      return;
     }
     this.FormVisible = false;
     this.successReg = true;

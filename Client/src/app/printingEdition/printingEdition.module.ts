@@ -14,9 +14,8 @@ import {
 } from '@angular/material';
 import {PrintingEditionService} from './shared/service/printingEdition.service';
 import {AuthorService} from './shared/service/author.service';
-import { PrintingEditionComponent } from './printing-edition-page/printing-edition.component';
-import { EditComponent } from './edit/edit.component';
-
+import {PrintingEditionComponent} from './printing-edition-page/printing-edition.component';
+import {EditComponent} from './edit/edit.component';
 
 
 @NgModule({
@@ -44,8 +43,8 @@ import { EditComponent } from './edit/edit.component';
     MatSelectModule,
     MatListModule
   ],
-    exports: [RouterModule],
-    providers: [PrintingEditionService, AuthorService]
+  exports: [RouterModule],
+  providers: [PrintingEditionService, AuthorService]
 })
 
 export class PrintingEditionModule {

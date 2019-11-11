@@ -15,9 +15,11 @@ export class DashBoardComponent implements OnInit {
   public dataSource = new MatTableDataSource<PrintingEditionModel>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  constructor(private printingEditionService: PrintingEditionService, private router: Router) { }
 
- async ngOnInit() {
+  constructor(private printingEditionService: PrintingEditionService, private router: Router) {
+  }
+
+  async ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.printingEdition = await this.printingEditionService.GetAll();
     console.log(this.printingEdition);
@@ -28,7 +30,6 @@ export class DashBoardComponent implements OnInit {
     const adress: string = 'printingEdition/:id' + id;
     this.router.navigate([adress]);
   }
-
 
 
 }

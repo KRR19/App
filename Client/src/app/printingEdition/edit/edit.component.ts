@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PrintingEditionModel} from '../../models/PrintingEditionModel';
 import {PrintingEditionService} from '../shared/service/printingEdition.service';
@@ -24,12 +24,13 @@ export class EditComponent implements OnInit {
   Authors: AuthorModel[];
   selectedAuthor: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService) { }
+  constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService) {
+  }
 
   async ngOnInit() {
     this.AdminCheck();
-    if (!this.isAdmin)    {
-      await  this.router.navigate(['']);
+    if (!this.isAdmin) {
+      await this.router.navigate(['']);
     }
 
     this.AddAuthorForm = false;
@@ -49,7 +50,7 @@ export class EditComponent implements OnInit {
     return this.isAdmin;
   }
 
-  async AddAuthor() {
+  public async AddAuthor() {
     this.AddAuthorForm = false;
     const newAuthor = {name: this.AuthorName, dateBirth: this.authorBirthDay, dateDeath: this.authorDeathDay};
     this.AuthorName = '';
@@ -59,18 +60,18 @@ export class EditComponent implements OnInit {
     this.Authors.unshift(addedAuthor);
   }
 
-  async Edit() {
+  public async Edit() {
     this.printingEdition.currency = Number(this.Currency);
     this.printingEdition.type = Number(this.Type);
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
     await this.printingEditionService.Update(this.printingEdition);
-    await  this.router.navigate(['']);
+    await this.router.navigate(['']);
   }
 
-  async Delete() {
+  public async Delete() {
     await this.printingEditionService.Delete(this.printingEdition);
-    await  this.router.navigate(['']);
+    await this.router.navigate(['']);
   }
 
 }

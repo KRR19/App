@@ -6,20 +6,21 @@ import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class PrintingEditionService {
-  private  Api = 'api';
+  private Api = 'api';
   private control = 'PrintingEdition';
-  private ActionCreate: string = 'Post';
-  private ActionGetAll: string = 'GetAll';
-  private ActionGet: string = 'Get';
-  private ActionDelete: string = 'Delete';
-  private ActionUpdate: string = 'Update';
+  private ActionCreate = 'Post';
+  private ActionGetAll = 'GetAll';
+  private ActionGet = 'Get';
+  private ActionDelete = 'Delete';
+  private ActionUpdate = 'Update';
 
 
-  constructor(private  http: HttpClient) {}
+  constructor(private  http: HttpClient) {
+  }
 
   public async Create(model: PrintingEditionModel): Promise<Responsemodel> {
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionCreate;
-    const result: Responsemodel  = await this.http.post<Responsemodel>(urlPath, model).toPromise();
+    const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, model).toPromise();
     return result;
   }
 

@@ -12,7 +12,8 @@ export class HeaderComponent implements OnInit {
   Auth: boolean;
   isAdmin: boolean;
 
-  constructor(private  auth: AuthService, private  router: Router) { }
+  constructor(private  auth: AuthService, private  router: Router) {
+  }
 
   ngOnInit() {
     this.isAdmin = localStorage.getItem('Role') === 'ADMIN';

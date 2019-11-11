@@ -8,15 +8,15 @@ import {environment} from '../../../../environments/environment';
 @Injectable()
 export class AuthService {
 
-  private  Api = 'api';
+  private Api = 'api';
   private control = 'Account';
-  private ActionSingIn: string = 'SingIn';
-  private ActionRegister: string = 'Register';
-  private ActionForgotPass: string = 'ForgotPassword';
-  private token: string = '';
+  private ActionSingIn = 'SingIn';
+  private ActionRegister = 'Register';
+  private ActionForgotPass = 'ForgotPassword';
+  private token = '';
 
-  constructor(private  http: HttpClient) {}
-
+  constructor(private  http: HttpClient) {
+  }
 
   public async SingUp(user: UserModel): Promise<Responsemodel> {
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionRegister;
@@ -26,21 +26,21 @@ export class AuthService {
 
   public async SingIn(user: UserModel): Promise<LogInResponceModel> {
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionSingIn;
-    const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user)
-      .toPromise();
+    const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user).toPromise();
+
     if (response.isValid) {
       this.setToken(response);
     }
     return response;
   }
+
   logout() {
-      localStorage.clear();
+    localStorage.clear();
   }
 
-  public async  forgotPassword(user: UserModel): Promise<Responsemodel> {
+  public async forgotPassword(user: UserModel): Promise<Responsemodel> {
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionForgotPass;
-    const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, user).
-    toPromise();
+    const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, user).toPromise();
     return result;
   }
 

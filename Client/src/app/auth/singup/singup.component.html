@@ -13,19 +13,20 @@
     <input id="password" type="password" formControlName="password">
     <div class="validation" *ngIf="form.get('password').touched && form.get('password').invalid">
       <small *ngIf="form.get('password').errors.required">Введите пароль</small>
-      <small *ngIf="form.get('password').errors.minlength">Пароль должен быть не менее {{form.get('password').errors.minlength.requiredLength}}
+      <small *ngIf="form.get('password').errors.minlength">Пароль должен быть не
+        менее {{form.get('password').errors.minlength.requiredLength}}
         символов. Сейчас он {{form.get('password').errors.minlength.actualLength}} символа</small>
     </div>
   </div>
   <div class="form-control">
     <label for="firstName">Имя:</label>
-    <input id="firstName" type="text" formControlName="firstName" >
+    <input id="firstName" type="text" formControlName="firstName">
   </div>
   <div class="form-control">
     <label for="secondName">Фамилия:</label>
     <input id="secondName" type="text" formControlName="secondName">
   </div>
-  <button type="submit" class="btn btn-primary" [disabled]="form.invalid" >Регистрация</button>
+  <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Регистрация</button>
 
 </form>
 
