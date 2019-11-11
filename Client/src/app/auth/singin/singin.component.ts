@@ -25,7 +25,7 @@ export class SinginComponent implements OnInit {
     });
   }
 
-  async submit() {
+  public async SingIn() {
     const  user: UserModel = { Email: this.form.value.email, Password: this.form.value.password};
     const response: LogInResponceModel = await this.auth.SingIn(user);
     this.success = !response.isValid;

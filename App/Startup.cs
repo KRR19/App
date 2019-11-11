@@ -89,8 +89,9 @@ namespace App
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)
+        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
+            
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
@@ -112,7 +113,7 @@ namespace App
 
             app.UseAuthentication();
             app.UseAuthorization();
-            IdentityRoleInitializer.SeedRoles(roleManager);
+            IdentityRoleInitializer.SeedRoles(roleManager, userManager);
             app.UseMiddleware<LogMiddleware>();
             app.UseEndpoints(endpoints =>
             {

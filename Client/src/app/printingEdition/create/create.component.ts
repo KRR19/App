@@ -14,11 +14,12 @@ import {Router} from '@angular/router';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
+  DefaultValue = '1';
   form: FormGroup;
   printingEdition: PrintingEditionModel = {};
-  Currency = '1' ;
-  Type = '1';
-  Status = '1';
+  Currency = this.DefaultValue;
+  Type = this.DefaultValue;
+  Status = this.DefaultValue;
   AddAuthorForm: boolean;
   Authors: AuthorModel[];
   newAuthorName: string;
@@ -42,7 +43,7 @@ export class CreateComponent implements OnInit {
         this.Authors = await this.authorService.GetAll();
   }
 
-  submit() {
+  public Create() {
     this.printingEdition.name = this.form.value.publishingName;
     this.printingEdition.description = this.form.value.description;
     this.printingEdition.price = this.form.value.price;
@@ -50,11 +51,13 @@ export class CreateComponent implements OnInit {
     this.printingEdition.type = Number(this.Type);
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
+
     this.printingEditionService.Create(this.printingEdition);
+
     this.router.navigate(['']);
   }
 
-  async AddAuthor() {
+  public async AddAuthor() {
     this.AddAuthorForm = false;
     const newAuthor = {name: this.form.value.authorName, dateBirth: this.form.value.authorBirthDay, dateDeath: this.form.value.authorDeathDay};
     this.newAuthorName = '';

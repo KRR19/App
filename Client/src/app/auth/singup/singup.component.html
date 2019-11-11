@@ -1,4 +1,4 @@
-<form  class="card" [formGroup]="form" (ngSubmit)="submit()" *ngIf="FormVisible">
+<form class="card" [formGroup]="form" (ngSubmit)="SingUp()" *ngIf="FormVisible">
   <h2>Регистрация</h2>
   <div class="form-control" [ngClass]="{invalid:form.get('email').touched && form.get('email').invalid}">
     <label for="email">Email:</label>

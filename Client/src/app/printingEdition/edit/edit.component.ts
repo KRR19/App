@@ -45,7 +45,7 @@ export class EditComponent implements OnInit {
   }
 
   private AdminCheck() {
-    this.isAdmin = localStorage.getItem('Role') === 'admin';
+    this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
     return this.isAdmin;
   }
 
@@ -69,7 +69,7 @@ export class EditComponent implements OnInit {
   }
 
   async Delete() {
-    await this.printingEditionService.delete(this.printingEdition);
+    await this.printingEditionService.Delete(this.printingEdition);
     await  this.router.navigate(['']);
   }
 

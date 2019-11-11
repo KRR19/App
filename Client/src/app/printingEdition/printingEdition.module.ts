@@ -14,13 +14,13 @@ import {
 } from '@angular/material';
 import {PrintingEditionService} from './shared/service/printingEdition.service';
 import {AuthorService} from './shared/service/author.service';
-import { PrintingEditionPageComponent } from './printing-edition-page/printing-edition-page.component';
+import { PrintingEditionComponent } from './printing-edition-page/printing-edition.component';
 import { EditComponent } from './edit/edit.component';
 
 
 
 @NgModule({
-  declarations: [CreateComponent, PrintingEditionPageComponent, EditComponent],
+  declarations: [CreateComponent, PrintingEditionComponent, EditComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
@@ -28,7 +28,7 @@ import { EditComponent } from './edit/edit.component';
         path: '', children: [
           {path: '', redirectTo: '/printingEdition/create', pathMatch: 'full'},
           {path: 'create', component: CreateComponent},
-          {path: ':id', component: PrintingEditionPageComponent},
+          {path: ':id', component: PrintingEditionComponent},
           {path: 'edit/:id', component: EditComponent}
         ]
       }

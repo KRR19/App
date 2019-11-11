@@ -15,14 +15,14 @@ export class HeaderComponent implements OnInit {
   constructor(private  auth: AuthService, private  router: Router) { }
 
   ngOnInit() {
-    this.isAdmin = localStorage.getItem('Role') === 'admin';
+    this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
     this.Auth = false;
     if (localStorage.getItem('accessToken')) {
       this.Auth = true;
     }
   }
 
-  submit() {
+  logout() {
     this.auth.logout();
     this.Auth = !true;
     this.router.navigate(['']);

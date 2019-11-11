@@ -3,23 +3,30 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {UserModel} from '../../../models/UserModel';
 import {Responsemodel} from '../../../models/Responsemodel';
 import {LogInResponceModel} from '../../../models/LogInResponceModel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class AuthService {
 
+  private  Api = 'api';
+  private control = 'Account';
+  private ActionSingIn: string = 'SingIn';
+  private ActionRegister: string = 'Register';
+  private ActionForgotPass: string = 'ForgotPassword';
+  private token: string = '';
+
   constructor(private  http: HttpClient) {}
 
-  get token(): string {
-    return  '';
-  }
 
   public async SingUp(user: UserModel): Promise<Responsemodel> {
-    const result: Responsemodel = await this.http.post<Responsemodel>('https://localhost:44378/api/Account/Register', user).toPromise();
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionRegister;
+    const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, user).toPromise();
     return result;
   }
 
   public async SingIn(user: UserModel): Promise<LogInResponceModel> {
-    const response: LogInResponceModel = await this.http.post<LogInResponceModel>('https://localhost:44378/api/Account/SingIn', user)
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionSingIn;
+    const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user)
       .toPromise();
     if (response.isValid) {
       this.setToken(response);
@@ -29,12 +36,10 @@ export class AuthService {
   logout() {
       localStorage.clear();
   }
-  isAuthenticated(): boolean {
-    return !!this.token;
-  }
-  public async  forgotPassword(user: UserModel): Promise<Responsemodel> {
 
-    const result: Responsemodel = await this.http.post<Responsemodel>('https://localhost:44378/api/Account/ForgotPassword', user).
+  public async  forgotPassword(user: UserModel): Promise<Responsemodel> {
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionForgotPass;
+    const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, user).
     toPromise();
     return result;
   }
@@ -43,5 +48,9 @@ export class AuthService {
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('Role', response.role);
+  }
+
+  isAuthenticated(): boolean {
+    return !!this.token;
   }
 }

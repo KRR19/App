@@ -2,37 +2,52 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Responsemodel} from '../../../models/Responsemodel';
 import {PrintingEditionModel} from '../../../models/PrintingEditionModel';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 export class PrintingEditionService {
+  private  Api = 'api';
+  private control = 'PrintingEdition';
+  private ActionCreate: string = 'Post';
+  private ActionGetAll: string = 'GetAll';
+  private ActionGet: string = 'Get';
+  private ActionDelete: string = 'Delete';
+  private ActionUpdate: string = 'Update';
+
+
   constructor(private  http: HttpClient) {}
 
   public async Create(model: PrintingEditionModel): Promise<Responsemodel> {
-    const result: Responsemodel  = await this.http.post<Responsemodel>('https://localhost:44378/api/PrintingEdition/Post', model).toPromise();
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionCreate;
+    const result: Responsemodel  = await this.http.post<Responsemodel>(urlPath, model).toPromise();
     return result;
   }
 
   public async GetAll(): Promise<PrintingEditionModel[]> {
-    const result: PrintingEditionModel[] = await this.http.get<PrintingEditionModel[]>('https://localhost:44378/api/PrintingEdition/GetAll').toPromise();
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionGetAll;
+    const result: PrintingEditionModel[] = await this.http.get<PrintingEditionModel[]>(urlPath).toPromise();
     return result;
   }
 
   public async Get(id: string): Promise<PrintingEditionModel> {
-    const result: PrintingEditionModel = await this.http.get<PrintingEditionModel>('https://localhost:44378/api/PrintingEdition/Get/' + id).toPromise();
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionGet + '/';
+    const result: PrintingEditionModel = await this.http.get<PrintingEditionModel>(urlPath + id).toPromise();
     return result;
   }
 
-  public async delete(printingEdition: PrintingEditionModel) {
-    const result: Responsemodel = await this.http.post<Responsemodel>('https://localhost:44378/api/PrintingEdition/Delete', printingEdition).toPromise();
+  public async Delete(printingEdition: PrintingEditionModel) {
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionDelete;
+    const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, printingEdition).toPromise();
     return result;
   }
 
-  async Update(printingEdition: PrintingEditionModel) {
-    const result: Responsemodel = await this.http.put<Responsemodel>('https://localhost:44378/api/PrintingEdition/Update', printingEdition).toPromise();
+  public async Update(printingEdition: PrintingEditionModel) {
+    const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionUpdate;
+    const result: Responsemodel = await this.http.put<Responsemodel>(urlPath, printingEdition).toPromise();
     return result;
   }
 
-  PriceSwitcher(element: number) {
+  public PriceSwitcher(element: number) {
     switch (element) {
       case 1:
         return 'USD';

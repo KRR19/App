@@ -30,7 +30,7 @@ export class SingupComponent implements OnInit {
     });
   }
 
-  async submit() {
+  public async SingUp() {
     this.FormVisible = true;
     this.successReg = false;
     this.unsuccessReg = false;
@@ -41,6 +41,7 @@ export class SingupComponent implements OnInit {
 
     const  user: UserModel = {Email: this.form.value.email, Password: this.form.value.password,
                               FirstName: this.form.value.firstName, SecondName: this.form.value.secondName};
+
     const result: Responsemodel =  await this.auth.SingUp(user);
 
     if (!result.isValid) {

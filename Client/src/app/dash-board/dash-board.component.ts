@@ -10,9 +10,9 @@ import {Router} from '@angular/router';
   styleUrls: ['./dash-board.component.scss']
 })
 export class DashBoardComponent implements OnInit {
-  printingEdition: PrintingEditionModel[];
-  displayedColumns: string[] = ['Name', 'Price'];
-  dataSource = new MatTableDataSource<PrintingEditionModel>();
+  private printingEdition: PrintingEditionModel[];
+  public displayedColumns: string[] = ['Name', 'Price'];
+  public dataSource = new MatTableDataSource<PrintingEditionModel>();
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   constructor(private printingEditionService: PrintingEditionService, private router: Router) { }
@@ -24,7 +24,7 @@ export class DashBoardComponent implements OnInit {
     this.dataSource = new MatTableDataSource<PrintingEditionModel>(this.printingEdition);
   }
 
-  OpenPrintingEdition(id: string) {
+  public OpenPrintingEdition(id: string) {
     const adress: string = 'printingEdition/:id' + id;
     this.router.navigate([adress]);
   }

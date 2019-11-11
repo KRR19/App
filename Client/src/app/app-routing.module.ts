@@ -7,8 +7,7 @@ import {DashBoardComponent} from './dash-board/dash-board.component';
 const routes: Routes = [
   {path: '', component: DashBoardComponent},
   {path: 'auth', loadChildren: './auth/auth.module#AuthModule'},
-  {path: 'printingEdition', loadChildren: './printingEdition/printingEdition.module#PrintingEditionModule'},
-  {path: 'admin', loadChildren: './admin/admin.module#AdminModule'}
+  {path: 'printingEdition', loadChildren: './printingEdition/printingEdition.module#PrintingEditionModule'}
 ];
 
 @NgModule({
