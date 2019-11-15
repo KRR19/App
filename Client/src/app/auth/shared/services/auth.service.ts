@@ -48,6 +48,7 @@ export class AuthService {
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('Role', response.role);
+    localStorage.setItem('User', response.user);
   }
 
   isAuthenticated(): boolean {

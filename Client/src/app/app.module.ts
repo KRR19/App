@@ -12,11 +12,12 @@ import {DashBoardComponent} from './dash-board/dash-board.component';
 import {PrintingEditionService} from './printingEdition/shared/service/printingEdition.service';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    DashBoardComponent,
+    DashBoardComponent
 
   ],
   imports: [

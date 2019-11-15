@@ -431,7 +431,7 @@ namespace App.DataAccessLayer.Migrations
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.OrderItem", b =>
                 {
-                    b.HasOne("App.DataAccessLayer.Entities.Order", "Order")
+                    b.HasOne("App.DataAccessLayer.Entities.Order", null)
                         .WithMany("OrderItem")
                         .HasForeignKey("OrderId");
 

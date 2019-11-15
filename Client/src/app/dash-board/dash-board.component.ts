@@ -22,8 +22,8 @@ export class DashBoardComponent implements OnInit {
   async ngOnInit() {
     this.dataSource.paginator = this.paginator;
     this.printingEdition = await this.printingEditionService.GetAll();
-    console.log(this.printingEdition);
     this.dataSource = new MatTableDataSource<PrintingEditionModel>(this.printingEdition);
+    this.dataSource.paginator = this.paginator;
   }
 
   public OpenPrintingEdition(id: string) {
@@ -31,5 +31,8 @@ export class DashBoardComponent implements OnInit {
     this.router.navigate([adress]);
   }
 
+  public doFilter = (value: string) => {
+    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  }
 
 }

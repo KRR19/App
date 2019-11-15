@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {PrintingEditionModel} from '../../models/PrintingEditionModel';
 import {PrintingEditionService} from '../shared/service/printingEdition.service';
-import {AuthorService} from '../shared/service/author.service';
+import {AuthorService} from '../../author/shared/services/author.service';
 import {AuthorModel} from '../../models/AuthorModel';
 import {Router} from '@angular/router';
 
@@ -41,6 +41,7 @@ export class CreateComponent implements OnInit {
       authorDeathDay: new FormControl()
     });
     this.Authors = await this.authorService.GetAll();
+    this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   }
 
   public Create() {
@@ -52,9 +53,7 @@ export class CreateComponent implements OnInit {
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
 
-    this.printingEditionService.Create(this.printingEdition);
-
-    this.router.navigate(['']);
+    this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
 
   public async AddAuthor() {

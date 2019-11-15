@@ -69,6 +69,8 @@ namespace App.BussinesLogicLayer.Services
             var roles = await _userManager.GetRolesAsync(user);
             logInResponse.Role = roles.ToList().FirstOrDefault();
 
+            logInResponse.User = user.NormalizedUserName;
+
             bool confirm = await _userManager.CheckPasswordAsync(user, model.Password);         
 
             if (!confirm)
@@ -90,6 +92,7 @@ namespace App.BussinesLogicLayer.Services
             refreshClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             refreshToken = GenerateJwtToken(refreshClaims, 5000);
             logInResponse.refreshToken = refreshToken;
+            
 
 
             return logInResponse;

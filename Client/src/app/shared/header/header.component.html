@@ -1,19 +1,24 @@
+
 <nav class="navbar bg-primary">
+  <a class="Home" (click)="router.navigate([''])">HOME</a>
   <h1></h1>
   <ul>
     <li routerLinkActive="active">
-      <a *ngIf="Auth && isAdmin" [routerLink]="['/printingEdition', 'create']">Add</a>
+      <a *ngIf="Auth && isAdmin" [routerLink]="['/printingEdition', 'create']">Add <sup></sup></a>
     </li>
     <li routerLinkActive="active">
-      <a *ngIf="!Auth" [routerLink]="['/auth', 'SingIn']">LogIn</a>
+      <a *ngIf="Auth && isAdmin" [routerLink]="['/author', 'author-dashboard']">Authors <sup></sup></a>
+    </li>
+    <li routerLinkActive="active">
+      <a *ngIf="!Auth" [routerLink]="['/auth', 'SingIn']">LogIn <sup></sup></a>
     </li>
     <li *ngIf="!Auth" routerLinkActive="active">
-      <a [routerLink]="['/auth', 'SingUp']">Registration</a>
+      <a [routerLink]="['/auth', 'SingUp']">Registration <sup></sup></a>
     </li>
     <li>
-      <a>Cart</a>
+      <a *ngIf="Auth" [routerLink]="['/cart', 'cartBoard']">Cart <sup>{{CartCount}}</sup></a>
     <li>
-      <a href="#" *ngIf="Auth" (click)="logout()">LogOut</a>
+      <a href="#" *ngIf="Auth" (click)="logout()">LogOut <sup></sup></a>
     </li>
   </ul>
 </nav>

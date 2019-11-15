@@ -1,0 +1,18 @@
+<label>Author name:</label>
+<input id="authorName" [(ngModel)]="Author.name" type="text">
+<table class="DateForm">
+  <tr>
+    <td><label>Date of birth:</label><input class="DatePicker" matInput [matDatepicker]="picker" [(ngModel)]="Author.dateBirth"  placeholder="Date of birth:">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker></td>
+
+    <td><label>Date of death:</label><input class="DatePicker" matInput [matDatepicker]="pickerD" [(ngModel)]="Author.dateDeath"  placeholder="Date of birth:">
+      <mat-datepicker-toggle matSuffix [for]="pickerD"></mat-datepicker-toggle>
+      <mat-datepicker #pickerD></mat-datepicker></td>
+  </tr>
+</table>
+
+
+<button *ngIf="!isEdit" type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()">Add Author</button>
+<button *ngIf="isEdit" type="submit" class="btn AddAuthor btn-dark" (click)="EditAuthor()">Edit</button>
+<button *ngIf="isEdit" type="submit" class="btn AddAuthor btn-primary" (click)="DeleteAuthor()">Delete</button>

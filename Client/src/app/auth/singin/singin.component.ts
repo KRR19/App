@@ -4,6 +4,7 @@ import {UserModel} from '../../models/UserModel';
 import {AuthService} from '../shared/services/auth.service';
 import {LogInResponceModel} from '../../models/LogInResponceModel';
 import {Router} from '@angular/router';
+import {HeaderComponent} from '../../shared/header/header.component';
 
 @Component({
   selector: 'app-singin',
@@ -15,7 +16,7 @@ export class SinginComponent implements OnInit {
   success: boolean;
   message: string[];
 
-  constructor(private  auth: AuthService, private  router: Router) {
+  constructor(private  auth: AuthService, private  router: Router, private header: HeaderComponent) {
   }
 
   ngOnInit() {
@@ -32,6 +33,7 @@ export class SinginComponent implements OnInit {
     this.message = response.message;
 
     if (response.isValid) {
+      this.header.ngOnInit();
       this.router.navigate(['']);
     }
   }

@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {PrintingEditionModel} from '../../models/PrintingEditionModel';
 import {PrintingEditionService} from '../shared/service/printingEdition.service';
 import {AuthorModel} from '../../models/AuthorModel';
-import {AuthorService} from '../shared/service/author.service';
+import {AuthorService} from '../../author/shared/services/author.service';
 import {FormGroup} from '@angular/forms';
 
 @Component({
@@ -41,6 +41,7 @@ export class EditComponent implements OnInit {
     this.Type = this.printingEdition.type.toString();
     this.Status = this.printingEdition.status.toString();
     this.Authors = await this.authorService.GetAll();
+    this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     this.selectedAuthor = this.printingEdition.authorId;
     console.log(this.printingEdition);
   }
@@ -65,13 +66,11 @@ export class EditComponent implements OnInit {
     this.printingEdition.type = Number(this.Type);
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
-    await this.printingEditionService.Update(this.printingEdition);
-    await this.router.navigate(['']);
+    await this.printingEditionService.Update(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
 
   public async Delete() {
-    await this.printingEditionService.Delete(this.printingEdition);
-    await this.router.navigate(['']);
+    await this.printingEditionService.Delete(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
 
 }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Order = App.DataAccessLayer.Entities.Order;
 using OrderItem = App.DataAccessLayer.Entities.OrderItem;
+using System.Linq;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -40,8 +41,8 @@ namespace App.BussinesLogicLayer.Services
             PaymentModel paymentModel = new PaymentModel();
             Order order = new Order();
             Payment payment = new Payment();
-            OrderItem orderItem = new OrderItem();
-
+            order.OrderItem = new List<OrderItem>();
+            order.Payment = new Payment();
 
             paymentModel.Amount = orderModel.Amount;
             paymentModel.Currency = orderModel.Currency;
@@ -49,25 +50,29 @@ namespace App.BussinesLogicLayer.Services
             paymentModel.Email = orderModel.PaymentEmail;
             paymentModel.Source = orderModel.PaymentSource;
 
-            payment.TransactionId = Charge(paymentModel);
-            payment.CreationDate = DateTime.Now;
-            await _paymentRepository.Create(payment);
+            order.Payment.TransactionId = Charge(paymentModel);
+            order.Payment.CreationDate = DateTime.Now;
 
             order.CreationDate = order.Date = DateTime.Now;
             order.IsRemoved = false;
             order.Description = orderModel.Description;
-            order.Payment = payment;
             order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
-            await _orderRepository.Create(order);
 
-            orderItem.CreationDate = DateTime.Now;
-            orderItem.IsRemoved = false;
-            orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition);
-            orderItem.Count = orderModel.Count;
-            orderItem.Currency = orderModel.Currency;
-            orderItem.Amount = orderItem.PrintingEdition.Price * orderItem.Count;
-            orderItem.Order = order;
-            await _orderItemRepository.Create(orderItem);
+            foreach (var item in orderModel.PrintingEdition)
+            {
+                OrderItem orderItem = new OrderItem();
+                orderItem.CreationDate = DateTime.Now;
+                orderItem.IsRemoved = false;
+                orderItem.PrintingEdition = await _printingEditionsRepository.GetById(item.printingEditionId);
+                orderItem.Count = item.printingEditionCount;
+                orderItem.Currency = item.printingEditionCurrency;
+                orderItem.Amount = item.printingEditionPrice * item.printingEditionCount;
+                orderItem.Order = order;
+
+                order.OrderItem.Add(orderItem);
+            }
+
+            await _orderRepository.Create(order);
 
             return report;
         }
@@ -90,8 +95,8 @@ namespace App.BussinesLogicLayer.Services
 
             orderItem.CreationDate = DateTime.Now;
             orderItem.IsRemoved = false;
-            orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition);
-            orderItem.Count = orderModel.Count;
+            orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition.Last().printingEditionId);
+            orderItem.Count = orderModel.PrintingEdition.Last().printingEditionCount;
             orderItem.Currency = orderModel.Currency;
             orderItem.Amount = orderItem.PrintingEdition.Price * orderItem.Count;
             orderItem.Order = order;

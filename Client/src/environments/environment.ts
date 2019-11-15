@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   protocol: 'https',
   host: 'localhost',
-  port: '44378'
+  port: '44378',
+  stripeKey: 'pk_test_fZaEc3bZ6qQ0J0jiNHNe75Nh00I17tMxpI'
 };
 
 /*

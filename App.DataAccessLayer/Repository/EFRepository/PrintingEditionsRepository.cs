@@ -48,7 +48,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public async Task<PrintingEdition> Update(PrintingEdition item)
         {
             _context.PrintingEditions.Update(item);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return item;
         }

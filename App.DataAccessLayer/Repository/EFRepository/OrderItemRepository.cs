@@ -2,6 +2,7 @@
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public async Task<OrderItem> Create(OrderItem item)
         {
             await _context.OrderItems.AddAsync(item);
+            await _context.SaveChangesAsync();
+
+            return item;
+        }
+
+        public async Task<List<OrderItem>> Create(List<OrderItem> item)
+        {
+            await _context.OrderItems.AddRangeAsync(item);
             await _context.SaveChangesAsync();
 
             return item;

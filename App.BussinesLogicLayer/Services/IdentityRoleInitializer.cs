@@ -6,7 +6,7 @@ namespace App.BussinesLogicLayer.Services
 {
     public class IdentityRoleInitializer
     {
-        public static void SeedRoles(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public static IdentityResult SeedRoles(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             bool isUserCreate = roleManager.RoleExistsAsync(DefaultRoles.User).Result;
             bool isAdminCreate = roleManager.RoleExistsAsync(DefaultRoles.Admin).Result;
@@ -27,7 +27,7 @@ namespace App.BussinesLogicLayer.Services
 
                 role.Name = DefaultRoles.Admin;
                 role.NormalizedName = DefaultRoles.Admin;
-                IdentityResult y = roleManager.CreateAsync(role).Result;
+                result = roleManager.CreateAsync(role).Result;
 
                 user.UserName = "Anuitex@mail.com";
                 user.Email = "Anuitex@mail.com";
@@ -35,6 +35,8 @@ namespace App.BussinesLogicLayer.Services
                 result = userManager.CreateAsync(user, "123456").Result;
                 result = userManager.AddToRoleAsync(user, DefaultRoles.Admin.ToString()).Result;
             }
+
+            return result;
         }
     }
 }

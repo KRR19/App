@@ -6,9 +6,8 @@ using App.DataAccessLayer.Entities.Enum;
 using App.DataAccessLayer.Repository.EFRepository;
 using App.DataAccessLayer.Repository.Interfaces;
 using System;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -67,7 +66,7 @@ namespace App.BussinesLogicLayer.Services
 
             PrintingEdition addedPrintingEdition = await _printingEditionsRepository.Create(printingEdition);
 
-           
+
 
             report.Message.Add(_publicationAddedMsg);
             return report;
@@ -91,7 +90,7 @@ namespace App.BussinesLogicLayer.Services
         public List<PrintingEdition> GetAll()
         {
             List<PrintingEdition> printingEdition = _printingEditionsRepository.GetAll();
-            
+
             return printingEdition;
         }
 
@@ -110,33 +109,49 @@ namespace App.BussinesLogicLayer.Services
                 Price = printingEdition.Price,
                 Status = printingEdition.Status,
                 AuthorId = _authorInPrintingEditionsRepository.GetAuthors(printingEdition.Id),
-              
+
             };
             printingEditionModel.AuthorName = _authorInPrintingEditionsRepository.GetAuthorsName(printingEditionModel.AuthorId);
 
             return printingEditionModel;
         }
 
-        public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition)
+        public async Task<BaseResponseModel> Update(PrintingEditionModel UpdatePrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
+            PrintingEdition printingEdition = new PrintingEdition();
 
             if (!report.IsValid)
             {
                 return report;
             }
 
-            PrintingEdition printingEdition = new PrintingEdition
+           
+            printingEdition.Id = UpdatePrintingEdition.Id;
+            printingEdition.Name = UpdatePrintingEdition.Name;
+            printingEdition.Description = UpdatePrintingEdition.Description;
+            printingEdition.Price = UpdatePrintingEdition.Price;
+            printingEdition.Status = UpdatePrintingEdition.Status;
+            printingEdition.Currency = UpdatePrintingEdition.Currency;
+            printingEdition.Type = UpdatePrintingEdition.Type;
+
+            List<AuthorInPrintingEdition> authorInPrintingEditions = new List<AuthorInPrintingEdition>();
+            foreach (Guid authorId in UpdatePrintingEdition.AuthorId)
             {
-                Id = UpdatePrintingEdition.Id,
-                Name = UpdatePrintingEdition.Name,
-                Description = UpdatePrintingEdition.Description,
-                Price = UpdatePrintingEdition.Price,
-                Status = UpdatePrintingEdition.Status,
-                Currency = UpdatePrintingEdition.Currency,
-                Type = UpdatePrintingEdition.Type
-            };
+                var authorInPrintingEdition = new AuthorInPrintingEdition();
+                authorInPrintingEdition.AuthorId = authorId;
+                authorInPrintingEdition.PrintingEdition = printingEdition;
+                authorInPrintingEdition.PrintingEditionId = printingEdition.Id;
+                authorInPrintingEdition.Author = await _authorRepository.GetById(authorId);
+                authorInPrintingEdition.Date = DateTime.Now;
+
+                authorInPrintingEditions.Add(authorInPrintingEdition);
+            }
+
+            
+
+            printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
 
             printingEditionsRepository.Update(printingEdition);
             return report;

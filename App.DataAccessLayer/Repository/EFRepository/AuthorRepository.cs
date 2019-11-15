@@ -60,7 +60,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public List<Author> GetAll()
         {
-            var author = _context.Authors.ToList();
+            var author = _context.Authors.Where(x => x.IsRemoved == false).ToList();
             return author;
         }
     }

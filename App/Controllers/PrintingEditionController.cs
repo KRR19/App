@@ -43,9 +43,9 @@ namespace App.Controllers
             return report;
         }
         [HttpPut("Update")]
-        public BaseResponseModel Update([FromBody]PrintingEditionModel newPrintingEdition)
+        public async Task<BaseResponseModel> Update([FromBody]PrintingEditionModel newPrintingEdition)
         {
-            BaseResponseModel report = _service.Update(newPrintingEdition);
+            BaseResponseModel report = await _service.Update(newPrintingEdition);
 
             return report;
         }

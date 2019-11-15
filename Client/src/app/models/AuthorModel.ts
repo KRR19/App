@@ -1,6 +1,6 @@
 export interface AuthorModel {
   id?: string;
-  name: string;
+  name?: string;
   dateBirth?: Date;
   dateDeath?: Date;
 }

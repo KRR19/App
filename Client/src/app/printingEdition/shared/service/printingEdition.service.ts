@@ -19,6 +19,7 @@ export class PrintingEditionService {
   }
 
   public async Create(model: PrintingEditionModel): Promise<Responsemodel> {
+    console.log(model);
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionCreate;
     const result: Responsemodel = await this.http.post<Responsemodel>(urlPath, model).toPromise();
     return result;
@@ -43,6 +44,7 @@ export class PrintingEditionService {
   }
 
   public async Update(printingEdition: PrintingEditionModel) {
+    console.log(printingEdition.authorId);
     const urlPath: string = environment.protocol + '://' + environment.host + ':' + environment.port + '/' + this.Api + '/' + this.control + '/' + this.ActionUpdate;
     const result: Responsemodel = await this.http.put<Responsemodel>(urlPath, printingEdition).toPromise();
     return result;

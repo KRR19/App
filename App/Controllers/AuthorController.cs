@@ -46,7 +46,7 @@ namespace App.Controllers
             return model;
         }
 
-        [HttpDelete]
+        [HttpPost("Delete")]
         public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
         {
             BaseResponseModel report = await _service.Delete(newAuthor.Id);

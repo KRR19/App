@@ -10,7 +10,7 @@ namespace App.BussinesLogicLayer.Services.Interfaces
     {
         public Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition);
         public Task<BaseResponseModel> Delete(Guid id);
-        public BaseResponseModel Update(PrintingEditionModel UpdatePrintingEdition);
+        public Task<BaseResponseModel> Update(PrintingEditionModel UpdatePrintingEdition);
         public Task<PrintingEditionModel> GetById(Guid id);
         public List<PrintingEdition> GetAll();
     }

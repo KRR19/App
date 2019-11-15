@@ -13,7 +13,7 @@ import {
   MatTabsModule
 } from '@angular/material';
 import {PrintingEditionService} from './shared/service/printingEdition.service';
-import {AuthorService} from './shared/service/author.service';
+import {AuthorService} from '../author/shared/services/author.service';
 import {PrintingEditionComponent} from './printing-edition-page/printing-edition.component';
 import {EditComponent} from './edit/edit.component';
 
