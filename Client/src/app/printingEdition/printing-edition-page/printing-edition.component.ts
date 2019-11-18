@@ -14,6 +14,7 @@ import {HeaderComponent} from '../../shared/header/header.component';
 export class PrintingEditionComponent implements OnInit {
   printingEdition: PrintingEditionModel = {};
   isAdmin: boolean;
+  previewUrl: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private  printingEditionService: PrintingEditionService, private header: HeaderComponent) {
   }

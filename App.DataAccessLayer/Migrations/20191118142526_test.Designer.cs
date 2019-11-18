@@ -4,14 +4,16 @@ using App.DataAccessLayer.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace App.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191118142526_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,14 +81,13 @@ namespace App.DataAccessLayer.Migrations
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("PrintingEditionId")
+                    b.Property<Guid>("PrintingEditionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PrintingEditionId")
-                        .IsUnique()
-                        .HasFilter("[PrintingEditionId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Covers");
                 });
@@ -449,7 +450,9 @@ namespace App.DataAccessLayer.Migrations
                 {
                     b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEdition")
                         .WithOne("Cover")
-                        .HasForeignKey("App.DataAccessLayer.Entities.Cover", "PrintingEditionId");
+                        .HasForeignKey("App.DataAccessLayer.Entities.Cover", "PrintingEditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>

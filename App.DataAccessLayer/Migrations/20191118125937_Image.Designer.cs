@@ -4,14 +4,16 @@ using App.DataAccessLayer.AppContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace App.DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20191118125937_Image")]
+    partial class Image
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,25 +72,18 @@ namespace App.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Base64Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("File")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsRemoved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("PrintingEditionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PrintingEditionId")
-                        .IsUnique()
-                        .HasFilter("[PrintingEditionId] IS NOT NULL");
-
-                    b.ToTable("Covers");
+                    b.ToTable("Cover");
                 });
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>
@@ -186,6 +181,9 @@ namespace App.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CoverId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
@@ -211,6 +209,8 @@ namespace App.DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CoverId");
 
                     b.ToTable("PrintingEditions");
                 });
@@ -445,13 +445,6 @@ namespace App.DataAccessLayer.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("App.DataAccessLayer.Entities.Cover", b =>
-                {
-                    b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEdition")
-                        .WithOne("Cover")
-                        .HasForeignKey("App.DataAccessLayer.Entities.Cover", "PrintingEditionId");
-                });
-
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>
                 {
                     b.HasOne("App.DataAccessLayer.Entities.Payment", "Payment")
@@ -472,6 +465,13 @@ namespace App.DataAccessLayer.Migrations
                     b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEdition")
                         .WithMany()
                         .HasForeignKey("PrintingEditionId");
+                });
+
+            modelBuilder.Entity("App.DataAccessLayer.Entities.PrintingEdition", b =>
+                {
+                    b.HasOne("App.DataAccessLayer.Entities.Cover", "Cover")
+                        .WithMany()
+                        .HasForeignKey("CoverId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

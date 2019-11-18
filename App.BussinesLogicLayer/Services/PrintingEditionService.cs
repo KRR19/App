@@ -17,6 +17,7 @@ namespace App.BussinesLogicLayer.Services
         private readonly IAuthorInPrintingEditionsRepository _authorInPrintingEditionsRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly IPrintingEditionsRepository _printingEditionsRepository;
+        private readonly ICoverRepository _coverRepository;
 
         private readonly string _publicationAddedMsg = "You have successfully added a publication";
         private readonly string _publicationNotFoundMsg = "Printing Edition not found in the database!";
@@ -27,17 +28,19 @@ namespace App.BussinesLogicLayer.Services
         private readonly string _currencyMsg = "Enter currency!";
         private readonly string _typeMsg = "Enter type of publication!";
 
-        public PrintingEditionService(ApplicationContext context, IAuthorInPrintingEditionsRepository authorInPrintingEditionsRepository, IAuthorRepository authorRepository, IPrintingEditionsRepository printingEditionsRepository)
+        public PrintingEditionService(ApplicationContext context, IAuthorInPrintingEditionsRepository authorInPrintingEditionsRepository, IAuthorRepository authorRepository, IPrintingEditionsRepository printingEditionsRepository, ICoverRepository coverRepository)
         {
             _context = context;
             _authorInPrintingEditionsRepository = authorInPrintingEditionsRepository;
             _authorRepository = authorRepository;
             _printingEditionsRepository = printingEditionsRepository;
+            _coverRepository = coverRepository;
         }
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
             PrintingEdition printingEdition = new PrintingEdition();
+            Cover cover = new Cover();
 
             if (!report.IsValid)
             {
@@ -52,6 +55,11 @@ namespace App.BussinesLogicLayer.Services
             printingEdition.Currency = newPrintingEdition.Currency;
             printingEdition.IsRemoved = false;
             printingEdition.CreationDate = DateTime.Now;
+
+            cover.CreationDate = DateTime.Now;
+            cover.Base64Image = newPrintingEdition.image;
+            cover.PrintingEdition = printingEdition;
+            printingEdition.Cover = cover;
 
             var authorInPrintingEditions = new List<AuthorInPrintingEdition>();
             foreach (Guid authorId in newPrintingEdition.AuthorId)
@@ -98,19 +106,20 @@ namespace App.BussinesLogicLayer.Services
         {
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
             PrintingEdition printingEdition = await printingEditionsRepository.GetById(id);
+            Cover cover = await _coverRepository.GetById(printingEdition.Cover.Id);
 
-            PrintingEditionModel printingEditionModel = new PrintingEditionModel
-            {
-                Id = printingEdition.Id,
-                Name = printingEdition.Name,
-                Description = printingEdition.Description,
-                Type = printingEdition.Type,
-                Currency = printingEdition.Currency,
-                Price = printingEdition.Price,
-                Status = printingEdition.Status,
-                AuthorId = _authorInPrintingEditionsRepository.GetAuthors(printingEdition.Id),
+            PrintingEditionModel printingEditionModel = new PrintingEditionModel();
 
-            };
+            printingEditionModel.Id = printingEdition.Id;
+            printingEditionModel.Name = printingEdition.Name;
+            printingEditionModel.Description = printingEdition.Description;
+            printingEditionModel.Type = printingEdition.Type;
+            printingEditionModel.Currency = printingEdition.Currency;
+            printingEditionModel.Price = printingEdition.Price;
+            printingEditionModel.Status = printingEdition.Status;
+            printingEditionModel.AuthorId = _authorInPrintingEditionsRepository.GetAuthors(printingEdition.Id);
+            printingEditionModel.image = cover.Base64Image;
+
             printingEditionModel.AuthorName = _authorInPrintingEditionsRepository.GetAuthorsName(printingEditionModel.AuthorId);
 
             return printingEditionModel;
@@ -127,7 +136,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
 
-           
+
             printingEdition.Id = UpdatePrintingEdition.Id;
             printingEdition.Name = UpdatePrintingEdition.Name;
             printingEdition.Description = UpdatePrintingEdition.Description;
@@ -149,7 +158,7 @@ namespace App.BussinesLogicLayer.Services
                 authorInPrintingEditions.Add(authorInPrintingEdition);
             }
 
-            
+
 
             printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
 

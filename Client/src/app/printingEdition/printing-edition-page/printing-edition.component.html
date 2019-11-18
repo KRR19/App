@@ -1,5 +1,6 @@
 <h2>{{printingEdition.name}}</h2>
 <p *ngFor="let author of printingEdition.authorName ">{{author}}</p>
+<img *ngIf="printingEdition.Image" [src]="printingEdition.Image"  />
 <h5>Price: {{printingEdition.price + this.printingEditionService.PriceSwitcher(printingEdition.currency)}}</h5>
 <strong>Description:</strong>
 <p>{{printingEdition.description}}</p>
