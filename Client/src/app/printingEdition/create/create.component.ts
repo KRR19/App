@@ -54,6 +54,7 @@ export class CreateComponent implements OnInit {
     this.printingEdition.type = Number(this.Type);
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
+    this.printingEdition.Image = this.previewUrl.toString();
 
     this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
@@ -73,12 +74,16 @@ export class CreateComponent implements OnInit {
   }
 
   AddCover(event: Event) {
-    this.fileData = event.target.files[0] as File;
+    const UploadImageInput: HTMLInputElement = event.target as HTMLInputElement;
+    if (UploadImageInput && UploadImageInput.files.length) {
+      this.fileData = UploadImageInput.files[0];
 
-    const reader = new FileReader();
-    reader.readAsDataURL(this.fileData);
-    reader.onload = () => {
-      this.previewUrl = reader.result;
-    };
+      const reader = new FileReader();
+      reader.readAsDataURL(this.fileData);
+      reader.onload = () => {
+        this.previewUrl = reader.result;
+      };
+
+    }
   }
 }

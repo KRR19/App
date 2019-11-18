@@ -8,4 +8,5 @@ export interface PrintingEditionModel {
   type?: number;
   authorId?: string;
   authorName?: string;
+  Image?: string;
 }
