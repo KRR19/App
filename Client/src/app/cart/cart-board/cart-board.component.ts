@@ -40,7 +40,7 @@ export class CartBoardComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource<CartItem>(this.cart[this.userIndex].PrintingEdition);
     this.TotalCalc();
-    this.ClientPrice = this.TotalPriceUSD;
+
   }
 
   CountIncrement(printingEditionId: string) {
@@ -83,20 +83,29 @@ export class CartBoardComponent implements OnInit {
   TotalCalc() {
     this.TotalPriceUSD = 0;
     for (const item of this.cart[this.userIndex].PrintingEdition) {
+
       if (item.printingEditionCurrency === 2) {
         this.TotalPriceUSD += this.exchangeService.EurUsd(item.printingEditionPrice * item.printingEditionCount);
         continue;
       }
+
       if (item.printingEditionCurrency === 3) {
         this.TotalPriceUSD += this.exchangeService.UsdUah(item.printingEditionPrice * item.printingEditionCount);
         continue;
       }
-      this.TotalPriceUSD += item.printingEditionPrice;
+      this.TotalPriceUSD += item.printingEditionPrice * item.printingEditionCount;
     }
+    this.ClientCurrency(this.CurrencySelector);
   }
 
   ClientCurrency(CurrencySelector: string) {
     this.ClientPrice = this.TotalPriceUSD;
+    if (CurrencySelector === '1') {
+      console.log();
+      this.ClientPrice = this.TotalPriceUSD;
+      return this.ClientPrice;
+    }
+
     if (CurrencySelector === '2') {
       this.ClientPrice = this.exchangeService.UsdEur(this.TotalPriceUSD);
       return this.ClientPrice;
@@ -105,7 +114,7 @@ export class CartBoardComponent implements OnInit {
       this.ClientPrice = this.exchangeService.UahUsd(this.TotalPriceUSD);
       return this.ClientPrice;
     }
-    return this.ClientPrice = this.TotalPriceUSD;
+
   }
 
   Order() {
@@ -114,7 +123,6 @@ export class CartBoardComponent implements OnInit {
   }
 
   CreateOrder(payment: PaymentModel) {
-    console.log('CreateOrder');
     const order: OrderModel = {PrintingEdition: [{}]};
     order.userName = this.cart[this.userIndex].userName;
     order.PrintingEdition = this.cart[this.userIndex].PrintingEdition;
@@ -136,7 +144,6 @@ export class CartBoardComponent implements OnInit {
         this.CreateOrder(payment);
         localStorage.removeItem('Cart');
         this.router.navigate(['']);
-        console.log(payment);
       }
     });
 

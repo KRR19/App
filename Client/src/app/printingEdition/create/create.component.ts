@@ -25,6 +25,8 @@ export class CreateComponent implements OnInit {
   authorDeathDay: Date;
   authorBirthDay: Date;
   selectedAuthor: string;
+  private fileData: File;
+  private previewUrl: string | ArrayBuffer;
 
   constructor(private printingEditionService: PrintingEditionService, private authorService: AuthorService, private router: Router) {
   }
@@ -68,5 +70,15 @@ export class CreateComponent implements OnInit {
     this.authorDeathDay = null;
     const addedAuthor: AuthorModel = await this.authorService.AddAuthor(newAuthor);
     this.Authors.unshift(addedAuthor);
+  }
+
+  AddCover(event: Event) {
+    this.fileData = event.target.files[0] as File;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileData);
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+    };
   }
 }

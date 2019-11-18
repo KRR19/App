@@ -24,6 +24,13 @@
     <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthorForm = !AddAuthorForm" >Cancel</button>
   </div>
 
+  <div>
+    <img *ngIf="previewUrl" [src]="previewUrl"  />
+    <br>
+    <input *ngIf="!previewUrl" type='file'  accept="image/x-png,image/gif,image/jpeg"  (change)="AddCover($event)" >
+    <mat-button-toggle *ngIf="previewUrl" class="btn-danger" (click)="previewUrl = null">Delete cover</mat-button-toggle>
+  </div>
+
   <div class="form-control">
     <label >Description:</label>
     <textarea rows="10" cols="45"  formControlName="description"></textarea>
