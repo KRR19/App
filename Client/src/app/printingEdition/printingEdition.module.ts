@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, Provider} from '@angular/core';
 import {CreateComponent} from './create/create.component';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
@@ -12,11 +12,18 @@ import {
   MatSelectModule,
   MatTabsModule
 } from '@angular/material';
-import {PrintingEditionService} from './shared/service/printingEdition.service';
-import {AuthorService} from '../author/shared/services/author.service';
+import {PrintingEditionService} from '../services/printingEdition.service';
+import {AuthorService} from '../services/author.service';
 import {PrintingEditionComponent} from './printing-edition-page/printing-edition.component';
 import {EditComponent} from './edit/edit.component';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {Interceptor} from '../core/interceptor';
 
+const INTERCEPTOR_PROVIDER: Provider = {
+  provide: HTTP_INTERCEPTORS,
+  useClass: Interceptor,
+  multi: true
+}
 
 @NgModule({
   declarations: [CreateComponent, PrintingEditionComponent, EditComponent],
@@ -28,7 +35,7 @@ import {EditComponent} from './edit/edit.component';
           {path: '', redirectTo: '/printingEdition/create', pathMatch: 'full'},
           {path: 'create', component: CreateComponent},
           {path: ':id', component: PrintingEditionComponent},
-          {path: 'edit/:id', component: EditComponent}
+          {path: 'edit/:id', component: EditComponent},
         ]
       }
     ]),
@@ -45,7 +52,7 @@ import {EditComponent} from './edit/edit.component';
     MatButtonToggleModule
   ],
   exports: [RouterModule],
-  providers: [PrintingEditionService, AuthorService]
+  providers: [INTERCEPTOR_PROVIDER, PrintingEditionService, AuthorService]
 })
 
 export class PrintingEditionModule {

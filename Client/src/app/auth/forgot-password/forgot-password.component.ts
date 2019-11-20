@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../shared/services/auth.service';
-import {ResetPasswordModel} from '../../models/ResetPasswordModel';
-import {Responsemodel} from '../../models/Responsemodel';
+import {AuthService} from '../../services/auth.service';
+import {ResetPasswordModel} from '../../shared/models/reset-password.model';
+import {ResponseModel} from '../../shared/models/response.model';
 
 @Component({
   selector: 'app-forgot-password',
@@ -14,7 +14,6 @@ export class ForgotPasswordComponent implements OnInit {
   private passwordsMatch = true;
   private success: boolean;
   private message: string[];
-
 
   constructor(private auth: AuthService) {
   }
@@ -35,11 +34,11 @@ export class ForgotPasswordComponent implements OnInit {
       return;
     }
     const model: ResetPasswordModel = {
-      Email: this.form.value.email,
-      Password: this.form.value.password,
-      ConfirmPassword: this.form.value.ConfirmPassword
+      email: this.form.value.email,
+      password: this.form.value.password,
+      confirmPassword: this.form.value.ConfirmPassword
     };
-    const response: Responsemodel = await this.auth.forgotPassword(model);
+    const response: ResponseModel = await this.auth.forgotPassword(model);
     this.auth.logout();
     this.success = response.isValid;
     this.message = response.message;

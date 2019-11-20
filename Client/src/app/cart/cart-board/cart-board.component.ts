@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {CartItem, CartModel} from '../../models/CartModel';
+import {CartItem, CartModel} from '../../shared/models/cart.model';
 import {MatTableDataSource} from '@angular/material';
-import {CartService} from '../shared/services/cart.service';
-import {ExchangeService} from '../shared/services/exchange.service';
-import {OrderModel} from '../../models/OrderModel';
-import {PaymentModel} from '../../models/PaymentModel';
+import {CartService} from '../../services/cart.service';
+import {ExchangeService} from '../../services/exchange.service';
+import {OrderModel} from '../../shared/models/order.model';
+import {PaymentModel} from '../../shared/models/payment.model';
 import {Router} from '@angular/router';
 import {HeaderComponent} from '../../shared/header/header.component';
 
@@ -38,15 +38,15 @@ export class CartBoardComponent implements OnInit {
         this.userIndex = i;
       }
     }
-    this.dataSource = new MatTableDataSource<CartItem>(this.cart[this.userIndex].PrintingEdition);
+    this.dataSource = new MatTableDataSource<CartItem>(this.cart[this.userIndex].printingEdition);
     this.TotalCalc();
 
   }
 
   CountIncrement(printingEditionId: string) {
-    for (let i = 0; i < this.cart[this.userIndex].PrintingEdition.length; i++) {
-      if (this.cart[this.userIndex].PrintingEdition[i].printingEditionId === printingEditionId) {
-        this.cart[this.userIndex].PrintingEdition[i].printingEditionCount++;
+    for (let i = 0; i < this.cart[this.userIndex].printingEdition.length; i++) {
+      if (this.cart[this.userIndex].printingEdition[i].printingEditionId === printingEditionId) {
+        this.cart[this.userIndex].printingEdition[i].printingEditionCount++;
         this.header.CartCount++;
       }
     }
@@ -56,12 +56,12 @@ export class CartBoardComponent implements OnInit {
   }
 
   CountDecrement(printingEditionId: string) {
-    for (let i = 0; i < this.cart[this.userIndex].PrintingEdition.length; i++) {
-      if (this.cart[this.userIndex].PrintingEdition[i].printingEditionId === printingEditionId) {
-        this.cart[this.userIndex].PrintingEdition[i].printingEditionCount--;
+    for (let i = 0; i < this.cart[this.userIndex].printingEdition.length; i++) {
+      if (this.cart[this.userIndex].printingEdition[i].printingEditionId === printingEditionId) {
+        this.cart[this.userIndex].printingEdition[i].printingEditionCount--;
 
-        if (this.cart[this.userIndex].PrintingEdition[i].printingEditionCount < 0) {
-          this.cart[this.userIndex].PrintingEdition[i].printingEditionCount = 0;
+        if (this.cart[this.userIndex].printingEdition[i].printingEditionCount < 0) {
+          this.cart[this.userIndex].printingEdition[i].printingEditionCount = 0;
         } else {
           this.header.CartCount--;
         }
@@ -73,7 +73,7 @@ export class CartBoardComponent implements OnInit {
   }
 
   DeleteItem(printingEditionId: string) {
-    this.cart[this.userIndex].PrintingEdition = this.cart[this.userIndex].PrintingEdition.filter(item => item.printingEditionId !== printingEditionId);
+    this.cart[this.userIndex].printingEdition = this.cart[this.userIndex].printingEdition.filter(item => item.printingEditionId !== printingEditionId);
     const cartJson: string = JSON.stringify(this.cart);
     localStorage.setItem('Cart', cartJson);
     this.header.GetCartCount();
@@ -82,7 +82,7 @@ export class CartBoardComponent implements OnInit {
 
   TotalCalc() {
     this.TotalPriceUSD = 0;
-    for (const item of this.cart[this.userIndex].PrintingEdition) {
+    for (const item of this.cart[this.userIndex].printingEdition) {
 
       if (item.printingEditionCurrency === 2) {
         this.TotalPriceUSD += this.exchangeService.EurUsd(item.printingEditionPrice * item.printingEditionCount);
@@ -123,13 +123,13 @@ export class CartBoardComponent implements OnInit {
   }
 
   CreateOrder(payment: PaymentModel) {
-    const order: OrderModel = {PrintingEdition: [{}]};
+    const order: OrderModel = {printingEdition: [{}]};
     order.userName = this.cart[this.userIndex].userName;
-    order.PrintingEdition = this.cart[this.userIndex].PrintingEdition;
-    order.Currency = +this.CurrencySelector
-    order.Amount = this.ClientPrice;
-    order.PaymentSource = payment.id;
-    order.PaymentEmail = payment.email;
+    order.printingEdition = this.cart[this.userIndex].printingEdition;
+    order.currency = +this.CurrencySelector
+    order.amount = this.ClientPrice;
+    order.paymentSource = payment.id;
+    order.paymentEmail = payment.email;
     this.cartService.CreateOrder(order);
   }
 

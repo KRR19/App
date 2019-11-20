@@ -1,8 +1,8 @@
 <h2>{{printingEdition.name}}</h2>
 <p *ngFor="let author of printingEdition.authorName ">{{author}}</p>
-<img *ngIf="printingEdition.Image" [src]="printingEdition.Image"  />
+<img [src]="printingEdition.image" *ngIf="printingEdition.image"  />
 <h5>Price: {{printingEdition.price + this.printingEditionService.PriceSwitcher(printingEdition.currency)}}</h5>
-<strong>Description:</strong>
+<strong>description:</strong>
 <p>{{printingEdition.description}}</p>
 <button class="btn btn-success" (click)="AddCart()">Add to Cart</button>
 <button class="btn btn-danger" *ngIf="isAdmin" (click)="EditPage()">Edit</button>

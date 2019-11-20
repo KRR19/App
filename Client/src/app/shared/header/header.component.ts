@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from '../../auth/shared/services/auth.service';
+import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
-import {CartModel} from '../../models/CartModel';
+import {CartModel} from '../models/cart.model';
 
 
 @Component({
@@ -37,8 +37,8 @@ export class HeaderComponent implements OnInit {
     }
     const cart: CartModel[] = JSON.parse(cartJson);
     for (const item of cart) {
-      if (item.userName === this.User) {
-        for (const cartItem of item.PrintingEdition) {
+      if (item.userName === this.User && item.printingEdition !== undefined) {
+        for (const cartItem of item.printingEdition) {
           this.CartCount += cartItem.printingEditionCount;
         }
       }

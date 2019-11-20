@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {AuthorModel} from '../../models/AuthorModel';
-import {AuthorService} from '../shared/services/author.service';
+import {AuthorModel} from '../../shared/models/author.model';
+import {AuthorService} from '../../services/author.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 
@@ -27,7 +27,6 @@ export class AuthorDashboardComponent implements OnInit {
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     this.dataSource = new MatTableDataSource<AuthorModel>(this.Authors);
     this.dataSource.paginator = this.paginator;
-    console.log(this.Authors);
   }
 
   public doFilter = (value: string) => {

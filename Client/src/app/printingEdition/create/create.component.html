@@ -14,12 +14,8 @@
 
   <div class="form-control" *ngIf="AddAuthorForm">
     <input id="authorName" [(ngModel)]="newAuthorName" type="text" formControlName="authorName">
-    <table class="DateForm">
-      <tr>
-        <td><label>Date of birth:</label><input [(ngModel)]="authorBirthDay" class="authorBirthDay" id="authorBirthDay" type="date" formControlName="authorBirthDay"></td>
-        <td><label>Date of death:</label><input [(ngModel)]="authorDeathDay" class="authorDeathDay" id="authorDeathDay" type="date" formControlName="authorDeathDay"></td>
-      </tr>
-    </table>
+    <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" class="authorBirthDay" id="authorBirthDay" type="date" formControlName="authorBirthDay">
+    <label>Date of death:</label><input [(ngModel)]="authorDeathDay" class="authorDeathDay" id="authorDeathDay" type="date" formControlName="authorDeathDay">
     <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()" >Add Author</button>
     <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthorForm = !AddAuthorForm" >Cancel</button>
   </div>
@@ -32,7 +28,7 @@
   </div>
 
   <div class="form-control">
-    <label >Description:</label>
+    <label >description:</label>
     <textarea rows="10" cols="45"  formControlName="description"></textarea>
   </div>
 
@@ -44,7 +40,7 @@
           <input id="price"  type="number" min="0" step="0.01"  formControlName="price">
         </td>
         <td>
-    <mat-label>Currency</mat-label>
+    <mat-label>currency</mat-label>
     <mat-select class="currencySelector" [(value)]="Currency" >
       <mat-option value="1">USD</mat-option>
       <mat-option value="2">EUR</mat-option>

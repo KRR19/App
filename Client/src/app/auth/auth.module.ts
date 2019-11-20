@@ -1,13 +1,20 @@
-import {NgModule} from '@angular/core';
+import {NgModule, Provider} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
 import {SingupComponent} from './singup/singup.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule, MatFormFieldModule, MatInputModule, MatTabsModule} from '@angular/material';
-import {AuthService} from './shared/services/auth.service';
+import {AuthService} from '../services/auth.service';
 import {SinginComponent} from './singin/singin.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {Interceptor} from '../core/interceptor';
 
+const INTERCEPTOR_PROVIDER: Provider = {
+  provide: HTTP_INTERCEPTORS,
+  useClass: Interceptor,
+  multi: true
+}
 
 @NgModule({
   declarations: [SingupComponent, SinginComponent, ForgotPasswordComponent],
@@ -32,7 +39,7 @@ import {ForgotPasswordComponent} from './forgot-password/forgot-password.compone
     MatTabsModule,
   ],
   exports: [RouterModule],
-  providers: [AuthService]
+  providers: [INTERCEPTOR_PROVIDER, AuthService]
 })
 
 export class AuthModule {

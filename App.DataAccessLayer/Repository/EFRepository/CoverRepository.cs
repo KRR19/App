@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
+using System.Linq;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -17,7 +18,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public async Task<Cover> GetById(Guid id)
         {
-            Cover cover = await _context.Covers.FindAsync(id);
+            Cover cover =  _context.Covers.FirstOrDefault(p => p.PrintingEditionId == id);
             return cover;
         }
     }

@@ -11,8 +11,9 @@ const routes: Routes = [
       {path: 'auth', loadChildren: './auth/auth.module#AuthModule'},
       {path: 'printingEdition', loadChildren: './printingEdition/printingEdition.module#PrintingEditionModule'},
       {path: 'cart', loadChildren: './cart/cart.modules#CartModules'},
-      {path: 'admin', loadChildren: './admin/admin.module#AdminModule'},
-      {path: 'author', loadChildren: './author/author.module#AuthorModule'}
+      {path: 'author', loadChildren: './author/author.module#AuthorModule'},
+      {path: 'user', loadChildren: './user/user.module#UserModule'},
+      {path: '**', redirectTo: ''}
     ]
   }
 ];

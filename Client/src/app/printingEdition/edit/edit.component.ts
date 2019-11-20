@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {PrintingEditionModel} from '../../models/PrintingEditionModel';
-import {PrintingEditionService} from '../shared/service/printingEdition.service';
-import {AuthorModel} from '../../models/AuthorModel';
-import {AuthorService} from '../../author/shared/services/author.service';
+import {PrintingEditionModel} from '../../shared/models/printing-edition.model';
+import {PrintingEditionService} from '../../services/printingEdition.service';
+import {AuthorModel} from '../../shared/models/author.model';
+import {AuthorService} from '../../services/author.service';
 import {FormGroup} from '@angular/forms';
 
 @Component({
@@ -23,6 +23,7 @@ export class EditComponent implements OnInit {
   private printingEdition: PrintingEditionModel = {};
   Authors: AuthorModel[];
   selectedAuthor: string;
+  private fileData: File;
 
   constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService) {
   }
@@ -73,4 +74,17 @@ export class EditComponent implements OnInit {
     await this.printingEditionService.Delete(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
 
+  AddCover(event: Event) {
+    const UploadImageInput: HTMLInputElement = event.target as HTMLInputElement;
+    if (UploadImageInput && UploadImageInput.files.length) {
+      this.fileData = UploadImageInput.files[0];
+
+      const reader = new FileReader();
+      reader.readAsDataURL(this.fileData);
+      reader.onload = () => {
+        this.printingEdition.image = reader.result.toString();
+      };
+
+    }
+  }
 }

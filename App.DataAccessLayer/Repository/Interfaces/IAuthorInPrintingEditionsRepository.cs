@@ -9,5 +9,6 @@ namespace App.DataAccessLayer.Repository.Interfaces
     {
         List<Guid> GetAuthors(Guid id);
         List<string> GetAuthorsName(List<Guid> authorId);
+        List<AuthorInPrintingEdition> GetById(Guid id);
     }
 }

@@ -449,7 +449,8 @@ namespace App.DataAccessLayer.Migrations
                 {
                     b.HasOne("App.DataAccessLayer.Entities.PrintingEdition", "PrintingEdition")
                         .WithOne("Cover")
-                        .HasForeignKey("App.DataAccessLayer.Entities.Cover", "PrintingEditionId");
+                        .HasForeignKey("App.DataAccessLayer.Entities.Cover", "PrintingEditionId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("App.DataAccessLayer.Entities.Order", b =>

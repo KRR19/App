@@ -42,6 +42,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return authorsName;
         }
 
+        public List<AuthorInPrintingEdition> GetById(Guid id)
+        {
+            List<AuthorInPrintingEdition> authorInPrintingEditions = _context.AuthorInPrintingEditions.Where(w => w.PrintingEditionId == id).ToList();
+            return authorInPrintingEditions;
+        }
+
         public async Task<AuthorInPrintingEdition> Update(AuthorInPrintingEdition item)
         {
             _context.AuthorInPrintingEditions.Update(item);

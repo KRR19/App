@@ -3,7 +3,9 @@ using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -43,6 +45,12 @@ namespace App.DataAccessLayer.Repository.EFRepository
             await _context.SaveChangesAsync();
 
             return item;
+        }
+
+        public List<IdentityUser> GetAll()
+        {
+            List<IdentityUser> users = _context.Users.ToList();
+            return users;
         }
     }
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthorModel} from '../../models/AuthorModel';
-import {AuthorService} from '../shared/services/author.service';
+import {AuthorModel} from '../../shared/models/author.model';
+import {AuthorService} from '../../services/author.service';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 
 @Component({
@@ -30,7 +30,7 @@ export class AuthorEditComponent implements OnInit {
   }
 
   async AddAuthor() {
-    await this.authorService.AddAuthor(this.Author).then(() => {this.router.navigate(['/author']).then(() => { window.location.reload(); } ); } );
+    await this.authorService.AddAuthor(this.Author) // .then(() => {this.router.navigate(['/author']).then(() => { window.location.reload(); } ); } );
   }
 
   async EditAuthor() {

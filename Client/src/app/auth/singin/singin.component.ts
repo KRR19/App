@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserModel} from '../../models/UserModel';
-import {AuthService} from '../shared/services/auth.service';
-import {LogInResponceModel} from '../../models/LogInResponceModel';
+import {UserModel} from '../../shared/models/user.model';
+import {AuthService} from '../../services/auth.service';
+import {LogInResponceModel} from '../../shared/models/logIn-responce.model';
 import {Router} from '@angular/router';
 import {HeaderComponent} from '../../shared/header/header.component';
 
@@ -27,7 +27,7 @@ export class SinginComponent implements OnInit {
   }
 
   public async SingIn() {
-    const user: UserModel = {Email: this.form.value.email, Password: this.form.value.password};
+    const user: UserModel = {email: this.form.value.email, password: this.form.value.password};
     const response: LogInResponceModel = await this.auth.SingIn(user);
     this.success = !response.isValid;
     this.message = response.message;

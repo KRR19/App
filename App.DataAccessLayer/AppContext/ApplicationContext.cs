@@ -32,7 +32,7 @@ namespace App.DataAccessLayer.AppContext
             modelBuilder.Entity<PrintingEdition>()
             .HasOne(a => a.Cover)
             .WithOne(b => b.PrintingEdition)
-            .HasForeignKey<Cover>(b => b.PrintingEditionId);
+            .HasForeignKey<Cover>(b => b.PrintingEditionId).OnDelete(DeleteBehavior.Cascade);
 
         }
     }

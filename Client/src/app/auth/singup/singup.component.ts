@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {UserModel} from '../../models/UserModel';
+import {UserModel} from '../../shared/models/user.model';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {AuthService} from '../shared/services/auth.service';
-import {Responsemodel} from '../../models/Responsemodel';
+import {AuthService} from '../../services/auth.service';
+import {ResponseModel} from '../../shared/models/response.model';
 
 @Component({
   selector: 'app-singup',
@@ -42,11 +42,11 @@ export class SingupComponent implements OnInit {
     }
 
     const user: UserModel = {
-      Email: this.form.value.email, Password: this.form.value.password,
-      FirstName: this.form.value.firstName, SecondName: this.form.value.secondName
+      email: this.form.value.email, password: this.form.value.password,
+      firstName: this.form.value.firstName, lastName: this.form.value.secondName
     };
 
-    const result: Responsemodel = await this.auth.SingUp(user);
+    const result: ResponseModel = await this.auth.SingUp(user);
 
     if (!result.isValid) {
       this.unsuccessReg = true;

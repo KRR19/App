@@ -2,6 +2,7 @@
 using App.BussinesLogicLayer.models.Authors;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,9 @@ namespace App.Controllers
             AuthorModel author = await _service.GetById(Id);
             return author;
         }
+
         [HttpPost("Create")]
+        [Authorize]
         public async Task<Author> Create([FromBody]AuthorModel newAuthor)
         {
             Author model = await _service.Create(newAuthor);
@@ -40,6 +43,7 @@ namespace App.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize]
         public AuthorModel Put([FromBody]AuthorModel newAuthor)
         {
             AuthorModel model = _service.Update(newAuthor);
@@ -47,6 +51,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Delete")]
+        [Authorize]
         public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
         {
             BaseResponseModel report = await _service.Delete(newAuthor.Id);

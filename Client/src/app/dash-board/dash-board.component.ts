@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {PrintingEditionService} from '../printingEdition/shared/service/printingEdition.service';
-import {PrintingEditionModel} from '../models/PrintingEditionModel';
+import {PrintingEditionService} from '../services/printingEdition.service';
+import {PrintingEditionModel} from '../shared/models/printing-edition.model';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 
@@ -20,7 +20,6 @@ export class DashBoardComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.dataSource.paginator = this.paginator;
     this.printingEdition = await this.printingEditionService.GetAll();
     this.dataSource = new MatTableDataSource<PrintingEditionModel>(this.printingEdition);
     this.dataSource.paginator = this.paginator;

@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {PrintingEditionModel} from '../../models/PrintingEditionModel';
-import {PrintingEditionService} from '../shared/service/printingEdition.service';
-import {AuthorService} from '../../author/shared/services/author.service';
-import {AuthorModel} from '../../models/AuthorModel';
+import {PrintingEditionModel} from '../../shared/models/printing-edition.model';
+import {PrintingEditionService} from '../../services/printingEdition.service';
+import {AuthorService} from '../../services/author.service';
+import {AuthorModel} from '../../shared/models/author.model';
 import {Router} from '@angular/router';
 
 
@@ -54,7 +54,7 @@ export class CreateComponent implements OnInit {
     this.printingEdition.type = Number(this.Type);
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
-    this.printingEdition.Image = this.previewUrl.toString();
+    this.printingEdition.image = this.previewUrl.toString();
 
     this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
