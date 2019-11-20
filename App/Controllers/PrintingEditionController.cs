@@ -2,6 +2,7 @@
 using App.BussinesLogicLayer.Models.PrintingEdition;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Post")]
+        [Authorize]
         public async Task<BaseResponseModel> Post([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Create(printingEdition);
@@ -46,6 +48,7 @@ namespace App.Controllers
         }
         
         [HttpPut("Update")]
+        [Authorize]
         public async Task<BaseResponseModel> Update([FromBody]PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = await _service.Update(newPrintingEdition);
@@ -54,6 +57,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Delete")]
+        [Authorize]
         public async Task<BaseResponseModel> Delete([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Delete(printingEdition.Id);

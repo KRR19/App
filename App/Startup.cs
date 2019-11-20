@@ -20,6 +20,9 @@ using Stripe;
 using App.BussinesLogicLayer.Middleware;
 using AccountService = App.BussinesLogicLayer.Services.AccountService;
 using OrdersService = App.BussinesLogicLayer.Services.OrdersService;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 namespace App
 {
@@ -87,6 +90,30 @@ namespace App
                     Title = "Controllers",
                     Version = "v1"
                 });
+            });
+
+            string key = Configuration.GetSection("JWT")["SecretKey"];
+            SecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            string jwtSchemeName = Configuration.GetSection("JWT")["JwtSchemeName"];
+            services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = jwtSchemeName;
+                options.DefaultChallengeScheme = jwtSchemeName;
+            })
+            .AddJwtBearer(jwtSchemeName, jwtBearerOptions =>
+            {
+                jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = securityKey,
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration.GetSection("JWT")["Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = Configuration.GetSection("JWT")["Audience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromSeconds(5)
+                };
             });
         }
 

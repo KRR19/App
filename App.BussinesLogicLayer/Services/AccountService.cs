@@ -18,7 +18,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using JwtRegisteredClaimNames = System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames;
 
 namespace App.BussinesLogicLayer.Services
 {
@@ -59,7 +58,7 @@ namespace App.BussinesLogicLayer.Services
 
             User user = await _userManager.FindByEmailAsync(model.Email);
 
-            if(user == null)
+            if (user == null)
             {
                 logInResponse.IsValid = false;
                 logInResponse.Message.Add(_userNotFoundMsg);
@@ -71,7 +70,7 @@ namespace App.BussinesLogicLayer.Services
 
             logInResponse.User = user.NormalizedUserName;
 
-            bool confirm = await _userManager.CheckPasswordAsync(user, model.Password);         
+            bool confirm = await _userManager.CheckPasswordAsync(user, model.Password);
 
             if (!confirm)
             {
@@ -80,7 +79,7 @@ namespace App.BussinesLogicLayer.Services
 
                 return logInResponse;
             }
-            
+
             accessClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             accessClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             accessClaims.Add(new Claim(ClaimTypes.Hash, user.PasswordHash));
@@ -92,7 +91,7 @@ namespace App.BussinesLogicLayer.Services
             refreshClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             refreshToken = GenerateJwtToken(refreshClaims, 5000);
             logInResponse.refreshToken = refreshToken;
-            
+
 
 
             return logInResponse;
@@ -164,21 +163,23 @@ namespace App.BussinesLogicLayer.Services
 
         private string GenerateJwtToken(List<Claim> claims, int expTime)
         {
-         
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddMinutes(expTime);
 
-            JwtSecurityToken token = new JwtSecurityToken(
-                issuer: _configuration["JwtIssuer"],
-                audience: _configuration["JwtIssuer"],
+            JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(
+                issuer: _configuration.GetValue<string>("JWT:Issuer"),
+                audience: _configuration.GetValue<string>("JWT:Audience"),
                 claims: claims,
                 expires: expires,
                 signingCredentials: creds
             );
 
-            return token.ToString();
+            string token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            return token;
         }
 
         public string CreateLink(ResetPasswordModel model, string action)
