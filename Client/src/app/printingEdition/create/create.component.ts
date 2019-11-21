@@ -27,6 +27,8 @@ export class CreateComponent implements OnInit {
   selectedAuthor: string;
   private fileData: File;
   private previewUrl: string | ArrayBuffer;
+  private AuthorInvalid = false;
+  private checkMSG: string;
 
   constructor(private printingEditionService: PrintingEditionService, private authorService: AuthorService, private router: Router) {
   }
@@ -37,7 +39,7 @@ export class CreateComponent implements OnInit {
     this.form = new FormGroup({
       publishingName: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
-      price: new FormControl(),
+      price: new FormControl(null, [Validators.required]),
       authorName: new FormControl(),
       authorBirthDay: new FormControl(),
       authorDeathDay: new FormControl()
@@ -60,15 +62,27 @@ export class CreateComponent implements OnInit {
   }
 
   public async AddAuthor() {
-    this.AddAuthorForm = false;
     const newAuthor = {
       name: this.form.value.authorName,
       dateBirth: this.form.value.authorBirthDay,
       dateDeath: this.form.value.authorDeathDay
     };
+    newAuthor.name = newAuthor.name.trim();
+
+    if (newAuthor.dateDeath >= newAuthor.dateBirth) {
+      this.checkMSG = 'Please check the date of birth and date of death of the author!';
+      return;
+    }
+    if (newAuthor.name === '') {
+      this.checkMSG = 'Please enter a valid author name!';
+      return;
+    }
+    this.AddAuthorForm = false;
+    this.checkMSG = '';
     this.newAuthorName = '';
     this.authorBirthDay = null;
     this.authorDeathDay = null;
+    this.AuthorInvalid = false;
     const addedAuthor: AuthorModel = await this.authorService.AddAuthor(newAuthor);
     this.Authors.unshift(addedAuthor);
   }

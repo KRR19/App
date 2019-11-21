@@ -24,7 +24,6 @@ export class PrintingEditionComponent implements OnInit {
     let id: string;
     this.route.params.subscribe(params => id = params.id.slice(3));
     this.printingEdition = await this.printingEditionService.Get(id);
-    console.log('test');
     if (this.printingEdition === null) {
       this.router.navigate(['']);
     }
@@ -44,7 +43,6 @@ export class PrintingEditionComponent implements OnInit {
       return;
     }
     let cart: CartModel[] = JSON.parse(localStorage.getItem('Cart'));
-    console.log(cart);
     let userIndex = -1;
     let cartJson: string;
     const userName: string = localStorage.getItem('User');
@@ -68,11 +66,9 @@ export class PrintingEditionComponent implements OnInit {
     for (let i = 0; i <= cart.length; i++) {
       if (userName === cart[i].userName) {
         userIndex = i;
-        console.log('user' + cart);
         break;
       }
     }
-    console.log('userIndex' + userIndex);
 
     if (userIndex === -1) {
       const cartModel: CartModel = {userName, printingEdition: [{}]};
@@ -86,12 +82,10 @@ export class PrintingEditionComponent implements OnInit {
         cartJson = JSON.stringify(cart);
         localStorage.setItem('Cart', cartJson);
         this.header.CartCount++;
-        console.log(cart);
         return;
       }
     }
 
-    console.log( cart);
     const newCartItem: CartItem = {printingEditionId: this.printingEdition.id,
                                     printingEditionCount: 1,
                                     printingEditionName: this.printingEdition.name,
@@ -102,6 +96,6 @@ export class PrintingEditionComponent implements OnInit {
     localStorage.setItem('Cart', cartJson);
 
     this.header.CartCount++;
-    console.log('Count:' + this.header.CartCount);
+    this.header.ngOnInit();
   }
 }

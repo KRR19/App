@@ -5,6 +5,7 @@ import {PrintingEditionService} from '../../services/printingEdition.service';
 import {AuthorModel} from '../../shared/models/author.model';
 import {AuthorService} from '../../services/author.service';
 import {FormGroup} from '@angular/forms';
+import {HeaderComponent} from '../../shared/header/header.component';
 
 @Component({
   selector: 'app-edit',
@@ -24,13 +25,14 @@ export class EditComponent implements OnInit {
   Authors: AuthorModel[];
   selectedAuthor: string;
   private fileData: File;
+  private AuthorInvalid = false;
+  private checkMSG: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService) {
+  constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService, private  header: HeaderComponent) {
   }
 
   async ngOnInit() {
-    this.AdminCheck();
-    if (!this.isAdmin) {
+    if (!this.header.isAdmin) {
       await this.router.navigate(['']);
     }
 
@@ -44,7 +46,6 @@ export class EditComponent implements OnInit {
     this.Authors = await this.authorService.GetAll();
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     this.selectedAuthor = this.printingEdition.authorId;
-    console.log(this.printingEdition);
   }
 
   private AdminCheck() {
@@ -53,11 +54,25 @@ export class EditComponent implements OnInit {
   }
 
   public async AddAuthor() {
-    this.AddAuthorForm = false;
+
+
     const newAuthor = {name: this.AuthorName, dateBirth: this.authorBirthDay, dateDeath: this.authorDeathDay};
+    newAuthor.name = newAuthor.name.trim();
+
+    if (newAuthor.dateDeath >= newAuthor.dateBirth) {
+      this.checkMSG = 'Please check the date of birth and date of death of the author!';
+      return;
+    }
+    if (newAuthor.name === '') {
+      this.checkMSG = 'Please enter a valid author name!';
+      return;
+    }
+    this.AddAuthorForm = false;
+    this.checkMSG = '';
     this.AuthorName = '';
     this.authorBirthDay = null;
     this.authorDeathDay = null;
+    this.AuthorInvalid = false;
     const addedAuthor: AuthorModel = await this.authorService.AddAuthor(newAuthor);
     this.Authors.unshift(addedAuthor);
   }

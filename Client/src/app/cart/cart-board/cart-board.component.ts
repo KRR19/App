@@ -101,7 +101,6 @@ export class CartBoardComponent implements OnInit {
   ClientCurrency(CurrencySelector: string) {
     this.ClientPrice = this.TotalPriceUSD;
     if (CurrencySelector === '1') {
-      console.log();
       this.ClientPrice = this.TotalPriceUSD;
       return this.ClientPrice;
     }

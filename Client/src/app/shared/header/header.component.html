@@ -19,7 +19,7 @@
       <a [routerLink]="['/auth', 'SingUp']">Registration<sup></sup></a>
     </li>
     <li>
-      <a *ngIf="Auth" [routerLink]="['/cart', 'cartBoard']">Cart<sup>{{CartCount}}</sup></a>
+      <a *ngIf="Auth && CartCount > 0" [routerLink]="['/cart', 'cartBoard']">Cart<sup>{{CartCount}}</sup></a>
     <li>
       <a href="#" *ngIf="Auth" (click)="logout()">LogOut<sup></sup></a>
     </li>

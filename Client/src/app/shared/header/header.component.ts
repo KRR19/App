@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {CartModel} from '../models/cart.model';
+import * as jwt_decode from 'jwt-decode';
 
 
 @Component({
@@ -20,10 +21,13 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
-    this.User = localStorage.getItem('User');
     this.Auth = false;
-    if (localStorage.getItem('accessToken')) {
+    const token: string = localStorage.getItem('accessToken');
+    if (token ) {
       this.Auth = true;
+      this.User = localStorage.getItem('User');
+      const jwtDecode = jwt_decode(token);
+      this.isAdmin = jwtDecode['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'ADMIN';
     }
 
     this.GetCartCount();
@@ -47,7 +51,7 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.auth.logout();
-    this.Auth = !true;
+    this.Auth = false;
     this.ngOnInit();
     this.router.navigate(['']);
   }

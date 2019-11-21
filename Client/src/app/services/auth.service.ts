@@ -36,7 +36,10 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear();
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('Role');
+    localStorage.removeItem('User');
   }
 
   public async forgotPassword(user: ResetPasswordModel): Promise<ResponseModel> {
@@ -46,11 +49,8 @@ export class AuthService {
   }
 
   private setToken(response: LogInResponceModel | null) {
-    console.log('ref: ', response.refreshToken);
-    console.log('acc: ', response.accessToken);
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
-    localStorage.setItem('Role', response.role);
     localStorage.setItem('User', response.user);
   }
 

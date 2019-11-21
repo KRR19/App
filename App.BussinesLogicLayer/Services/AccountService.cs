@@ -37,6 +37,7 @@ namespace App.BussinesLogicLayer.Services
         private readonly string _emailAlreadyConfirmedMsg = "This email has already been confirmed.";
         private readonly string _emailNotFoundMsg = "Email is not verified.";
         private readonly string _emailConfirmedMsg = "Email confirmed.";
+        private readonly string _emailNOTConfirmedMsg = "Please confirm your mail";
         private readonly string _wrongPass = "You entered an incorrect password";
         public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
@@ -62,6 +63,13 @@ namespace App.BussinesLogicLayer.Services
             {
                 logInResponse.IsValid = false;
                 logInResponse.Message.Add(_userNotFoundMsg);
+                return logInResponse;
+            }
+
+            if(!user.EmailConfirmed)
+            {
+                logInResponse.IsValid = false;
+                logInResponse.Message.Add(_emailNOTConfirmedMsg);
                 return logInResponse;
             }
 
@@ -107,6 +115,8 @@ namespace App.BussinesLogicLayer.Services
 
             user.UserName = model.Email;
             user.Email = model.Email;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
             string role = _roleManager.Roles.FirstOrDefault(p => p.NormalizedName == DefaultRoles.User).ToString();
             result = await _userManager.CreateAsync(user, model.Password);
 
