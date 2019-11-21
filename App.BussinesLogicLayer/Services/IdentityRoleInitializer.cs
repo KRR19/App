@@ -31,6 +31,7 @@ namespace App.BussinesLogicLayer.Services
 
                 user.UserName = "Anuitex@mail.com";
                 user.Email = "Anuitex@mail.com";
+                user.EmailConfirmed = true;
 
                 result = userManager.CreateAsync(user, "123456").Result;
                 result = userManager.AddToRoleAsync(user, DefaultRoles.Admin.ToString()).Result;

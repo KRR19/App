@@ -120,6 +120,7 @@ namespace App.BussinesLogicLayer.Services
         public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
         {
             User user = _userManager.Users.Where(w => w.Id == rolesModel.Id.ToString()).FirstOrDefault();
+            user.EmailConfirmed = true;
             IList<string> userRoles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user,userRoles);
             await _userManager.AddToRoleAsync(user, rolesModel.Role);
