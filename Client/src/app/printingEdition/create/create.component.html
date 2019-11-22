@@ -14,8 +14,8 @@
 
   <div class="form-control" *ngIf="AddAuthorForm">
     <input id="authorName" [(ngModel)]="newAuthorName" type="text" formControlName="authorName">
-    <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" class="authorBirthDay" id="authorBirthDay" type="date" formControlName="authorBirthDay">
-    <label>Date of death:</label><input [(ngModel)]="authorDeathDay" class="authorDeathDay" id="authorDeathDay" type="date" formControlName="authorDeathDay">
+    <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" [value]="authorBirthDay" class="authorBirthDay" id="authorBirthDay" type="date" formControlName="authorBirthDay">
+    <label>Date of death:</label><input [(ngModel)]="authorDeathDay" [value]="authorDeathDay" class="authorDeathDay" id="authorDeathDay" type="date" formControlName="authorDeathDay">
     <strong>{{checkMSG}}</strong>
     <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()" >Add Author</button>
     <button  type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthorForm = !AddAuthorForm" >Cancel</button>

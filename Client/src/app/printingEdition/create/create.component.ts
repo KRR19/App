@@ -5,6 +5,7 @@ import {PrintingEditionService} from '../../services/printingEdition.service';
 import {AuthorService} from '../../services/author.service';
 import {AuthorModel} from '../../shared/models/author.model';
 import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
 
 
 @Component({
@@ -24,13 +25,14 @@ export class CreateComponent implements OnInit {
   newAuthorName: string;
   authorDeathDay: Date;
   authorBirthDay: Date;
-  selectedAuthor: string;
+  selectedAuthor: string[];
   private fileData: File;
-  private previewUrl: string | ArrayBuffer;
+  private previewUrl: string;
   private AuthorInvalid = false;
   private checkMSG: string;
 
   constructor(private printingEditionService: PrintingEditionService, private authorService: AuthorService, private router: Router) {
+    this.selectedAuthor = [];
   }
 
   async ngOnInit() {
@@ -44,11 +46,15 @@ export class CreateComponent implements OnInit {
       authorBirthDay: new FormControl(),
       authorDeathDay: new FormControl()
     });
+    this.newAuthorName = '';
     this.Authors = await this.authorService.GetAll();
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   }
 
   public Create() {
+    if (!this.previewUrl) {
+      this.previewUrl = 'no image';
+    }
     this.printingEdition.name = this.form.value.publishingName;
     this.printingEdition.description = this.form.value.description;
     this.printingEdition.price = this.form.value.price;
@@ -58,25 +64,36 @@ export class CreateComponent implements OnInit {
     this.printingEdition.authorId = this.selectedAuthor;
     this.printingEdition.image = this.previewUrl.toString();
 
+    console.log(this.printingEdition);
+
     this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
 
   public async AddAuthor() {
-    const newAuthor = {
+
+    const newAuthor: AuthorModel = {
       name: this.form.value.authorName,
-      dateBirth: this.form.value.authorBirthDay,
-      dateDeath: this.form.value.authorDeathDay
+      dateBirth: this.authorBirthDay.toString(),
+      dateDeath: this.authorDeathDay.toString()
     };
     newAuthor.name = newAuthor.name.trim();
-
-    if (newAuthor.dateDeath >= newAuthor.dateBirth) {
-      this.checkMSG = 'Please check the date of birth and date of death of the author!';
-      return;
-    }
-    if (newAuthor.name === '') {
+    if (newAuthor.name === '' || !newAuthor.name) {
       this.checkMSG = 'Please enter a valid author name!';
       return;
     }
+    if ( newAuthor.dateDeath.toString() !== '' && new Date(newAuthor.dateDeath) <= new Date(newAuthor.dateBirth)) {
+      this.checkMSG = 'Please check the date of birth and date of death of the author!';
+      return false;
+    }
+
+    if (newAuthor.dateDeath === '') {
+      newAuthor.dateDeath = '0001-01-01';
+    }
+
+    if (newAuthor.dateBirth.toString() === '') {
+      newAuthor.dateBirth = '0001-01-01';
+    }
+
     this.AddAuthorForm = false;
     this.checkMSG = '';
     this.newAuthorName = '';
@@ -95,7 +112,7 @@ export class CreateComponent implements OnInit {
       const reader = new FileReader();
       reader.readAsDataURL(this.fileData);
       reader.onload = () => {
-        this.previewUrl = reader.result;
+        this.previewUrl = reader.result.toString();
       };
 
     }

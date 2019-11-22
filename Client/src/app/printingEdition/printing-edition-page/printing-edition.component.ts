@@ -24,9 +24,13 @@ export class PrintingEditionComponent implements OnInit {
     let id: string;
     this.route.params.subscribe(params => id = params.id.slice(3));
     this.printingEdition = await this.printingEditionService.Get(id);
+    if (this.printingEdition.image === 'no image') {
+      this.printingEdition.image = 'assets/no-image-icon-10.png';
+    }
     if (this.printingEdition === null) {
       this.router.navigate(['']);
     }
+    console.log(this.printingEdition);
   }
   private AdminCheck() {
     this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
@@ -38,6 +42,8 @@ export class PrintingEditionComponent implements OnInit {
 
 
   AddCart() {
+    this.header.CartCount++;
+    this.header.reload();
     if (!this.header.Auth) {
       this.router.navigate(['/auth/SingIn']);
       return;
@@ -95,7 +101,6 @@ export class PrintingEditionComponent implements OnInit {
     cartJson = JSON.stringify(cart);
     localStorage.setItem('Cart', cartJson);
 
-    this.header.CartCount++;
-    this.header.ngOnInit();
+
   }
 }

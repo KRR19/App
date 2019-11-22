@@ -24,6 +24,14 @@ export class AuthorDashboardComponent implements OnInit {
   async ngOnInit() {
 
     this.Authors = await this.authorservice.GetAll();
+     for (let i = 0; i < this.Authors.length; i++) {
+      if (this.Authors[i].dateDeath === '0001-01-01T00:00:00'){
+        this.Authors[i].dateDeath = '';
+      }
+       if (this.Authors[i].dateBirth === '0001-01-01T00:00:00'){
+         this.Authors[i].dateBirth = '';
+       }
+    }
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     this.dataSource = new MatTableDataSource<AuthorModel>(this.Authors);
     this.dataSource.paginator = this.paginator;

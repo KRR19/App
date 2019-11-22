@@ -141,7 +141,10 @@ export class CartBoardComponent implements OnInit {
       token: (token: any) => {
         const payment: PaymentModel = {id: token.id, email: token.email};
         this.CreateOrder(payment);
+        this.header.CartCount = 0;
+        this.header.reload() ;
         localStorage.removeItem('Cart');
+
         this.router.navigate(['']);
       }
     });

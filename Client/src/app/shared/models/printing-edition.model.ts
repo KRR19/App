@@ -6,7 +6,7 @@ export interface PrintingEditionModel {
   status?: number;
   currency?: number;
   type?: number;
-  authorId?: string;
+  authorId?: string[];
   authorName?: string;
   image?: string;
 }

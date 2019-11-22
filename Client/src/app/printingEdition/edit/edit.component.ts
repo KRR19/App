@@ -23,7 +23,7 @@ export class EditComponent implements OnInit {
   Status: string;
   private printingEdition: PrintingEditionModel = {};
   Authors: AuthorModel[];
-  selectedAuthor: string;
+  selectedAuthor: string[];
   private fileData: File;
   private AuthorInvalid = false;
   private checkMSG: string;
@@ -46,27 +46,38 @@ export class EditComponent implements OnInit {
     this.Authors = await this.authorService.GetAll();
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     this.selectedAuthor = this.printingEdition.authorId;
+    if(this.printingEdition.image === 'no image'){
+      this.printingEdition.image = 'assets/no-image-icon-10.png'
+    }
+
+    this.AuthorName = '';
   }
 
-  private AdminCheck() {
-    this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
-    return this.isAdmin;
-  }
 
   public async AddAuthor() {
-
-
-    const newAuthor = {name: this.AuthorName, dateBirth: this.authorBirthDay, dateDeath: this.authorDeathDay};
+    const newAuthor: AuthorModel = {
+      name: this.AuthorName,
+      dateBirth: this.authorBirthDay.toString(),
+      dateDeath: this.authorDeathDay.toString()
+    };
     newAuthor.name = newAuthor.name.trim();
-
-    if (newAuthor.dateDeath >= newAuthor.dateBirth) {
-      this.checkMSG = 'Please check the date of birth and date of death of the author!';
-      return;
-    }
-    if (newAuthor.name === '') {
+    if (newAuthor.name === '' || !newAuthor.name) {
       this.checkMSG = 'Please enter a valid author name!';
       return;
     }
+    if (newAuthor.dateDeath !== '' && new Date(newAuthor.dateDeath) <= new Date(newAuthor.dateBirth)) {
+      this.checkMSG = 'Please check the date of birth and date of death of the author!';
+      return false;
+    }
+
+    if (newAuthor.dateDeath === '') {
+      newAuthor.dateDeath = '0001-01-01';
+    }
+
+    if (newAuthor.dateBirth === '') {
+      newAuthor.dateBirth = '0001-01-01';
+    }
+
     this.AddAuthorForm = false;
     this.checkMSG = '';
     this.AuthorName = '';
@@ -78,15 +89,23 @@ export class EditComponent implements OnInit {
   }
 
   public async Edit() {
-    this.printingEdition.currency = Number(this.Currency);
-    this.printingEdition.type = Number(this.Type);
-    this.printingEdition.status = Number(this.Status);
+    this.printingEdition.currency = +this.Currency;
+    this.printingEdition.type = +this.Type;
+    this.printingEdition.status = +this.Status;
     this.printingEdition.authorId = this.selectedAuthor;
-    await this.printingEditionService.Update(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
+    await this.printingEditionService.Update(this.printingEdition).then(() => {
+      this.router.navigate(['']).then(() => {
+        window.location.reload();
+      });
+    });
   }
 
   public async Delete() {
-    await this.printingEditionService.Delete(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
+    await this.printingEditionService.Delete(this.printingEdition).then(() => {
+      this.router.navigate(['']).then(() => {
+        window.location.reload();
+      });
+    });
   }
 
   AddCover(event: Event) {
