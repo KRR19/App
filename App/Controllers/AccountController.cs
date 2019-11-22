@@ -40,8 +40,8 @@ namespace App.Controllers
         [HttpPost("Register")]
         public async Task<BaseResponseModel> Register([FromBody] UserModel model)
         {
-           BaseResponseModel result = await _accountService.Register(model);
-           return result;
+            BaseResponseModel result = await _accountService.Register(model);
+            return result;
         }
 
         [HttpPost("ForgotPassword")]
@@ -59,7 +59,7 @@ namespace App.Controllers
         }
 
         [HttpPost("SingIn")]
-        public async Task<LogInResponseModel> SingIn([FromBody] UserModel model)
+        public async Task<LogInResponseModel> SingIn([FromBody] SingInModel model)
         {
             LogInResponseModel logInResponse = await _accountService.Singin(model);
             return logInResponse;

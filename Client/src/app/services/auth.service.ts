@@ -5,6 +5,7 @@ import {ResponseModel} from '../shared/models/response.model';
 import {LogInResponceModel} from '../shared/models/logIn-responce.model';
 import {environment} from '../../environments/environment';
 import {ResetPasswordModel} from '../shared/models/reset-password.model';
+import {SinginModel} from '../shared/models/singin.model';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +26,7 @@ export class AuthService {
     return result;
   }
 
-  public async SingIn(user: UserModel): Promise<LogInResponceModel> {
+  public async SingIn(user: SinginModel): Promise<LogInResponceModel> {
     const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionSingIn}`;
     const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user).toPromise();
 

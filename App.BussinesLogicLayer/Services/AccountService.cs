@@ -49,7 +49,7 @@ namespace App.BussinesLogicLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<LogInResponseModel> Singin(UserModel model)
+        public async Task<LogInResponseModel> Singin(SingInModel model)
         {
             LogInResponseModel logInResponse = new LogInResponseModel();
             List<Claim> accessClaims = new List<Claim>();
@@ -66,7 +66,7 @@ namespace App.BussinesLogicLayer.Services
                 return logInResponse;
             }
 
-            if(!user.EmailConfirmed)
+            if (!user.EmailConfirmed)
             {
                 logInResponse.IsValid = false;
                 logInResponse.Message.Add(_emailNOTConfirmedMsg);
@@ -92,15 +92,14 @@ namespace App.BussinesLogicLayer.Services
             accessClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             accessClaims.Add(new Claim(ClaimTypes.Hash, user.PasswordHash));
             accessClaims.Add(new Claim(ClaimTypes.Role, logInResponse.Role));
-            accessToken = GenerateJwtToken(accessClaims, 5000);
+
+            accessToken = GenerateAccesToken(accessClaims);
             logInResponse.accessToken = accessToken;
 
             refreshClaims.Add(new Claim(ClaimTypes.Authentication, accessToken));
             refreshClaims.Add(new Claim(ClaimTypes.Email, user.Email));
-            refreshToken = GenerateJwtToken(refreshClaims, 5000);
+            refreshToken = GenerateRefreshToken(refreshClaims);
             logInResponse.refreshToken = refreshToken;
-
-
 
             return logInResponse;
         }
@@ -239,6 +238,20 @@ namespace App.BussinesLogicLayer.Services
             response.Message.Add(_emailConfirmedMsg);
             response.IsValid = true;
             return response;
+        }
+
+        private string GenerateAccesToken(List<Claim> accessClaims)
+        {
+            int exp = _configuration.GetValue<int>("JWT:AccessTokenExp");
+            string accessToken = GenerateJwtToken(accessClaims, exp);
+            return accessToken;
+        }
+
+        private string GenerateRefreshToken(List<Claim> refreshClaims)
+        {
+            int exp = _configuration.GetValue<int>("JWT:AccessTokenExp");
+            string refreshToken = GenerateJwtToken(refreshClaims, exp);
+            return refreshToken;
         }
     }
 }

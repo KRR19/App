@@ -13,6 +13,6 @@ namespace App.BussinesLogicLayer.Services.Interfaces
         public Task<BaseResponseModel> ResetPassword(ResetPasswordModel model);
         public Task<IdentityResult> CreateRole(string Role);
         public Task<BaseResponseModel> ConfirmEmail(ResetPasswordModel model);
-        public Task<LogInResponseModel> Singin(UserModel model);
+        public Task<LogInResponseModel> Singin(SingInModel model);
     }
 }

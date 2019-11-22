@@ -5,6 +5,7 @@ import {AuthService} from '../../services/auth.service';
 import {LogInResponceModel} from '../../shared/models/logIn-responce.model';
 import {Router} from '@angular/router';
 import {HeaderComponent} from '../../shared/header/header.component';
+import {SinginModel} from '../../shared/models/singin.model';
 
 @Component({
   selector: 'app-singin',
@@ -27,7 +28,7 @@ export class SinginComponent implements OnInit {
   }
 
   public async SingIn() {
-    const user: UserModel = {email: this.form.value.email, password: this.form.value.password};
+    const user: SinginModel = {email: this.form.value.email, password: this.form.value.password};
     const response: LogInResponceModel = await this.auth.SingIn(user);
     this.success = !response.isValid;
     this.message = response.message;
