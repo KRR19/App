@@ -43,6 +43,7 @@ export class AuthService {
   }
 
   public async forgotPassword(user: ResetPasswordModel): Promise<ResponseModel> {
+    console.log(user);
     const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionForgotPass}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;

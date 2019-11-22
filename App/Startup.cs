@@ -1,3 +1,4 @@
+using App.BussinesLogicLayer.Middleware;
 using App.BussinesLogicLayer.Models.Payments;
 using App.BussinesLogicLayer.Services;
 using App.BussinesLogicLayer.Services.Interfaces;
@@ -15,20 +16,19 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Stripe;
-using App.BussinesLogicLayer.Middleware;
+using System;
+using System.Text;
 using AccountService = App.BussinesLogicLayer.Services.AccountService;
 using OrdersService = App.BussinesLogicLayer.Services.OrdersService;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using System;
 
 namespace App
 {
     public class Startup
     {
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -90,6 +90,27 @@ namespace App
                     Title = "Controllers",
                     Version = "v1"
                 });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                    },
+                    new string[] { }
+                }
+                });
             });
 
             string key = Configuration.GetSection("JWT")["SecretKey"];
@@ -118,9 +139,9 @@ namespace App
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public  void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
-            
+
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];

@@ -141,7 +141,7 @@ namespace App.BussinesLogicLayer.Services
 
         public async Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model)
         {
-            User user = await _userManager.FindByNameAsync(model.Email);
+            User user = await _userManager.FindByEmailAsync(model.Email);
             model.Code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             string passwordEmailLink = CreateLink(model, "ResetPassword");

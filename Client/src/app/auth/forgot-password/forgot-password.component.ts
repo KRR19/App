@@ -24,19 +24,20 @@ export class ForgotPasswordComponent implements OnInit {
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
-      ConfirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
   }
 
   public async ForgotPassword() {
-    if (this.form.value.password !== this.form.value.ConfirmPassword) {
+    debugger;
+    if (this.form.value.password !== this.form.value.confirmPassword) {
       this.passwordsMatch = false;
       return;
     }
     const model: ResetPasswordModel = {
       email: this.form.value.email,
       password: this.form.value.password,
-      confirmPassword: this.form.value.ConfirmPassword
+      confirmPassword: this.form.value.confirmPassword
     };
     const response: ResponseModel = await this.auth.forgotPassword(model);
     this.auth.logout();
