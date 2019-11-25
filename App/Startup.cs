@@ -44,16 +44,18 @@ namespace App
 
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SQLServer")));
 
-            //services.AddIdentity<User, IdentityRole>
-            //    (options =>
-            //    {
-            //        options.Password.RequireNonAlphanumeric = false;
-            //        options.Password.RequireUppercase = false;
-            //        options.Password.RequireLowercase = false;
-            //        options.Password.RequireDigit = false;
-            //        options.Password.RequiredLength = 6;
-            //    })
-            //    .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
+            services.AddIdentity<User, IdentityRole>
+                (options =>
+                {
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 6;
+                })
+                .AddEntityFrameworkStores<ApplicationContext>().AddDefaultTokenProviders();
+
+            services.AddTransient<IdentityRoleInitializer>();
 
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
@@ -139,9 +141,9 @@ namespace App
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityRoleInitializer identityRoleInitializer)
         {
-
+            
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
@@ -162,13 +164,14 @@ namespace App
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
-            IdentityRoleInitializer.SeedRoles(roleManager, userManager);
+            app.UseAuthorization();            
+            
             app.UseMiddleware<LogMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            identityRoleInitializer.SeedRoles();
         }
     }
 }

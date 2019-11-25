@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace App.DataAccessLayer.AppContext
 {
-    public class ApplicationContext : IdentityDbContext
+    public class ApplicationContext : IdentityDbContext<User>
     {
         public DbSet<Author> Authors { get; set; }
         public DbSet<AuthorInPrintingEdition> AuthorInPrintingEditions { get; set; }
@@ -16,7 +16,6 @@ namespace App.DataAccessLayer.AppContext
 
         public ApplicationContext(DbContextOptions optionsBuilder) : base(optionsBuilder)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

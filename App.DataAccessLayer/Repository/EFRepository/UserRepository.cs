@@ -47,9 +47,9 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public List<IdentityUser> GetAll()
+        public List<User> GetAll()
         {
-            List<IdentityUser> users = _context.Users.ToList();
+            List<User> users = _context.Users.ToList();
             return users;
         }
     }
