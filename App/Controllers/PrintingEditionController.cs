@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace App.Controllers
 {
@@ -46,7 +44,7 @@ namespace App.Controllers
 
             return report;
         }
-        
+
         [HttpPut("Update")]
         [Authorize]
         public async Task<BaseResponseModel> Update([FromBody]PrintingEditionModel newPrintingEdition)
