@@ -14,6 +14,7 @@ import {
 import {CartBoardComponent} from './cart-board/cart-board.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {ErrorRouteComponent} from '../error-route/error-route.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,

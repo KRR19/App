@@ -23,7 +23,7 @@ namespace App.Controllers
         [HttpGet("GetAll")]
         public List<Author> GetAll()
         {
-            List<Author> author =  _service.GetAll();
+            List<Author> author = _service.GetAll();
             return author;
         }
 

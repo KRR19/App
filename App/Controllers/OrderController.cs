@@ -27,7 +27,7 @@ namespace App.Controllers
 
         [HttpPost("Create")]
         public async Task<BaseResponseModel> Create([FromBody]OrderModel orderModel)
-        {            
+        {
             BaseResponseModel report = await _service.Create(orderModel);
             return report;
         }

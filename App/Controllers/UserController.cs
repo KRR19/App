@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using App.BussinesLogicLayer.Models.Users;
+﻿using App.BussinesLogicLayer.Models.Users;
 using App.BussinesLogicLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace App.Controllers
 {
@@ -20,7 +17,7 @@ namespace App.Controllers
             _userService = userService;
         }
         [HttpGet("GetAll")]
-        public async Task<List<UserInfoModel>>GetAll()
+        public async Task<List<UserInfoModel>> GetAll()
         {
             List<UserInfoModel> users = await _userService.GetAll();
 
@@ -38,7 +35,7 @@ namespace App.Controllers
         [Authorize]
         public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
         {
-             RolesModel user = await _userService.ChangeRole(rolesModel);
+            RolesModel user = await _userService.ChangeRole(rolesModel);
 
             return user;
         }

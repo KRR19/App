@@ -9,6 +9,7 @@ import {SinginComponent} from './singin/singin.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {ErrorRouteComponent} from '../error-route/error-route.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -26,7 +27,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
           {path: '', redirectTo: '/auth/SingIn', pathMatch: 'full'},
           {path: 'SingIn', component: SinginComponent},
           {path: 'SingUp', component: SingupComponent},
-          {path: 'ForgotPassword', component: ForgotPasswordComponent},
+          {path: 'ForgotPassword', component: ForgotPasswordComponent}
         ]
       }
     ]),

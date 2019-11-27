@@ -15,6 +15,7 @@ import {
 import {UsersService} from '../services/users.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {ErrorRouteComponent} from '../error-route/error-route.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,

@@ -17,11 +17,12 @@ namespace App.BussinesLogicLayer.Services
         public  IdentityResult SeedRoles()
         {
             IdentityResult result = new IdentityResult();
-            bool isUserCreate = _roleManager.RoleExistsAsync(DefaultRoles.User).Result;
-            bool isAdminCreate = _roleManager.RoleExistsAsync(DefaultRoles.Admin).Result;
+            bool isUserCreated = _roleManager.RoleExistsAsync(DefaultRoles.User).Result;
+            bool isAdminCreated = _roleManager.RoleExistsAsync(DefaultRoles.Admin).Result;
+            bool isSuperAdminCreated = _userManager.FindByEmailAsync("Anuitex@mail.com").Result != null;
 
 
-            if (!isUserCreate)
+            if (!isUserCreated)
             {
                 IdentityRole role = new IdentityRole();
                 role.Name = DefaultRoles.User;
@@ -29,21 +30,24 @@ namespace App.BussinesLogicLayer.Services
                 result = _roleManager.CreateAsync(role).Result;
             }
 
-            if (!isAdminCreate)
+            if (!isAdminCreated)
             {
-                IdentityRole role = new IdentityRole();
-                User user = new User();
+                IdentityRole role = new IdentityRole();                
 
                 role.Name = DefaultRoles.Admin;
                 role.NormalizedName = DefaultRoles.Admin;
                 result = _roleManager.CreateAsync(role).Result;
+            }
 
+            if(!isSuperAdminCreated)
+            {
+                User user = new User();
                 user.UserName = "Anuitex@mail.com";
                 user.Email = "Anuitex@mail.com";
                 user.EmailConfirmed = true;
 
                 result = _userManager.CreateAsync(user, "123456").Result;
-                result = _userManager.AddToRoleAsync(user, DefaultRoles.Admin.ToString()).Result;
+                result = _userManager.AddToRoleAsync(user, DefaultRoles.Admin).Result;
             }
 
             return result;
