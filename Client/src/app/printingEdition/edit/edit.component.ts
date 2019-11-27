@@ -16,8 +16,8 @@ export class EditComponent implements OnInit {
   private isAdmin: boolean;
   AddAuthorForm: boolean;
   AuthorName: string;
-  authorBirthDay: Date;
-  authorDeathDay: Date;
+  authorBirthDay: string;
+  authorDeathDay: string;
   Currency: string;
   Type: string;
   Status: string;
@@ -27,6 +27,7 @@ export class EditComponent implements OnInit {
   private fileData: File;
   private AuthorInvalid = false;
   private checkMSG: string;
+  ErrorMSG: string;
 
   constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService, private  header: HeaderComponent) {
   }
@@ -55,28 +56,22 @@ export class EditComponent implements OnInit {
 
 
   public async AddAuthor() {
-    const newAuthor: AuthorModel = {
-      name: this.AuthorName,
-      dateBirth: this.authorBirthDay.toString(),
-      dateDeath: this.authorDeathDay.toString()
-    };
-    newAuthor.name = newAuthor.name.trim();
-    if (newAuthor.name === '' || !newAuthor.name) {
+    this.AuthorName = this.AuthorName.trim();
+    if (this.AuthorName === '' || !this.AuthorName) {
       this.checkMSG = 'Please enter a valid author name!';
       return;
     }
-    if (newAuthor.dateDeath !== '' && new Date(newAuthor.dateDeath) <= new Date(newAuthor.dateBirth)) {
+
+    const newAuthor: AuthorModel = {
+      name: this.AuthorName
+    };
+
+    if ((new Date(this.authorDeathDay) <= new Date(this.authorBirthDay))) {
       this.checkMSG = 'Please check the date of birth and date of death of the author!';
       return false;
     }
-
-    if (newAuthor.dateDeath === '') {
-      newAuthor.dateDeath = '0001-01-01';
-    }
-
-    if (newAuthor.dateBirth === '') {
-      newAuthor.dateBirth = '0001-01-01';
-    }
+    newAuthor.dateBirth = this.authorBirthDay;
+    newAuthor.dateDeath = this.authorDeathDay;
 
     this.AddAuthorForm = false;
     this.checkMSG = '';
@@ -89,15 +84,24 @@ export class EditComponent implements OnInit {
   }
 
   public async Edit() {
+    this.printingEdition.name.trim();
+    if (this.printingEdition.name === '') {
+      this.ErrorMSG = 'Enter the title of the publication!';
+      return false;
+    }
+    if (!this.printingEdition.price) {
+      this.ErrorMSG = 'Enter the price of the publication!';
+      return false;
+    }
     this.printingEdition.currency = +this.Currency;
     this.printingEdition.type = +this.Type;
     this.printingEdition.status = +this.Status;
     this.printingEdition.authorId = this.selectedAuthor;
     await this.printingEditionService.Update(this.printingEdition).then(() => {
-      this.router.navigate(['']).then(() => {
-        window.location.reload();
-      });
-    });
+       this.router.navigate(['']).then(() => {
+         window.location.reload();
+       });
+     });
   }
 
   public async Delete() {

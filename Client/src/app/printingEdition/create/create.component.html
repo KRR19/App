@@ -13,7 +13,7 @@
   </div>
 
   <div class="form-control" *ngIf="AddAuthorForm">
-    <input id="authorName" [(ngModel)]="newAuthorName" type="text" formControlName="authorName">
+    <input id="authorName" [(ngModel)]="AuthorName" type="text" formControlName="authorName">
     <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" [value]="authorBirthDay" class="authorBirthDay" id="authorBirthDay" type="date" formControlName="authorBirthDay">
     <label>Date of death:</label><input [(ngModel)]="authorDeathDay" [value]="authorDeathDay" class="authorDeathDay" id="authorDeathDay" type="date" formControlName="authorDeathDay">
     <strong>{{checkMSG}}</strong>

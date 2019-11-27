@@ -54,7 +54,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public async Task<Author> GetById(Guid id)
         {
-            Author author =await _context.Authors.FindAsync(id);
+            Author author = await _context.Authors.FindAsync(id);
             return author;
         }
 

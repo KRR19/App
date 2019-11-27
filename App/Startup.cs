@@ -144,7 +144,7 @@ namespace App
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IdentityRoleInitializer identityRoleInitializer)
         {
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
 
@@ -165,6 +165,8 @@ namespace App
 
             app.UseAuthentication();
             app.UseAuthorization();
+            //app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader());
 
             app.UseMiddleware<LogMiddleware>();
             app.UseEndpoints(endpoints =>

@@ -42,7 +42,7 @@ namespace App.Controllers
             return model;
         }
 
-        [HttpPut("Update")]
+        [HttpPost("Update")]
         [Authorize]
         public AuthorModel Put([FromBody]AuthorModel newAuthor)
         {

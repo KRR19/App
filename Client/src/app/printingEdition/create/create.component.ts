@@ -22,9 +22,9 @@ export class CreateComponent implements OnInit {
   Status = this.DefaultValue;
   AddAuthorForm: boolean;
   Authors: AuthorModel[];
-  newAuthorName: string;
-  authorDeathDay: Date;
-  authorBirthDay: Date;
+  AuthorName: string;
+  authorDeathDay: string;
+  authorBirthDay: string;
   selectedAuthor: string[];
   private fileData: File;
   private previewUrl: string;
@@ -46,15 +46,12 @@ export class CreateComponent implements OnInit {
       authorBirthDay: new FormControl(),
       authorDeathDay: new FormControl()
     });
-    this.newAuthorName = '';
+    this.AuthorName = '';
     this.Authors = await this.authorService.GetAll();
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   }
 
   public Create() {
-    if (!this.previewUrl) {
-      this.previewUrl = 'no image';
-    }
     this.printingEdition.name = this.form.value.publishingName;
     this.printingEdition.description = this.form.value.description;
     this.printingEdition.price = this.form.value.price;
@@ -62,7 +59,7 @@ export class CreateComponent implements OnInit {
     this.printingEdition.type = Number(this.Type);
     this.printingEdition.status = Number(this.Status);
     this.printingEdition.authorId = this.selectedAuthor;
-    this.printingEdition.image = this.previewUrl.toString();
+    this.printingEdition.image = this.previewUrl;
 
     console.log(this.printingEdition);
 
@@ -71,32 +68,26 @@ export class CreateComponent implements OnInit {
 
   public async AddAuthor() {
 
-    const newAuthor: AuthorModel = {
-      name: this.form.value.authorName,
-      dateBirth: this.authorBirthDay.toString(),
-      dateDeath: this.authorDeathDay.toString()
-    };
-    newAuthor.name = newAuthor.name.trim();
-    if (newAuthor.name === '' || !newAuthor.name) {
+    this.AuthorName = this.AuthorName.trim();
+    if (this.AuthorName === '' || !this.AuthorName) {
       this.checkMSG = 'Please enter a valid author name!';
       return;
     }
-    if ( newAuthor.dateDeath.toString() !== '' && new Date(newAuthor.dateDeath) <= new Date(newAuthor.dateBirth)) {
+
+    const newAuthor: AuthorModel = {
+      name: this.AuthorName
+    };
+
+    if ((new Date(this.authorDeathDay) <= new Date(this.authorBirthDay))) {
       this.checkMSG = 'Please check the date of birth and date of death of the author!';
       return false;
     }
-
-    if (newAuthor.dateDeath === '') {
-      newAuthor.dateDeath = '0001-01-01';
-    }
-
-    if (newAuthor.dateBirth.toString() === '') {
-      newAuthor.dateBirth = '0001-01-01';
-    }
+    newAuthor.dateBirth = this.authorBirthDay;
+    newAuthor.dateDeath = this.authorDeathDay;
 
     this.AddAuthorForm = false;
     this.checkMSG = '';
-    this.newAuthorName = '';
+    this.AuthorName = '';
     this.authorBirthDay = null;
     this.authorDeathDay = null;
     this.AuthorInvalid = false;

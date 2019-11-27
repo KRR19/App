@@ -13,27 +13,22 @@ import {HeaderComponent} from '../../shared/header/header.component';
 })
 export class PrintingEditionComponent implements OnInit {
   printingEdition: PrintingEditionModel = {};
-  isAdmin: boolean;
 
 
   constructor(private route: ActivatedRoute, private router: Router, private  printingEditionService: PrintingEditionService, private header: HeaderComponent) {
   }
 
   async ngOnInit() {
-    this.AdminCheck();
     let id: string;
     this.route.params.subscribe(params => id = params.id.slice(3));
     this.printingEdition = await this.printingEditionService.Get(id);
-    if (this.printingEdition.image === 'no image') {
+    if (this.printingEdition.image === null) {
       this.printingEdition.image = 'assets/no-image-icon-10.png';
     }
     if (this.printingEdition === null) {
       this.router.navigate(['']);
     }
     console.log(this.printingEdition);
-  }
-  private AdminCheck() {
-    this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
   }
 
   public EditPage() {
@@ -43,7 +38,6 @@ export class PrintingEditionComponent implements OnInit {
 
   AddCart() {
     this.header.CartCount++;
-    this.header.reload();
     if (!this.header.Auth) {
       this.router.navigate(['/auth/SingIn']);
       return;
@@ -68,8 +62,7 @@ export class PrintingEditionComponent implements OnInit {
     }
 
     userIndex = cart.length + 1;
-
-    for (let i = 0; i <= cart.length; i++) {
+    for (let i = 0; i < cart.length; i++) {
       if (userName === cart[i].userName) {
         userIndex = i;
         break;
@@ -87,7 +80,6 @@ export class PrintingEditionComponent implements OnInit {
         cart[userIndex].printingEdition[i].printingEditionCount++;
         cartJson = JSON.stringify(cart);
         localStorage.setItem('Cart', cartJson);
-        this.header.CartCount++;
         return;
       }
     }
@@ -100,7 +92,5 @@ export class PrintingEditionComponent implements OnInit {
     cart[userIndex].printingEdition.push(newCartItem);
     cartJson = JSON.stringify(cart);
     localStorage.setItem('Cart', cartJson);
-
-
   }
 }

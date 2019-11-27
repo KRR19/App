@@ -45,7 +45,7 @@ namespace App.Controllers
             return report;
         }
 
-        [HttpPut("Update")]
+        [HttpPost("Update")]
         [Authorize]
         public async Task<BaseResponseModel> Update([FromBody]PrintingEditionModel newPrintingEdition)
         {

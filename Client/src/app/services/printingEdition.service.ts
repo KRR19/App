@@ -44,7 +44,7 @@ export class PrintingEditionService {
 
   public async Update(printingEdition: PrintingEditionModel) {
     const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionUpdate}`;
-    const result: ResponseModel = await this.http.put<ResponseModel>(urlPath, printingEdition).toPromise();
+    const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, printingEdition).toPromise();
     return result;
   }
 

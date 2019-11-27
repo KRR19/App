@@ -2,9 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthorModel} from '../../shared/models/author.model';
 import {AuthorService} from '../../services/author.service';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 import {HeaderComponent} from '../../shared/header/header.component';
-import {log} from 'util';
 
 @Component({
   selector: 'app-author-edit',
@@ -62,7 +60,7 @@ export class AuthorEditComponent implements OnInit {
       return false;
     }
 
-    if ( this.Author.dateDeath !== '' && new Date(this.Author.dateDeath) <= new Date(this.Author.dateBirth)) {
+    if ( this.Author.dateDeath !== '' && new Date(this.Author.dateDeath) < new Date(this.Author.dateBirth)) {
       this.checkMSG = 'Please check the date of birth and date of death of the author!';
       return false;
     }
