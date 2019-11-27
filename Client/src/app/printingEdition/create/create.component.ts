@@ -61,7 +61,6 @@ export class CreateComponent implements OnInit {
     this.printingEdition.authorId = this.selectedAuthor;
     this.printingEdition.image = this.previewUrl;
 
-    console.log(this.printingEdition);
 
     this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }

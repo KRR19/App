@@ -28,7 +28,6 @@ export class PrintingEditionComponent implements OnInit {
     if (this.printingEdition === null) {
       this.router.navigate(['']);
     }
-    console.log(this.printingEdition);
   }
 
   public EditPage() {
