@@ -40,6 +40,7 @@ export class AuthorService {
   }
 
   async EditAuthor(model: AuthorModel) {
+    debugger;
     const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionUpdate}`;
     const result: AuthorModel = await this.http.post<AuthorModel>(urlPath, model).toPromise();
     return result;

@@ -60,7 +60,7 @@ export class AuthorEditComponent implements OnInit {
       return false;
     }
 
-    if ( this.Author.dateDeath !== '' && new Date(this.Author.dateDeath) < new Date(this.Author.dateBirth)) {
+    if ( new Date(this.Author.dateDeath) < new Date(this.Author.dateBirth)) {
       this.checkMSG = 'Please check the date of birth and date of death of the author!';
       return false;
     }
