@@ -5,7 +5,6 @@ import {PrintingEditionModel} from '../../shared/models/printing-edition.model';
 import {CartItem, CartModel} from '../../shared/models/cart.model';
 import {HeaderComponent} from '../../shared/header/header.component';
 
-
 @Component({
   selector: 'app-printing-edition-page',
   templateUrl: './printing-edition.component.html',
@@ -13,7 +12,6 @@ import {HeaderComponent} from '../../shared/header/header.component';
 })
 export class PrintingEditionComponent implements OnInit {
   printingEdition: PrintingEditionModel = {};
-
 
   constructor(private route: ActivatedRoute, private router: Router, private  printingEditionService: PrintingEditionService, private header: HeaderComponent) {
   }
@@ -26,14 +24,13 @@ export class PrintingEditionComponent implements OnInit {
       this.printingEdition.image = 'assets/no-image-icon-10.png';
     }
     if (this.printingEdition === null) {
-      this.router.navigate(['']);
+      await this.router.navigate(['']);
     }
   }
 
   public EditPage() {
     this.router.navigate(['/printingEdition/edit/:id' + this.printingEdition.id]);
   }
-
 
   AddCart() {
     this.header.CartCount++;
@@ -47,7 +44,7 @@ export class PrintingEditionComponent implements OnInit {
     const userName: string = localStorage.getItem('User');
 
     if (cart === null) {
-      cart = [{printingEdition: [{}]}]
+      cart = [{printingEdition: [{}]}];
       cart[0].userName = userName;
       cart[0].printingEdition[0].printingEditionId = this.printingEdition.id;
       cart[0].printingEdition[0].printingEditionCount = 1;

@@ -11,5 +11,4 @@ export class ErrorRouteComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

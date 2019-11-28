@@ -29,7 +29,6 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   public async ForgotPassword() {
-    debugger;
     if (this.form.value.password !== this.form.value.confirmPassword) {
       this.passwordsMatch = false;
       return;

@@ -4,7 +4,6 @@ import {environment} from '../../environments/environment';
 import {UserInfoModel} from '../shared/models/user-info.model';
 import {RolesModel} from '../shared/models/roles.model';
 import {ChangeRoleModel} from '../shared/models/change-role.model';
-import {ResponseModel} from '../shared/models/response.model';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +15,6 @@ export class UsersService {
   private ActionGet = 'Get';
   private ActionDelete = 'Delete';
   private ActionUpdate = 'Update';
-
 
   constructor(private  http: HttpClient) {
   }

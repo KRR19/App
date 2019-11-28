@@ -4,7 +4,6 @@ import {DashBoardComponent} from './dash-board/dash-board.component';
 import {HeaderComponent} from './shared/header/header.component';
 import {ErrorRouteComponent} from './error-route/error-route.component';
 
-
 const routes: Routes = [
   {
     path: '', component: HeaderComponent, children: [

@@ -10,14 +10,12 @@ import { AuthorEditComponent } from './author-edit/author-edit.component';
 import { MatInputModule } from '@angular/material';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
-import {ErrorRouteComponent} from '../error-route/error-route.component';
-
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
   useClass: Interceptor,
   multi: true
-}
+};
 
 @NgModule({
   declarations: [AuthorDashboardComponent, AuthorEditComponent, ],

@@ -14,7 +14,6 @@ export class PrintingEditionService {
   private ActionDelete = 'Delete';
   private ActionUpdate = 'Update';
 
-
   constructor(private  http: HttpClient) {
   }
 
@@ -58,6 +57,4 @@ export class PrintingEditionService {
         return 'UAH';
     }
   }
-
-
 }

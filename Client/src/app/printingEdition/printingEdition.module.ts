@@ -18,13 +18,12 @@ import {PrintingEditionComponent} from './printing-edition-page/printing-edition
 import {EditComponent} from './edit/edit.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
-import {ErrorRouteComponent} from '../error-route/error-route.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
   useClass: Interceptor,
   multi: true
-}
+};
 
 @NgModule({
   declarations: [CreateComponent, PrintingEditionComponent, EditComponent],
@@ -57,5 +56,4 @@ const INTERCEPTOR_PROVIDER: Provider = {
 })
 
 export class PrintingEditionModule {
-
 }

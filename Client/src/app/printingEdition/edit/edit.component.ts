@@ -4,7 +4,6 @@ import {PrintingEditionModel} from '../../shared/models/printing-edition.model';
 import {PrintingEditionService} from '../../services/printingEdition.service';
 import {AuthorModel} from '../../shared/models/author.model';
 import {AuthorService} from '../../services/author.service';
-import {FormGroup} from '@angular/forms';
 import {HeaderComponent} from '../../shared/header/header.component';
 
 @Component({
@@ -13,7 +12,6 @@ import {HeaderComponent} from '../../shared/header/header.component';
   styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit {
-  private isAdmin: boolean;
   AddAuthorForm: boolean;
   AuthorName: string;
   authorBirthDay: string;
@@ -36,7 +34,6 @@ export class EditComponent implements OnInit {
     if (!this.header.isAdmin) {
       await this.router.navigate(['']);
     }
-
     this.AddAuthorForm = false;
     let id: string;
     this.route.params.subscribe(params => id = params.id.slice(3));
@@ -47,21 +44,18 @@ export class EditComponent implements OnInit {
     this.Authors = await this.authorService.GetAll();
     this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     this.selectedAuthor = this.printingEdition.authorId;
+
     if(this.printingEdition.image === 'no image'){
       this.printingEdition.image = 'assets/no-image-icon-10.png'
     }
-
     this.AuthorName = '';
   }
-
-
   public async AddAuthor() {
     this.AuthorName = this.AuthorName.trim();
     if (this.AuthorName === '' || !this.AuthorName) {
       this.checkMSG = 'Please enter a valid author name!';
       return;
     }
-
     const newAuthor: AuthorModel = {
       name: this.AuthorName
     };
@@ -122,7 +116,6 @@ export class EditComponent implements OnInit {
       reader.onload = () => {
         this.printingEdition.image = reader.result.toString();
       };
-
     }
   }
 }

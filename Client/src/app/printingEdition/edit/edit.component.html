@@ -15,18 +15,23 @@
 
 <div class="form-control" *ngIf="AddAuthorForm" ngNativeValidate>
   <input id="authorName" [(ngModel)]="AuthorName" type="text">
-  <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" [value]="authorBirthDay" class="DatePicker" id="authorBirthDay" type="date">
-  <label>Date of death:</label><input [(ngModel)]="authorDeathDay" [value]="authorDeathDay" class="DatePicker" id="authorDeathDay" type="date">
-  <strong >{{checkMSG}}</strong>
+  <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" [value]="authorBirthDay" class="DatePicker"
+                                      id="authorBirthDay" type="date">
+  <label>Date of death:</label><input [(ngModel)]="authorDeathDay" [value]="authorDeathDay" class="DatePicker"
+                                      id="authorDeathDay" type="date">
+  <strong>{{checkMSG}}</strong>
   <button type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()">Add Author</button>
   <button type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthorForm = !AddAuthorForm">Cancel</button>
 </div>
 
 <div>
-  <img *ngIf="printingEdition.image" [src]="printingEdition.image"  />
+  <img *ngIf="printingEdition.image" [src]="printingEdition.image"/>
   <br>
-  <input *ngIf="!printingEdition.image" type='file'  accept="image/x-png,image/gif,image/jpeg"  (change)="AddCover($event)" >
-  <mat-button-toggle *ngIf="printingEdition.image" class="btn-danger" (click)="printingEdition.image = null">Delete cover</mat-button-toggle>
+  <input *ngIf="!printingEdition.image" type='file' accept="image/x-png,image/gif,image/jpeg"
+         (change)="AddCover($event)">
+  <mat-button-toggle *ngIf="printingEdition.image" class="btn-danger" (click)="printingEdition.image = null">Delete
+    cover
+  </mat-button-toggle>
 </div>
 
 <div class="form-control">
@@ -39,7 +44,9 @@
     <tr>
       <td>
         <label for="price">Price:</label>
-        <input id="price" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57" type="number" min="0.01" step="0.01" [(ngModel)]="printingEdition.price">
+        <input id="price"
+               onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"
+               type="number" min="0.01" step="0.01" [(ngModel)]="printingEdition.price">
       </td>
       <td>
         <mat-label>currency</mat-label>

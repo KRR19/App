@@ -5,8 +5,6 @@ import {PrintingEditionService} from '../../services/printingEdition.service';
 import {AuthorService} from '../../services/author.service';
 import {AuthorModel} from '../../shared/models/author.model';
 import {Router} from '@angular/router';
-import {environment} from '../../../environments/environment';
-
 
 @Component({
   selector: 'app-create',
@@ -61,12 +59,10 @@ export class CreateComponent implements OnInit {
     this.printingEdition.authorId = this.selectedAuthor;
     this.printingEdition.image = this.previewUrl;
 
-
     this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
   }
 
   public async AddAuthor() {
-
     this.AuthorName = this.AuthorName.trim();
     if (this.AuthorName === '' || !this.AuthorName) {
       this.checkMSG = 'Please enter a valid author name!';
@@ -93,18 +89,15 @@ export class CreateComponent implements OnInit {
     const addedAuthor: AuthorModel = await this.authorService.AddAuthor(newAuthor);
     this.Authors.unshift(addedAuthor);
   }
-
   AddCover(event: Event) {
     const UploadImageInput: HTMLInputElement = event.target as HTMLInputElement;
     if (UploadImageInput && UploadImageInput.files.length) {
       this.fileData = UploadImageInput.files[0];
-
       const reader = new FileReader();
       reader.readAsDataURL(this.fileData);
       reader.onload = () => {
         this.previewUrl = reader.result.toString();
       };
-
     }
   }
 }

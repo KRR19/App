@@ -14,7 +14,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
   useClass: Interceptor,
   multi: true
-}
+};
 
 @NgModule({
   declarations: [SingupComponent, SinginComponent, ForgotPasswordComponent],

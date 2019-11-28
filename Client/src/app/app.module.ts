@@ -11,13 +11,13 @@ import {AuthService} from './services/auth.service';
 import {DashBoardComponent} from './dash-board/dash-board.component';
 import {PrintingEditionService} from './services/printingEdition.service';
 import {Interceptor} from './core/interceptor';
-import { ErrorRouteComponent } from './error-route/error-route.component';
+import {ErrorRouteComponent} from './error-route/error-route.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
   useClass: Interceptor,
   multi: true
-}
+};
 
 @NgModule({
   declarations: [

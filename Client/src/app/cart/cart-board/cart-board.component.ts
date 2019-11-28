@@ -8,7 +8,6 @@ import {PaymentModel} from '../../shared/models/payment.model';
 import {Router} from '@angular/router';
 import {HeaderComponent} from '../../shared/header/header.component';
 
-
 @Component({
   selector: 'app-cart-board',
   templateUrl: './cart-board.component.html',
@@ -40,7 +39,6 @@ export class CartBoardComponent implements OnInit {
     }
     this.dataSource = new MatTableDataSource<CartItem>(this.cart[this.userIndex].printingEdition);
     this.TotalCalc();
-
   }
 
   CountIncrement(printingEditionId: string) {
@@ -113,25 +111,22 @@ export class CartBoardComponent implements OnInit {
       this.ClientPrice = this.exchangeService.UahUsd(this.TotalPriceUSD);
       return this.ClientPrice;
     }
-
   }
 
   Order() {
     this.pay(this.ClientPrice, +this.CurrencySelector);
-
   }
 
   CreateOrder(payment: PaymentModel) {
     const order: OrderModel = {printingEdition: [{}]};
     order.userName = this.cart[this.userIndex].userName;
     order.printingEdition = this.cart[this.userIndex].printingEdition;
-    order.currency = +this.CurrencySelector
+    order.currency = +this.CurrencySelector;
     order.amount = this.ClientPrice;
     order.paymentSource = payment.id;
     order.paymentEmail = payment.email;
     this.cartService.CreateOrder(order);
   }
-
 
   pay(amount: number, currencyNumber: number) {
     const currency = this.cartService.PriceSwitcher(currencyNumber);
@@ -146,7 +141,6 @@ export class CartBoardComponent implements OnInit {
         this.router.navigate(['']).then(() => this.header.reload());
       }
     });
-
     handler.open({
       name: 'App',
       description: '2 widgets',
@@ -154,8 +148,5 @@ export class CartBoardComponent implements OnInit {
       currency
     });
   }
-
-
-
 }
 

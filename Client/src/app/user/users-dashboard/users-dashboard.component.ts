@@ -20,10 +20,11 @@ export class UsersDashboardComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private userService: UsersService) { }
+  constructor(private userService: UsersService) {
+  }
 
   async ngOnInit() {
-    this. edit = false;
+    this.edit = false;
     this.roles = await this.userService.GetAllRoles();
     this.Users = await this.userService.GetAll();
     this.dataSource = new MatTableDataSource<UserInfoModel>(this.Users);
@@ -32,8 +33,7 @@ export class UsersDashboardComponent implements OnInit {
 
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
-  }
-
+  };
 
   Selectuser(element) {
     this.RoleModel.id = element.id;
@@ -43,8 +43,9 @@ export class UsersDashboardComponent implements OnInit {
   }
 
   ChangeRole() {
-    this.userService.ChangeRole(this.RoleModel).then(() => {window.location.reload(); } );
-
+    this.userService.ChangeRole(this.RoleModel).then(() => {
+      window.location.reload();
+    });
   }
 
   Cancel() {

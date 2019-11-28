@@ -4,9 +4,8 @@ import {Router} from '@angular/router';
 import {CartModel} from '../models/cart.model';
 import * as jwt_decode from 'jwt-decode';
 
-
 @Component({
-  selector: 'n ',
+  selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -34,7 +33,7 @@ export class HeaderComponent implements OnInit {
   }
 
   GetCartCount() {
-    this.CartCount = 0
+    this.CartCount = 0;
     const cartJson: string = localStorage.getItem('Cart');
     if (cartJson === null) {
       return;
