@@ -13,7 +13,6 @@ namespace App.BussinesLogicLayer.Helper
         {
             Configuration = configuration;
         }
-
         public string SendEmail(string inputEmail, string subject, string body)
         {
             string returnString = string.Empty;

@@ -7,29 +7,26 @@ using Microsoft.AspNetCore.Identity;
 using Stripe;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Order = App.DataAccessLayer.Entities.Order;
 using OrderItem = App.DataAccessLayer.Entities.OrderItem;
-using System.Linq;
 
 namespace App.BussinesLogicLayer.Services
 {
     public class OrdersService : IOrdersService
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IPaymentRepository _paymentRepository;
         private readonly IPrintingEditionsRepository _printingEditionsRepository;
         private readonly IOrderItemRepository _orderItemRepository;
-
         private readonly UserManager<User> _userManager;
 
         private readonly string _successDeletMsg = "You have successfully deleted";
 
-        public OrdersService(IOrderRepository orderRepository, IPaymentRepository paymentRepository, IPrintingEditionsRepository printingEditionsRepository,
+        public OrdersService(IOrderRepository orderRepository, IPrintingEditionsRepository printingEditionsRepository,
                              IOrderItemRepository orderItemRepository, UserManager<User> userManager)
         {
             _orderRepository = orderRepository;
-            _paymentRepository = paymentRepository;
             _printingEditionsRepository = printingEditionsRepository;
             _orderItemRepository = orderItemRepository;
             _userManager = userManager;
@@ -40,7 +37,6 @@ namespace App.BussinesLogicLayer.Services
             BaseResponseModel report = new BaseResponseModel();
             PaymentModel paymentModel = new PaymentModel();
             Order order = new Order();
-            Payment payment = new Payment();
             order.OrderItem = new List<OrderItem>();
             order.Payment = new Payment();
 
@@ -63,10 +59,10 @@ namespace App.BussinesLogicLayer.Services
                 OrderItem orderItem = new OrderItem();
                 orderItem.CreationDate = DateTime.Now;
                 orderItem.IsRemoved = false;
-                orderItem.PrintingEdition = await _printingEditionsRepository.GetById(item.printingEditionId);
-                orderItem.Count = item.printingEditionCount;
-                orderItem.Currency = item.printingEditionCurrency;
-                orderItem.Amount = item.printingEditionPrice * item.printingEditionCount;
+                orderItem.PrintingEdition = await _printingEditionsRepository.GetById(item.PrintingEditionId);
+                orderItem.Count = item.PrintingEditionCount;
+                orderItem.Currency = item.PrintingEditionCurrency;
+                orderItem.Amount = item.PrintingEditionPrice * item.PrintingEditionCount;
                 orderItem.Order = order;
 
                 order.OrderItem.Add(orderItem);
@@ -79,6 +75,7 @@ namespace App.BussinesLogicLayer.Services
         public List<Order> GetAll()
         {
             List<Order> order = _orderRepository.GetAll();
+
             return order;
         }
         public async Task<BaseResponseModel> Update(OrderModel orderModel)
@@ -95,8 +92,8 @@ namespace App.BussinesLogicLayer.Services
 
             orderItem.CreationDate = DateTime.Now;
             orderItem.IsRemoved = false;
-            orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition.Last().printingEditionId);
-            orderItem.Count = orderModel.PrintingEdition.Last().printingEditionCount;
+            orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition.Last().PrintingEditionId);
+            orderItem.Count = orderModel.PrintingEdition.Last().PrintingEditionCount;
             orderItem.Currency = orderModel.Currency;
             orderItem.Amount = orderItem.PrintingEdition.Price * orderItem.Count;
             orderItem.Order = order;

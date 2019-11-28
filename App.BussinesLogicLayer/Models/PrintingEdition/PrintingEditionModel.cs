@@ -16,6 +16,5 @@ namespace App.BussinesLogicLayer.Models.PrintingEdition
         public List<Guid> AuthorId { get; set; }
         public List<string> AuthorName { get; set; }
         public string Image { get; set; }
-
     }
 }

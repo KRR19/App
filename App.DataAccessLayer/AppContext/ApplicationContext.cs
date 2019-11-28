@@ -15,10 +15,8 @@ namespace App.DataAccessLayer.AppContext
         public DbSet<Cover> Covers { get; set; }
 
         public ApplicationContext(DbContextOptions optionsBuilder) : base(optionsBuilder)
-        {            
+        {
         }
-        
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

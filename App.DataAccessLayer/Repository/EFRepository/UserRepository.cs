@@ -4,8 +4,8 @@ using App.DataAccessLayer.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {

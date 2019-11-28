@@ -15,7 +15,6 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-
         public async Task<bool> Create(Payment payment)
         {
             await _context.Payments.AddAsync(payment);
@@ -27,18 +26,19 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public List<Payment> GetAll()
         {
             List<Payment> payment = _context.Payments.ToList();
+
             return payment;
         }
-
         public async Task<Payment> GetById(Guid id)
         {
             Payment payment = await _context.Payments.FindAsync(id);
+
             return payment;
         }
-
         public Payment GetLast()
         {
             Payment payment = _context.Payments.ToList<Payment>().Last<Payment>();
+
             return payment;
         }
     }

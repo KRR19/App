@@ -12,7 +12,6 @@ namespace App.BussinesLogicLayer.Middleware
         {
             _next = next;
         }
-
         public async Task InvokeAsync(HttpContext context)
         {
             try

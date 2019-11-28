@@ -16,6 +16,7 @@ namespace App.Controllers
         {
             _userService = userService;
         }
+
         [HttpGet("GetAll")]
         public async Task<List<UserInfoModel>> GetAll()
         {
@@ -23,6 +24,7 @@ namespace App.Controllers
 
             return users;
         }
+
         [HttpGet("GetAllRoles")]
         public List<RolesModel> GetAllRoles()
         {

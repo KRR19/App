@@ -28,28 +28,32 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context.Orders.Update(item);
             await _context.SaveChangesAsync();
             result = true;
+
             return result;
         }
-
         public List<Order> GetAll()
         {
             var order = _context.Orders.ToList();
+
             return order;
         }
         public Order GetLast()
         {
             Order order = _context.Orders.ToList<Order>().Last<Order>();
+
             return order;
         }
         public async Task<Order> GetById(Guid id)
         {
             Order order = await _context.Orders.FindAsync(id);
+
             return order;
         }
         public async Task<Order> Update(Order item)
         {
             _context.Orders.Update(item);
             await _context.SaveChangesAsync();
+
             return item;
         }
     }

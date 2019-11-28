@@ -1,6 +1,4 @@
 ﻿using App.DataAccessLayer.Entities.Enum;
-using System;
-using System.Collections.Generic;
 
 namespace App.BussinesLogicLayer.Models.Orders
 {

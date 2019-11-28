@@ -66,15 +66,12 @@ namespace App.BussinesLogicLayer.Services
             {
                 var authorInPrintingEdition = new AuthorInPrintingEdition();
                 authorInPrintingEdition.AuthorId = authorId;
-
                 authorInPrintingEditions.Add(authorInPrintingEdition);
             }
 
             printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
 
-            PrintingEdition addedPrintingEdition = await _printingEditionsRepository.Create(printingEdition);
-
-
+            await _printingEditionsRepository.Create(printingEdition);
 
             report.Message.Add(_publicationAddedMsg);
             return report;
@@ -106,10 +103,9 @@ namespace App.BussinesLogicLayer.Services
         {
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
             PrintingEdition printingEdition = await printingEditionsRepository.GetById(id);
-            Cover cover = await _coverRepository.GetById(printingEdition.Id);
+            Cover cover = _coverRepository.GetById(printingEdition.Id);
 
             PrintingEditionModel printingEditionModel = new PrintingEditionModel();
-
             printingEditionModel.Id = printingEdition.Id;
             printingEditionModel.Name = printingEdition.Name;
             printingEditionModel.Description = printingEdition.Description;
@@ -131,13 +127,12 @@ namespace App.BussinesLogicLayer.Services
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
             PrintingEdition printingEdition = await printingEditionsRepository.GetById(UpdatePrintingEdition.Id);
             printingEdition.AuthorInPrintingEditions = _authorInPrintingEditionsRepository.GetById(UpdatePrintingEdition.Id);
-            printingEdition.Cover = await _coverRepository.GetById(UpdatePrintingEdition.Id);
+            printingEdition.Cover = _coverRepository.GetById(UpdatePrintingEdition.Id);
 
             if (!report.IsValid)
             {
                 return report;
             }
-
 
             printingEdition.Id = UpdatePrintingEdition.Id;
             printingEdition.Name = UpdatePrintingEdition.Name;

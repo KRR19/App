@@ -24,6 +24,7 @@ namespace App.Controllers
         public List<Author> GetAll()
         {
             List<Author> author = _service.GetAll();
+
             return author;
         }
 
@@ -31,6 +32,7 @@ namespace App.Controllers
         public async Task<AuthorModel> Get(Guid Id)
         {
             AuthorModel author = await _service.GetById(Id);
+
             return author;
         }
 
@@ -39,6 +41,7 @@ namespace App.Controllers
         public async Task<Author> Create([FromBody]AuthorModel newAuthor)
         {
             Author model = await _service.Create(newAuthor);
+
             return model;
         }
 
@@ -47,6 +50,7 @@ namespace App.Controllers
         public AuthorModel Put([FromBody]AuthorModel newAuthor)
         {
             AuthorModel model = _service.Update(newAuthor);
+
             return model;
         }
 
@@ -55,6 +59,7 @@ namespace App.Controllers
         public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
         {
             BaseResponseModel report = await _service.Delete(newAuthor.Id);
+
             return report;
         }
     }

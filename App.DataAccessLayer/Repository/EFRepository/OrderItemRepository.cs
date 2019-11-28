@@ -22,7 +22,6 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return item;
         }
-
         public async Task<List<OrderItem>> Create(List<OrderItem> item)
         {
             await _context.OrderItems.AddRangeAsync(item);
@@ -30,28 +29,27 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return item;
         }
-
         public async Task<bool> Delete(OrderItem item)
         {
             bool result;
             _context.OrderItems.Update(item);
             await _context.SaveChangesAsync();
             result = true;
+
             return result;
         }
-
         public async Task<OrderItem> GetById(Guid Id)
         {
             OrderItem orderItem = await _context.OrderItems.FindAsync(Id);
+
             return orderItem;
         }
-
         public OrderItem GetLast()
         {
             OrderItem orderItem = _context.OrderItems.ToList<OrderItem>().Last<OrderItem>();
+
             return orderItem;
         }
-
         public async Task<OrderItem> Update(OrderItem item)
         {
             _context.OrderItems.Update(item);

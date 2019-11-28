@@ -55,12 +55,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public async Task<Author> GetById(Guid id)
         {
             Author author = await _context.Authors.FindAsync(id);
+
             return author;
         }
 
         public List<Author> GetAll()
         {
-            var author = _context.Authors.Where(x => x.IsRemoved == false).ToList();
+            List<Author> author = _context.Authors.Where(x => x.IsRemoved == false).ToList();
+
             return author;
         }
     }

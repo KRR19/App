@@ -5,10 +5,10 @@ namespace App.BussinesLogicLayer.Models.Orders
 {
     public class OrderItemModel
     {
-        public Guid printingEditionId { get; set; }
-        public double printingEditionPrice { get; set; }
-        public Currency printingEditionCurrency { get; set; }
-        public string printingEditionName { get; set; }
-        public int printingEditionCount { get; set; }
+        public Guid PrintingEditionId { get; set; }
+        public double PrintingEditionPrice { get; set; }
+        public Currency PrintingEditionCurrency { get; set; }
+        public string PrintingEditionName { get; set; }
+        public int PrintingEditionCount { get; set; }
     }
 }

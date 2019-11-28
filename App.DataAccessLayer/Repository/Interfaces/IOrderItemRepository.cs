@@ -10,6 +10,6 @@ namespace App.DataAccessLayer.Repository.Interfaces
     {
         public Task<OrderItem> GetById(Guid Id);
         public Task<bool> Delete(OrderItem item);
-        public  Task<List<OrderItem>> Create(List<OrderItem> item);
+        public Task<List<OrderItem>> Create(List<OrderItem> item);
     }
 }

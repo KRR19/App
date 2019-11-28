@@ -6,7 +6,7 @@ import * as jwt_decode from 'jwt-decode';
 
 
 @Component({
-  selector: 'app-header',
+  selector: 'n ',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })

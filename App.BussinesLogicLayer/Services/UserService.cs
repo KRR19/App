@@ -34,7 +34,6 @@ namespace App.BussinesLogicLayer.Services
                 Email = userModel.Email,
                 UserName = userModel.Email,
             };
-
             await userRepository.Create(user);
 
             return report;
@@ -50,8 +49,8 @@ namespace App.BussinesLogicLayer.Services
                 report.IsValid = false;
                 return report;
             }
-
             await userRepository.Delete(user);
+
             return report;
         }
         public async Task<UserModel> GetById(Guid id)
@@ -87,7 +86,7 @@ namespace App.BussinesLogicLayer.Services
             List<User> users = _userManager.Users.ToList();
             List<UserInfoModel> userInfoModels = new List<UserInfoModel>();
 
-            foreach(var item in users)
+            foreach (var item in users)
             {
                 UserInfoModel user = new UserInfoModel();
                 user.Id = item.Id;
@@ -103,27 +102,29 @@ namespace App.BussinesLogicLayer.Services
 
             return userInfoModels;
         }
-
         public List<RolesModel> GetAllRoles()
         {
-            List<IdentityRole> identityRoles =_roleManager.Roles.ToList();
+            List<IdentityRole> identityRoles = _roleManager.Roles.ToList();
             List<RolesModel> roles = new List<RolesModel>();
-            foreach(var item in identityRoles)
+
+            foreach (var item in identityRoles)
             {
                 RolesModel role = new RolesModel();
                 role.Role = item.NormalizedName;
                 roles.Add(role);
             }
+
             return roles;
         }
-
         public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
         {
             User user = _userManager.Users.Where(w => w.Id == rolesModel.Id.ToString()).FirstOrDefault();
             user.EmailConfirmed = true;
             IList<string> userRoles = await _userManager.GetRolesAsync(user);
-            await _userManager.RemoveFromRolesAsync(user,userRoles);
+
+            await _userManager.RemoveFromRolesAsync(user, userRoles);
             await _userManager.AddToRoleAsync(user, rolesModel.Role);
+
             return rolesModel;
         }
     }

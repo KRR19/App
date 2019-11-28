@@ -47,10 +47,12 @@ namespace App.BussinesLogicLayer.Services
             }
             author.IsRemoved = true;
             bool isDelete = await _authorRepository.Delete(author);
+
             if (isDelete)
             {
                 report.Message.Add("The author has been deleted");
             }
+
             return report;
         }
         public AuthorModel Update(AuthorModel UpdateAuthor)
@@ -68,6 +70,7 @@ namespace App.BussinesLogicLayer.Services
                     CreationDate = DateTime.Now,
                     IsRemoved = false
                 };
+
                 _authorRepository.Update(author);
             }
 
@@ -76,15 +79,11 @@ namespace App.BussinesLogicLayer.Services
         public async Task<AuthorModel> GetById(Guid id)
         {
             AuthorModel authorModel = new AuthorModel();
-            AuthorModel authorsModel = new AuthorModel();
             Author author = await _authorRepository.GetById(id);
-
-                authorModel.Id = author.Id;
-                authorModel.Name = author.Name;
-                authorModel.DateBirth = author.DateBirth;
-                authorModel.DateDeath = author.DateDeath;
-
-
+            authorModel.Id = author.Id;
+            authorModel.Name = author.Name;
+            authorModel.DateBirth = author.DateBirth;
+            authorModel.DateDeath = author.DateDeath;
 
             return authorModel;
         }
@@ -120,7 +119,5 @@ namespace App.BussinesLogicLayer.Services
             report.IsValid = true;
             return report;
         }
-
-       
     }
 }

@@ -73,8 +73,8 @@ namespace App.BussinesLogicLayer.Services
                 return logInResponse;
             }
 
-            var roles = await _userManager.GetRolesAsync(user);
-            logInResponse.Role = roles.ToList().FirstOrDefault();
+            IList<string> roles = await _userManager.GetRolesAsync(user);
+            logInResponse.Role = roles.FirstOrDefault();
 
             logInResponse.User = user.NormalizedUserName;
 
@@ -87,23 +87,21 @@ namespace App.BussinesLogicLayer.Services
 
                 return logInResponse;
             }
-
             accessClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
             accessClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             accessClaims.Add(new Claim(ClaimTypes.Hash, user.PasswordHash));
             accessClaims.Add(new Claim(ClaimTypes.Role, logInResponse.Role));
 
             accessToken = GenerateAccesToken(accessClaims);
-            logInResponse.accessToken = accessToken;
+            logInResponse.AccessToken = accessToken;
 
             refreshClaims.Add(new Claim(ClaimTypes.Authentication, accessToken));
             refreshClaims.Add(new Claim(ClaimTypes.Email, user.Email));
             refreshToken = GenerateRefreshToken(refreshClaims);
-            logInResponse.refreshToken = refreshToken;
+            logInResponse.RefreshToken = refreshToken;
 
             return logInResponse;
         }
-
         public async Task<BaseResponseModel> Register(UserModel model)
         {
             User user = new User();
@@ -137,7 +135,6 @@ namespace App.BussinesLogicLayer.Services
 
             return responseModel;
         }
-
         public async Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model)
         {
             User user = await _userManager.FindByEmailAsync(model.Email);
@@ -153,7 +150,6 @@ namespace App.BussinesLogicLayer.Services
 
             return response;
         }
-
         public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
         {
             BaseResponseModel report = new BaseResponseModel();
@@ -169,11 +165,8 @@ namespace App.BussinesLogicLayer.Services
 
             return report;
         }
-
         private string GenerateJwtToken(List<Claim> claims, int expTime)
         {
-
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var expires = DateTime.Now.AddMinutes(expTime);
@@ -190,14 +183,9 @@ namespace App.BussinesLogicLayer.Services
 
             return token;
         }
-
         public string CreateLink(ResetPasswordModel model, string action)
         {
-            string callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(
-                action,
-                "Account",
-                model,
-                protocol: _contextAccessor.HttpContext.Request.Scheme);
+            string callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(action, "Account", model, protocol: _contextAccessor.HttpContext.Request.Scheme);
 
             return callbackUrl;
         }
@@ -237,20 +225,21 @@ namespace App.BussinesLogicLayer.Services
 
             response.Message.Add(_emailConfirmedMsg);
             response.IsValid = true;
+
             return response;
         }
-
         private string GenerateAccesToken(List<Claim> accessClaims)
         {
             int exp = _configuration.GetValue<int>("JWT:AccessTokenExp");
             string accessToken = GenerateJwtToken(accessClaims, exp);
+
             return accessToken;
         }
-
         private string GenerateRefreshToken(List<Claim> refreshClaims)
         {
             int exp = _configuration.GetValue<int>("JWT:AccessTokenExp");
             string refreshToken = GenerateJwtToken(refreshClaims, exp);
+
             return refreshToken;
         }
     }

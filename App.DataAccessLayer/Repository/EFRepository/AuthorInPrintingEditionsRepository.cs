@@ -26,7 +26,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public List<Guid> GetAuthors(Guid id)
         {
-            List<AuthorInPrintingEdition> authorInPrintingEditions = _context.AuthorInPrintingEditions.Where(x=> x.PrintingEditionId == id).ToList();
+            List<AuthorInPrintingEdition> authorInPrintingEditions = _context.AuthorInPrintingEditions.Where(x => x.PrintingEditionId == id).ToList();
             return authorInPrintingEditions.Select(p => p.AuthorId).ToList();
         }
 
@@ -34,7 +34,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             List<Author> authorList = new List<Author>();
             List<string> authorsName = new List<string>();
-            foreach(var author in authorId)
+            foreach (var author in authorId)
             {
                 authorList.Add(_context.Authors.Where(p => p.Id == author).FirstOrDefault());
             }
