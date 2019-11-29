@@ -8,17 +8,22 @@ namespace App.BussinesLogicLayer.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+
+        private const string SuperAdminEmail = "Anuitex@mail.com";
+        private const string SuperAdminPassword = "123456";
+
         public IdentityRoleInitializer(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             _roleManager = roleManager;
             _userManager = userManager;
         }
+
         public IdentityResult SeedRoles()
         {
             IdentityResult result = new IdentityResult();
             bool isUserCreated = _roleManager.RoleExistsAsync(DefaultRoles.User).Result;
             bool isAdminCreated = _roleManager.RoleExistsAsync(DefaultRoles.Admin).Result;
-            bool isSuperAdminCreated = _userManager.FindByEmailAsync("Anuitex@mail.com").Result != null;
+            bool isSuperAdminCreated = _userManager.FindByEmailAsync(SuperAdminEmail).Result != null;
 
             if (!isUserCreated)
             {
@@ -40,11 +45,11 @@ namespace App.BussinesLogicLayer.Services
             if (!isSuperAdminCreated)
             {
                 User user = new User();
-                user.UserName = "Anuitex@mail.com";
-                user.Email = "Anuitex@mail.com";
+                user.UserName = SuperAdminEmail;
+                user.Email = SuperAdminEmail;
                 user.EmailConfirmed = true;
 
-                result = _userManager.CreateAsync(user, "123456").Result;
+                result = _userManager.CreateAsync(user, SuperAdminPassword).Result;
                 result = _userManager.AddToRoleAsync(user, DefaultRoles.Admin).Result;
             }
 

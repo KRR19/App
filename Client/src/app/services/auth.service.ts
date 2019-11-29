@@ -49,7 +49,7 @@ export class AuthService {
     return result;
   }
 
-  private setToken(response: LogInResponceModel | null) {
+  private setToken(response: LogInResponceModel) {
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('User', response.user);

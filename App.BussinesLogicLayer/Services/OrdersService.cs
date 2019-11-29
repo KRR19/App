@@ -32,6 +32,13 @@ namespace App.BussinesLogicLayer.Services
             _userManager = userManager;
         }
 
+        public List<Order> GetAll()
+        {
+            List<Order> order = _orderRepository.GetAll();
+
+            return order;
+        }
+
         public async Task<BaseResponseModel> Create(OrderModel orderModel)
         {
             BaseResponseModel report = new BaseResponseModel();
@@ -72,12 +79,7 @@ namespace App.BussinesLogicLayer.Services
 
             return report;
         }
-        public List<Order> GetAll()
-        {
-            List<Order> order = _orderRepository.GetAll();
 
-            return order;
-        }
         public async Task<BaseResponseModel> Update(OrderModel orderModel)
         {
             BaseResponseModel report = new BaseResponseModel();

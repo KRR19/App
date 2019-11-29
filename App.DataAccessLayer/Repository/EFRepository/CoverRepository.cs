@@ -14,9 +14,11 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
+
         public Cover GetById(Guid id)
         {
             Cover cover = _context.Covers.FirstOrDefault(p => p.PrintingEditionId == id);
+
             return cover;
         }
     }

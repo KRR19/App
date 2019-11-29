@@ -39,6 +39,7 @@ namespace App.BussinesLogicLayer.Services
         private readonly string _emailConfirmedMsg = "Email confirmed.";
         private readonly string _emailNOTConfirmedMsg = "Please confirm your mail";
         private readonly string _wrongPass = "You entered an incorrect password";
+
         public AccountService(UserManager<User> userManager, IConfiguration configuration, IHttpContextAccessor contextAccessor, IUrlHelperFactory urlHelper, IActionContextAccessor actionContextAccessor, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -103,6 +104,7 @@ namespace App.BussinesLogicLayer.Services
 
             return logInResponse;
         }
+
         public async Task<BaseResponseModel> Register(UserModel model)
         {
             User user = new User();
@@ -136,6 +138,7 @@ namespace App.BussinesLogicLayer.Services
 
             return responseModel;
         }
+
         public async Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model)
         {
             User user = await _userManager.FindByEmailAsync(model.Email);
@@ -151,6 +154,7 @@ namespace App.BussinesLogicLayer.Services
 
             return response;
         }
+
         public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
         {
             BaseResponseModel report = new BaseResponseModel();
@@ -166,6 +170,7 @@ namespace App.BussinesLogicLayer.Services
 
             return report;
         }
+
         private string GenerateJwtToken(List<Claim> claims, int expTime)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtKey"]));
@@ -184,6 +189,7 @@ namespace App.BussinesLogicLayer.Services
 
             return token;
         }
+
         public string CreateLink(ResetPasswordModel model, string action)
         {
             string callbackUrl = _urlHelper.GetUrlHelper(_actionContextAccessor.ActionContext).Action(action, "Account", model, protocol: _contextAccessor.HttpContext.Request.Scheme);
@@ -229,6 +235,7 @@ namespace App.BussinesLogicLayer.Services
 
             return response;
         }
+
         private string GenerateAccesToken(List<Claim> accessClaims)
         {
             int exp = _configuration.GetValue<int>("JWT:AccessTokenExp");
@@ -236,6 +243,7 @@ namespace App.BussinesLogicLayer.Services
 
             return accessToken;
         }
+
         private string GenerateRefreshToken(List<Claim> refreshClaims)
         {
             int exp = _configuration.GetValue<int>("JWT:RefreshTokenExp");

@@ -31,7 +31,6 @@ namespace App.DataAccessLayer.AppContext
             .HasOne(a => a.Cover)
             .WithOne(b => b.PrintingEdition)
             .HasForeignKey<Cover>(b => b.PrintingEditionId).OnDelete(DeleteBehavior.Cascade);
-
         }
     }
 }

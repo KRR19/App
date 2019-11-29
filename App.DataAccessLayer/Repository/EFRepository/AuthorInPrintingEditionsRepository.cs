@@ -16,36 +16,34 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<AuthorInPrintingEdition> Create(AuthorInPrintingEdition item)
-        {
-            await _context.AuthorInPrintingEditions.AddAsync(item);
-            await _context.SaveChangesAsync();
-
-            return item;
-        }
 
         public List<Guid> GetAuthors(Guid id)
         {
             List<AuthorInPrintingEdition> authorInPrintingEditions = _context.AuthorInPrintingEditions.Where(x => x.PrintingEditionId == id).ToList();
+
             return authorInPrintingEditions.Select(p => p.AuthorId).ToList();
         }
 
         public List<string> GetAuthorsName(List<Guid> authorId)
         {
-            List<Author> authorList = new List<Author>();
-            List<string> authorsName = new List<string>();
-            foreach (var author in authorId)
-            {
-                authorList.Add(_context.Authors.Where(p => p.Id == author).FirstOrDefault());
-            }
-            authorsName = authorList.Select(p => p.Name).ToList();
+            List<string> authorsName = _context.Authors.Where(w => authorId.Contains(w.Id)).Select(s => s.Name).ToList();
+
             return authorsName;
         }
 
         public List<AuthorInPrintingEdition> GetById(Guid id)
         {
             List<AuthorInPrintingEdition> authorInPrintingEditions = _context.AuthorInPrintingEditions.Where(w => w.PrintingEditionId == id).ToList();
+
             return authorInPrintingEditions;
+        }
+
+        public async Task<AuthorInPrintingEdition> Create(AuthorInPrintingEdition item)
+        {
+            await _context.AuthorInPrintingEditions.AddAsync(item);
+            await _context.SaveChangesAsync();
+
+            return item;
         }
 
         public async Task<AuthorInPrintingEdition> Update(AuthorInPrintingEdition item)

@@ -16,41 +16,6 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<Author> Create(Author author)
-        {
-            EntityEntry<Author> createdAuthor =  await _context.Authors.AddAsync(author);
-            await _context.SaveChangesAsync();
-
-            return  createdAuthor.Entity;
-        }
-
-        public async Task<bool> Delete(Author item)
-        {
-            bool result;
-            _context.Authors.Update(item);
-            await _context.SaveChangesAsync();
-            result = true;
-
-            return result;
-        }
-
-        public async Task<Author> Update(Author item)
-        {
-            _context.Authors.Update(item);
-            await _context.SaveChangesAsync();
-
-            return item;
-        }
-
-        public async Task<List<Author>> GetById(List<Guid> id)
-        {
-            List<Author> author = new List<Author>();
-            foreach (var index in id)
-            {
-                author.Add(await _context.Authors.FindAsync(index));
-            }
-            return author;
-        }
 
         public async Task<Author> GetById(Guid id)
         {
@@ -64,6 +29,32 @@ namespace App.DataAccessLayer.Repository.EFRepository
             List<Author> author = _context.Authors.Where(x => x.IsRemoved == false).ToList();
 
             return author;
+        }
+
+        public async Task<Author> Create(Author author)
+        {
+            EntityEntry<Author> createdAuthor = await _context.Authors.AddAsync(author);
+            await _context.SaveChangesAsync();
+
+            return createdAuthor.Entity;
+        }
+
+        public async Task<Author> Update(Author item)
+        {
+            _context.Authors.Update(item);
+            await _context.SaveChangesAsync();
+
+            return item;
+        }
+
+        public async Task<bool> Delete(Author item)
+        {
+            bool result;
+            _context.Authors.Update(item);
+            await _context.SaveChangesAsync();
+            result = true;
+
+            return result;
         }
     }
 }

@@ -36,6 +36,36 @@ namespace App.BussinesLogicLayer.Services
             _printingEditionsRepository = printingEditionsRepository;
             _coverRepository = coverRepository;
         }
+
+        public List<PrintingEdition> GetAll()
+        {
+            List<PrintingEdition> printingEdition = _printingEditionsRepository.GetAll();
+
+            return printingEdition;
+        }
+
+        public async Task<PrintingEditionModel> GetById(Guid id)
+        {
+            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
+            PrintingEdition printingEdition = await printingEditionsRepository.GetById(id);
+            Cover cover = _coverRepository.GetById(printingEdition.Id);
+
+            PrintingEditionModel printingEditionModel = new PrintingEditionModel();
+            printingEditionModel.Id = printingEdition.Id;
+            printingEditionModel.Name = printingEdition.Name;
+            printingEditionModel.Description = printingEdition.Description;
+            printingEditionModel.Type = printingEdition.Type;
+            printingEditionModel.Currency = printingEdition.Currency;
+            printingEditionModel.Price = printingEdition.Price;
+            printingEditionModel.Status = printingEdition.Status;
+            printingEditionModel.AuthorId = _authorInPrintingEditionsRepository.GetAuthors(printingEdition.Id);
+            printingEditionModel.Image = cover.Base64Image;
+
+            printingEditionModel.AuthorName = _authorInPrintingEditionsRepository.GetAuthorsName(printingEditionModel.AuthorId);
+
+            return printingEditionModel;
+        }
+
         public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
@@ -75,50 +105,6 @@ namespace App.BussinesLogicLayer.Services
 
             report.Message.Add(_publicationAddedMsg);
             return report;
-        }
-        public async Task<BaseResponseModel> Delete(Guid id)
-        {
-            BaseResponseModel report = new BaseResponseModel();
-            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
-            PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
-
-            if (printingEdition == null)
-            {
-                report.Message.Add(_publicationNotFoundMsg);
-                return report;
-            }
-            printingEdition.IsRemoved = true;
-            report.Message.Add(await printingEditionsRepository.Delete(printingEdition));
-
-            return report;
-        }
-        public List<PrintingEdition> GetAll()
-        {
-            List<PrintingEdition> printingEdition = _printingEditionsRepository.GetAll();
-
-            return printingEdition;
-        }
-
-        public async Task<PrintingEditionModel> GetById(Guid id)
-        {
-            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
-            PrintingEdition printingEdition = await printingEditionsRepository.GetById(id);
-            Cover cover = _coverRepository.GetById(printingEdition.Id);
-
-            PrintingEditionModel printingEditionModel = new PrintingEditionModel();
-            printingEditionModel.Id = printingEdition.Id;
-            printingEditionModel.Name = printingEdition.Name;
-            printingEditionModel.Description = printingEdition.Description;
-            printingEditionModel.Type = printingEdition.Type;
-            printingEditionModel.Currency = printingEdition.Currency;
-            printingEditionModel.Price = printingEdition.Price;
-            printingEditionModel.Status = printingEdition.Status;
-            printingEditionModel.AuthorId = _authorInPrintingEditionsRepository.GetAuthors(printingEdition.Id);
-            printingEditionModel.Image = cover.Base64Image;
-
-            printingEditionModel.AuthorName = _authorInPrintingEditionsRepository.GetAuthorsName(printingEditionModel.AuthorId);
-
-            return printingEditionModel;
         }
 
         public async Task<BaseResponseModel> Update(PrintingEditionModel UpdatePrintingEdition)
@@ -160,6 +146,23 @@ namespace App.BussinesLogicLayer.Services
             printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
 
             await printingEditionsRepository.Update(printingEdition);
+            return report;
+        }
+
+        public async Task<BaseResponseModel> Delete(Guid id)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+            IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
+            PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
+
+            if (printingEdition == null)
+            {
+                report.Message.Add(_publicationNotFoundMsg);
+                return report;
+            }
+            printingEdition.IsRemoved = true;
+            report.Message.Add(await printingEditionsRepository.Delete(printingEdition));
+
             return report;
         }
 

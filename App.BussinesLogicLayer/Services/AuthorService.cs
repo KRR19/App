@@ -17,6 +17,26 @@ namespace App.BussinesLogicLayer.Services
             _authorRepository = AuthorRepository;
         }
 
+        public async Task<AuthorModel> GetById(Guid id)
+        {
+            AuthorModel authorModel = new AuthorModel();
+            Author author = await _authorRepository.GetById(id);
+            authorModel.Id = author.Id;
+            authorModel.Name = author.Name;
+            authorModel.DateBirth = author.DateBirth;
+            authorModel.DateDeath = author.DateDeath;
+
+            return authorModel;
+        }
+
+        public List<Author> GetAll()
+        {
+            List<Author> authors = _authorRepository.GetAll();
+
+            return authors;
+
+        }
+
         public async Task<Author> Create(AuthorModel newAuthor)
         {
             BaseResponseModel report = ValidationAuthor(newAuthor);
@@ -35,26 +55,7 @@ namespace App.BussinesLogicLayer.Services
 
             return author;
         }
-        public async Task<BaseResponseModel> Delete(Guid id)
-        {
-            BaseResponseModel report = new BaseResponseModel();
-            Author author = await _authorRepository.GetById(id);
 
-            if (author == null)
-            {
-                report.Message.Add($"Author not found in the database!");
-                return report;
-            }
-            author.IsRemoved = true;
-            bool isDelete = await _authorRepository.Delete(author);
-
-            if (isDelete)
-            {
-                report.Message.Add("The author has been deleted");
-            }
-
-            return report;
-        }
         public AuthorModel Update(AuthorModel UpdateAuthor)
         {
             BaseResponseModel report = ValidationAuthor(UpdateAuthor);
@@ -76,25 +77,28 @@ namespace App.BussinesLogicLayer.Services
 
             return UpdateAuthor;
         }
-        public async Task<AuthorModel> GetById(Guid id)
+
+        public async Task<BaseResponseModel> Delete(Guid id)
         {
-            AuthorModel authorModel = new AuthorModel();
+            BaseResponseModel report = new BaseResponseModel();
             Author author = await _authorRepository.GetById(id);
-            authorModel.Id = author.Id;
-            authorModel.Name = author.Name;
-            authorModel.DateBirth = author.DateBirth;
-            authorModel.DateDeath = author.DateDeath;
 
-            return authorModel;
+            if (author == null)
+            {
+                report.Message.Add($"Author not found in the database!");
+                return report;
+            }
+            author.IsRemoved = true;
+            bool isDelete = await _authorRepository.Delete(author);
+
+            if (isDelete)
+            {
+                report.Message.Add("The author has been deleted");
+            }
+
+            return report;
         }
 
-        public List<Author> GetAll()
-        {
-            List<Author> authors = _authorRepository.GetAll();
-
-            return authors;
-
-        }
         private BaseResponseModel ValidationAuthor(AuthorModel author)
         {
             BaseResponseModel report = new BaseResponseModel();

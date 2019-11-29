@@ -15,22 +15,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
         {
             _context = context;
         }
-        public async Task<PrintingEdition> Create(PrintingEdition item)
-        {
-            await _context.PrintingEditions.AddAsync(item);
-            await _context.SaveChangesAsync();
 
-            return item;
-        }
-        public async Task<string> Delete(PrintingEdition item)
-        {
-            string result;
-            _context.PrintingEditions.Update(item);
-            await _context.SaveChangesAsync();
-            result = $"You delete {item.Name}";
-
-            return result;
-        }
         public async Task<PrintingEdition> GetById(Guid id)
         {
             PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
@@ -44,6 +29,13 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return printingEdition.ToList();
         }
+        public async Task<PrintingEdition> Create(PrintingEdition item)
+        {
+            await _context.PrintingEditions.AddAsync(item);
+            await _context.SaveChangesAsync();
+
+            return item;
+        }
 
         public async Task<PrintingEdition> Update(PrintingEdition item)
         {
@@ -51,6 +43,15 @@ namespace App.DataAccessLayer.Repository.EFRepository
             await _context.SaveChangesAsync();
 
             return item;
+        }
+        public async Task<string> Delete(PrintingEdition item)
+        {
+            string result;
+            _context.PrintingEditions.Update(item);
+            await _context.SaveChangesAsync();
+            result = $"You delete {item.Name}";
+
+            return result;
         }
     }
 }

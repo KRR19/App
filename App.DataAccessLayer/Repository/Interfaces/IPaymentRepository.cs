@@ -9,6 +9,6 @@ namespace App.DataAccessLayer.Repository.Interfaces
     {
         public List<Payment> GetAll();
         public Task<Payment> GetById(Guid id);
-        public Task<bool> Create(Payment payment);
+        public Task<Payment> Create(Payment payment);
     }
 }

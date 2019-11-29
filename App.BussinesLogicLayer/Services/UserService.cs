@@ -17,42 +17,14 @@ namespace App.BussinesLogicLayer.Services
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly string UserNF = "User not found in the database!";
+
         public UserService(IUserRepository userRepository, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userRepository = userRepository;
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        public async Task<BaseResponseModel> Create(UserModel userModel)
-        {
-            BaseResponseModel report = new BaseResponseModel();
 
-            User user = new User
-            {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Email = userModel.Email,
-                UserName = userModel.Email,
-            };
-            await userRepository.Create(user);
-
-            return report;
-        }
-        public async Task<BaseResponseModel> Delete(Guid id)
-        {
-            BaseResponseModel report = new BaseResponseModel();
-            User user = await _userManager.FindByIdAsync(id.ToString());
-
-            if (user == null)
-            {
-                report.Message.Add(UserNF);
-                report.IsValid = false;
-                return report;
-            }
-            await userRepository.Delete(user);
-
-            return report;
-        }
         public async Task<UserModel> GetById(Guid id)
         {
             User user = await userRepository.Read(id);
@@ -64,21 +36,6 @@ namespace App.BussinesLogicLayer.Services
             };
 
             return userModel;
-        }
-
-        public BaseResponseModel Update(UserModel userModel)
-        {
-            BaseResponseModel report = new BaseResponseModel();
-            User user = new User
-            {
-                FirstName = userModel.FirstName,
-                LastName = userModel.LastName,
-                Email = userModel.Email,
-                UserName = userModel.Email,
-            };
-            userRepository.Update(user);
-
-            return report;
         }
 
         public async Task<List<UserInfoModel>> GetAll()
@@ -102,6 +59,7 @@ namespace App.BussinesLogicLayer.Services
 
             return userInfoModels;
         }
+
         public List<RolesModel> GetAllRoles()
         {
             List<IdentityRole> identityRoles = _roleManager.Roles.ToList();
@@ -116,6 +74,53 @@ namespace App.BussinesLogicLayer.Services
 
             return roles;
         }
+
+        public async Task<BaseResponseModel> Create(UserModel userModel)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+
+            User user = new User
+            {
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Email = userModel.Email,
+                UserName = userModel.Email,
+            };
+            await userRepository.Create(user);
+
+            return report;
+        }
+
+        public BaseResponseModel Update(UserModel userModel)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+            User user = new User
+            {
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Email = userModel.Email,
+                UserName = userModel.Email,
+            };
+            userRepository.Update(user);
+
+            return report;
+        }
+        public async Task<BaseResponseModel> Delete(Guid id)
+        {
+            BaseResponseModel report = new BaseResponseModel();
+            User user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user == null)
+            {
+                report.Message.Add(UserNF);
+                report.IsValid = false;
+                return report;
+            }
+            await userRepository.Delete(user);
+
+            return report;
+        }
+
         public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
         {
             User user = _userManager.Users.Where(w => w.Id == rolesModel.Id.ToString()).FirstOrDefault();

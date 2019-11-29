@@ -1,6 +1,7 @@
 ﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,6 @@ namespace App.DataAccessLayer.Repository.EFRepository
         public PaymentRepository(ApplicationContext context)
         {
             _context = context;
-        }
-        public async Task<bool> Create(Payment payment)
-        {
-            await _context.Payments.AddAsync(payment);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
         public List<Payment> GetAll()
@@ -40,6 +34,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
             Payment payment = _context.Payments.ToList<Payment>().Last<Payment>();
 
             return payment;
+        }
+
+        public async Task<Payment> Create(Payment payment)
+        {
+            EntityEntry<Payment> createdPayment = await _context.Payments.AddAsync(payment);
+            await _context.SaveChangesAsync();
+
+            return createdPayment.Entity;
         }
     }
 }
