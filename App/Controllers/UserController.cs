@@ -34,7 +34,7 @@ namespace App.Controllers
         }
 
         [HttpPost("ChangeRole")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
         {
             RolesModel user = await _userService.ChangeRole(rolesModel);

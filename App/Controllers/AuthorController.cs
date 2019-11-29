@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.BussinesLogicLayer.Models;
 
 namespace App.Controllers
 {
@@ -37,7 +38,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Create")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<Author> Create([FromBody]AuthorModel newAuthor)
         {
             Author model = await _service.Create(newAuthor);
@@ -46,7 +47,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Update")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public AuthorModel Put([FromBody]AuthorModel newAuthor)
         {
             AuthorModel model = _service.Update(newAuthor);
@@ -55,7 +56,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Delete")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
         {
             BaseResponseModel report = await _service.Delete(newAuthor.Id);

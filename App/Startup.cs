@@ -135,7 +135,8 @@ namespace App
                     ValidateAudience = true,
                     ValidAudience = Configuration.GetSection("JWT")["Audience"],
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.FromSeconds(5)
+                    ClockSkew = TimeSpan.FromSeconds(5),
+
                 };
             });
         }
@@ -162,8 +163,7 @@ namespace App
 
             app.UseAuthentication();
             app.UseAuthorization();
-            //app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader());
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseMiddleware<LogMiddleware>();
             app.UseEndpoints(endpoints =>

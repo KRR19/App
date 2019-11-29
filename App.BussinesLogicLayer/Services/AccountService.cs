@@ -92,6 +92,7 @@ namespace App.BussinesLogicLayer.Services
             accessClaims.Add(new Claim(ClaimTypes.Hash, user.PasswordHash));
             accessClaims.Add(new Claim(ClaimTypes.Role, logInResponse.Role));
 
+
             accessToken = GenerateAccesToken(accessClaims);
             logInResponse.AccessToken = accessToken;
 
@@ -237,7 +238,7 @@ namespace App.BussinesLogicLayer.Services
         }
         private string GenerateRefreshToken(List<Claim> refreshClaims)
         {
-            int exp = _configuration.GetValue<int>("JWT:AccessTokenExp");
+            int exp = _configuration.GetValue<int>("JWT:RefreshTokenExp");
             string refreshToken = GenerateJwtToken(refreshClaims, exp);
 
             return refreshToken;

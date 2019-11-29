@@ -1,6 +1,7 @@
 ﻿using App.DataAccessLayer.AppContext;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,11 +18,10 @@ namespace App.DataAccessLayer.Repository.EFRepository
         }
         public async Task<Author> Create(Author author)
         {
-            await _context.Authors.AddAsync(author);
+            EntityEntry<Author> createdAuthor =  await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
-            Author newAuthor = _context.Authors.ToList().Last();
 
-            return newAuthor;
+            return  createdAuthor.Entity;
         }
 
         public async Task<bool> Delete(Author item)

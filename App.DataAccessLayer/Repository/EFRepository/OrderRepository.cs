@@ -37,12 +37,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return order;
         }
-        public Order GetLast()
-        {
-            Order order = _context.Orders.ToList<Order>().Last<Order>();
 
-            return order;
-        }
         public async Task<Order> GetById(Guid id)
         {
             Order order = await _context.Orders.FindAsync(id);

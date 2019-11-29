@@ -37,7 +37,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Post")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<BaseResponseModel> Post([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Create(printingEdition);
@@ -46,7 +46,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Update")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<BaseResponseModel> Update([FromBody]PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = await _service.Update(newPrintingEdition);
@@ -55,7 +55,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Delete")]
-        [Authorize]
+        [Authorize(Roles = "ADMIN")]
         public async Task<BaseResponseModel> Delete([FromBody]PrintingEditionModel printingEdition)
         {
             BaseResponseModel report = await _service.Delete(printingEdition.Id);

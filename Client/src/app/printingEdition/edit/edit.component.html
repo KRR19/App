@@ -13,7 +13,7 @@
   </button>
 </div>
 
-<div class="form-control" *ngIf="AddAuthorForm" ngNativeValidate>
+<div class="form-control" *ngIf="AddAuthorForm">
   <input id="authorName" [(ngModel)]="AuthorName" type="text">
   <label>Date of birth:</label><input [(ngModel)]="authorBirthDay" [value]="authorBirthDay" class="DatePicker"
                                       id="authorBirthDay" type="date">
