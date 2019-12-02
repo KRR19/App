@@ -14,6 +14,7 @@ import {
 import {CartBoardComponent} from './cart-board/cart-board.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {CartRoutingModule} from './cart-routing.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -25,14 +26,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
   declarations: [CartBoardComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '', children: [
-          {path: '', redirectTo: '/cart/cartBoard', pathMatch: 'full'},
-          {path: 'cartBoard', component: CartBoardComponent}
-        ]
-      }
-    ]),
+    CartRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,

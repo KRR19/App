@@ -9,6 +9,7 @@ import {SinginComponent} from './singin/singin.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {AuthRoutingModule} from './auth-routing.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -20,16 +21,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
   declarations: [SingupComponent, SinginComponent, ForgotPasswordComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '', children: [
-          {path: '', redirectTo: '/auth/SingIn', pathMatch: 'full'},
-          {path: 'SingIn', component: SinginComponent},
-          {path: 'SingUp', component: SingupComponent},
-          {path: 'ForgotPassword', component: ForgotPasswordComponent}
-        ]
-      }
-    ]),
+    AuthRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,

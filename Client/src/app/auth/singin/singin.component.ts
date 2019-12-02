@@ -12,11 +12,11 @@ import {SinginModel} from '../../shared/models/singin.model';
   styleUrls: ['./singin.component.scss']
 })
 export class SinginComponent implements OnInit {
-  form: FormGroup;
-  success: boolean;
-  message: string[];
+  private form: FormGroup;
+  private success: boolean;
+  private message: string[];
 
-  constructor(private  auth: AuthService, private  router: Router, private header: HeaderComponent) {
+  constructor(private auth: AuthService, private router: Router, private header: HeaderComponent) {
   }
 
   ngOnInit() {
@@ -32,9 +32,9 @@ export class SinginComponent implements OnInit {
     this.success = !response.isValid;
     this.message = response.message;
 
+    this.header.MenuLayout();
     if (response.isValid) {
-      this.header.ngOnInit();
-      this.router.navigate(['']);
+      this.router.navigate(['']).then(() => window.location.reload());
     }
   }
 }

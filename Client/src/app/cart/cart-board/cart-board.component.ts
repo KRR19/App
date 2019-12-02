@@ -45,12 +45,13 @@ export class CartBoardComponent implements OnInit {
     for (let i = 0; i < this.cart[this.userIndex].printingEdition.length; i++) {
       if (this.cart[this.userIndex].printingEdition[i].printingEditionId === printingEditionId) {
         this.cart[this.userIndex].printingEdition[i].printingEditionCount++;
-        this.header.CartCount++;
+        this.header.cartCount++;
       }
     }
     const cartJson: string = JSON.stringify(this.cart);
     localStorage.setItem('Cart', cartJson);
-    this.ngOnInit();
+    this.TotalCalc();
+    this.cartService.GetCartCount();
   }
 
   CountDecrement(printingEditionId: string) {
@@ -61,21 +62,24 @@ export class CartBoardComponent implements OnInit {
         if (this.cart[this.userIndex].printingEdition[i].printingEditionCount < 0) {
           this.cart[this.userIndex].printingEdition[i].printingEditionCount = 0;
         } else {
-          this.header.CartCount--;
+          this.header.cartCount--;
         }
       }
     }
     const cartJson: string = JSON.stringify(this.cart);
     localStorage.setItem('Cart', cartJson);
-    this.ngOnInit();
+    this.TotalCalc();
+    this.cartService.GetCartCount();
   }
 
   DeleteItem(printingEditionId: string) {
     this.cart[this.userIndex].printingEdition = this.cart[this.userIndex].printingEdition.filter(item => item.printingEditionId !== printingEditionId);
     const cartJson: string = JSON.stringify(this.cart);
     localStorage.setItem('Cart', cartJson);
-    this.header.GetCartCount();
-    this.ngOnInit();
+    this.cartService.GetCartCount();
+    this.dataSource = new MatTableDataSource<CartItem>(this.cart[this.userIndex].printingEdition);
+    this.TotalCalc();
+    this.cartService.GetCartCount();
   }
 
   TotalCalc() {
@@ -136,7 +140,7 @@ export class CartBoardComponent implements OnInit {
       token: (token: any) => {
         const payment: PaymentModel = {id: token.id, email: token.email};
         this.CreateOrder(payment);
-        this.header.CartCount = 0;
+        this.header.cartCount = 0;
         localStorage.removeItem('Cart');
         this.router.navigate(['']).then(() => this.header.reload());
       }

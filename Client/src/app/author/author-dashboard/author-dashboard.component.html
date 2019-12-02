@@ -7,25 +7,25 @@
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" class="table">
     <ng-container matColumnDef="Name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <th mat-authService-cell *matHeaderCellDef>Name</th>
       <td mat-cell *matCellDef="let element">
         <a routerLink="../../author/:id{{element.id}}">  {{element.name}}</a>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="DateBirth">
-      <th mat-header-cell *matHeaderCellDef>Date of birth</th>
+      <th mat-authService-cell *matHeaderCellDef>Date of birth</th>
       <td mat-cell
           *matCellDef="let element"> {{element.dateBirth | date}} </td>
     </ng-container>
 
     <ng-container matColumnDef="DateDeath">
-      <th mat-header-cell *matHeaderCellDef>Date of Death</th>
+      <th mat-authService-cell *matHeaderCellDef>Date of Death</th>
       <td mat-cell
           *matCellDef="let element"> {{element.dateDeath | date}} </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-authService-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>

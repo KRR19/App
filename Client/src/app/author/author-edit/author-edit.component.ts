@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthorModel} from '../../shared/models/author.model';
 import {AuthorService} from '../../services/author.service';
 import {HeaderComponent} from '../../shared/header/header.component';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-author-edit',
@@ -13,20 +14,20 @@ export class AuthorEditComponent implements OnInit {
   private Author: AuthorModel = {};
   private isEdit = false;
   checkMSG: string;
-  constructor(private route: ActivatedRoute, private router: Router, private authorService: AuthorService, private header: HeaderComponent) {
+  constructor(private route: ActivatedRoute, private router: Router, private authorService: AuthorService, private header: HeaderComponent, private authService: AuthService) {
   }
 
   async ngOnInit() {
     let id: string;
 
-    if (!this.header.isAdmin) {
+    if (!this.authService.isAdmin) {
       await this.router.navigate(['']);
     }
     this.Author.name = '';
     this.Author.dateBirth = '';
     this.Author.dateDeath = '';
     this.route.params.subscribe(params => id = params.id.slice(3));
-    if (id !== '') {
+    if (id) {
       this.isEdit = true;
       this.Author =  await this.authorService.GetById(id);
       this.Author.dateBirth = this.Author.dateBirth.slice(0, -9);
@@ -42,9 +43,7 @@ export class AuthorEditComponent implements OnInit {
   async EditAuthor() {
     if (this.AuthorCheck()) {
       await this.authorService.EditAuthor(this.Author).then(() => {
-        this.router.navigate(['/author']).then(() => {
-          this.ngOnInit();
-        });
+        this.router.navigate(['/author']);
       });
     }
   }
@@ -55,12 +54,14 @@ export class AuthorEditComponent implements OnInit {
 
   AuthorCheck(): boolean {
     this.Author.name = this.Author.name.trim();
-    if (this.Author.name === '' || !this.Author.name) {
+    if (!this.Author.name) {
       this.checkMSG = 'Please enter a valid author name!';
       return false;
     }
+    const dateBirth = new Date(this.Author.dateBirth)
+    const dateDeath = new Date(this.Author.dateDeath);
 
-    if ( new Date(this.Author.dateDeath) < new Date(this.Author.dateBirth)) {
+    if (dateDeath < dateBirth) {
       this.checkMSG = 'Please check the date of birth and date of death of the author!';
       return false;
     }

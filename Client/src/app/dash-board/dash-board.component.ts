@@ -3,6 +3,7 @@ import {PrintingEditionService} from '../services/printingEdition.service';
 import {PrintingEditionModel} from '../shared/models/printing-edition.model';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
+import {CartService} from '../services/cart.service';
 
 @Component({
   selector: 'app-dash-board',
@@ -16,22 +17,22 @@ export class DashBoardComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  constructor(private printingEditionService: PrintingEditionService, private router: Router) {
+  constructor(private printingEditionService: PrintingEditionService, private router: Router, private cartService: CartService) {
   }
 
-  async ngOnInit() {
+  public async ngOnInit() {
     this.printingEdition = await this.printingEditionService.GetAll();
     this.dataSource = new MatTableDataSource<PrintingEditionModel>(this.printingEdition);
     this.dataSource.paginator = this.paginator;
   }
 
   public OpenPrintingEdition(id: string) {
-    const adress: string = 'printingEdition/:id' + id;
+    const adress: string = 'printing-edition/:id' + id;
     this.router.navigate([adress]);
   }
 
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
-  }
+  };
 
 }

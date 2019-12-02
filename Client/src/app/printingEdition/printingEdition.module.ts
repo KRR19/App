@@ -18,6 +18,7 @@ import {PrintingEditionComponent} from './printing-edition-page/printing-edition
 import {EditComponent} from './edit/edit.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {PrintingEditionRoutingModule} from './printing-edition-routing.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -29,16 +30,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
   declarations: [CreateComponent, PrintingEditionComponent, EditComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '', children: [
-          {path: '', redirectTo: '/printingEdition/create', pathMatch: 'full'},
-          {path: 'create', component: CreateComponent},
-          {path: ':id', component: PrintingEditionComponent},
-          {path: 'edit/:id', component: EditComponent}
-        ]
-      }
-    ]),
+    PrintingEditionRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,

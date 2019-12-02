@@ -6,6 +6,8 @@ import {LogInResponceModel} from '../shared/models/logIn-responce.model';
 import {environment} from '../../environments/environment';
 import {ResetPasswordModel} from '../shared/models/reset-password.model';
 import {SinginModel} from '../shared/models/singin.model';
+import * as jwt_decode from 'jwt-decode';
+import {Subject} from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -15,19 +17,31 @@ export class AuthService {
   private ActionSingIn = 'SingIn';
   private ActionRegister = 'Register';
   private ActionForgotPass = 'ForgotPassword';
+  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}`;
+
   private token = '';
+  public isAuth: boolean;
+  public isAdmin: boolean;
+  public user: string;
 
   constructor(private  http: HttpClient) {
+    const token: string = localStorage.getItem('accessToken');
+    if (token) {
+      this.isAuth = true;
+      this.user = localStorage.getItem('User');
+      const jwtDecode = jwt_decode(token);
+      this.isAdmin = jwtDecode['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'ADMIN';
+    }
   }
 
   public async SingUp(user: UserModel): Promise<ResponseModel> {
-    const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionRegister}`;
+    const urlPath = `${this.serverUrl}/${this.ActionRegister}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;
   }
 
   public async SingIn(user: SinginModel): Promise<LogInResponceModel> {
-    const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionSingIn}`;
+    const urlPath = `${this.serverUrl}/${this.ActionSingIn}`;
     const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user).toPromise();
 
     if (response.isValid) {
@@ -36,7 +50,7 @@ export class AuthService {
     return response;
   }
 
-  logout() {
+  public logout() {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('Role');
@@ -44,7 +58,7 @@ export class AuthService {
   }
 
   public async forgotPassword(user: ResetPasswordModel): Promise<ResponseModel> {
-    const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionForgotPass}`;
+    const urlPath = `${this.serverUrl}/${this.ActionForgotPass}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;
   }
@@ -55,7 +69,7 @@ export class AuthService {
     localStorage.setItem('User', response.user);
   }
 
-  isAuthenticated(): boolean {
+  public isAuthenticated(): boolean {
     return !!this.token;
   }
 }

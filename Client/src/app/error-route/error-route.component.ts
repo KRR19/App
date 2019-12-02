@@ -5,10 +5,5 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './error-route.component.html',
   styleUrls: ['./error-route.component.scss']
 })
-export class ErrorRouteComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
+export class ErrorRouteComponent {
 }

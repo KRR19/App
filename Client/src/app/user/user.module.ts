@@ -15,6 +15,7 @@ import {
 import {UsersService} from '../services/users.service';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {UserRoutingModule} from './user-routing.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -26,14 +27,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
   declarations: [UsersDashboardComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild([
-      {
-        path: '', children: [
-          {path: '', redirectTo: '/user/dashboard', pathMatch: 'full'},
-          {path: 'dashboard', component: UsersDashboardComponent}
-        ]
-      }
-    ]),
+    UserRoutingModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormFieldModule,

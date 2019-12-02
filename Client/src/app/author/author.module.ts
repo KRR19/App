@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { AuthorDashboardComponent } from './author-dashboard/author-dashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.modules';
-import {RouterModule} from '@angular/router';
 import {AuthorService} from '../services/author.service';
 import {MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatPaginatorModule, MatTableModule} from '@angular/material';
 import { AuthorEditComponent } from './author-edit/author-edit.component';
 import { MatInputModule } from '@angular/material';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
+import {AuthorRoutingModule} from './author-routing.module';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -24,11 +24,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    RouterModule.forChild([
-      {path: '', redirectTo: '/author/author-dashboard', pathMatch: 'full'},
-      {path: 'author-dashboard', component: AuthorDashboardComponent},
-      {path: ':id', component: AuthorEditComponent}
-    ]),
+    AuthorRoutingModule,
     MatTableModule,
     MatDatepickerModule,
     MatFormFieldModule,

@@ -3,28 +3,25 @@
   <ul>
     <li><a class="Home" (click)="router.navigate([''])">HOME<sup></sup></a></li>
     <li routerLinkActive="active">
-      <a *ngIf="Auth && isAdmin" [routerLink]="['/printingEdition', 'create']">Add<sup></sup></a>
+      <a *ngIf="isAuth && isAdmin" [routerLink]="['/printing-edition', 'create']">Add<sup></sup></a>
     </li>
     <li routerLinkActive="active">
-      <a *ngIf="Auth && isAdmin" [routerLink]="['/author', 'author-dashboard']">Authors<sup></sup></a>
+      <a *ngIf="isAuth && isAdmin" [routerLink]="['/author', 'author-dashboard']">Authors<sup></sup></a>
     </li>
     <li routerLinkActive="active">
-      <a *ngIf="Auth && isAdmin" [routerLink]="['/user', 'dashboard']">Users<sup></sup></a>
+      <a *ngIf="isAuth && isAdmin" [routerLink]="['/user', 'dashboard']">Users<sup></sup></a>
     </li>
     <li routerLinkActive="active">
-      <a *ngIf="!Auth" [routerLink]="['/auth', 'SingIn']">LogIn<sup></sup></a>
+      <a *ngIf="!isAuth" [routerLink]="['/auth', 'SingIn']">LogIn<sup></sup></a>
     </li>
-    <li *ngIf="!Auth" routerLinkActive="active">
+    <li *ngIf="!isAuth" routerLinkActive="active">
       <a [routerLink]="['/auth', 'SingUp']">Registration<sup></sup></a>
     </li>
     <li>
-      <a *ngIf="Auth && CartCount > 0" [routerLink]="['/cart', 'cartBoard']">Cart<sup>{{CartCount}}</sup></a>
+      <a *ngIf="isAuth && cartCount > 0" [routerLink]="['/cart', 'cartBoard']">Cart<sup>{{cartCount}}</sup></a>
     <li>
-      <a href="#" *ngIf="Auth" (click)="logout()">LogOut<sup></sup></a>
+      <a href="#" *ngIf="isAuth" (click)="logout()">LogOut<sup></sup></a>
     </li>
   </ul>
 </nav>
 
-<div class="container">
-  <router-outlet></router-outlet>
-</div>

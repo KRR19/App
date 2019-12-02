@@ -12,14 +12,9 @@ export class AuthorService {
   private ActionGet = 'Get';
   private ActionDelete = 'Delete';
   private ActionUpdate = 'Update';
+  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}`;
 
   constructor(private  http: HttpClient) {
-  }
-
-  public async AddAuthor(model: AuthorModel) {
-    const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionCreate}`;
-    const result: AuthorModel = await this.http.post<AuthorModel>(urlPath, model).toPromise();
-    return result;
   }
 
   public async GetAll() {
@@ -34,14 +29,20 @@ export class AuthorService {
     return authors;
   }
 
-  public async Delete(model: AuthorModel) {
-    const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionDelete}`;
-    await this.http.post(urlPath, model).toPromise();
+  public async AddAuthor(model: AuthorModel) {
+    const urlPath = `${this.serverUrl}/${this.ActionCreate}`;
+    const result: AuthorModel = await this.http.post<AuthorModel>(urlPath, model).toPromise();
+    return result;
   }
 
-  async EditAuthor(model: AuthorModel) {
+  public async EditAuthor(model: AuthorModel) {
     const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionUpdate}`;
     const result: AuthorModel = await this.http.post<AuthorModel>(urlPath, model).toPromise();
     return result;
+  }
+
+  public async Delete(model: AuthorModel) {
+    const urlPath = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}/${this.ActionDelete}`;
+    await this.http.post(urlPath, model).toPromise();
   }
 }

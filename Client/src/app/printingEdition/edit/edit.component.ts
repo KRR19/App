@@ -5,6 +5,7 @@ import {PrintingEditionService} from '../../services/printingEdition.service';
 import {AuthorModel} from '../../shared/models/author.model';
 import {AuthorService} from '../../services/author.service';
 import {HeaderComponent} from '../../shared/header/header.component';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-edit',
@@ -27,11 +28,11 @@ export class EditComponent implements OnInit {
   private checkMSG: string;
   ErrorMSG: string;
 
-  constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService, private  header: HeaderComponent) {
+  constructor(private router: Router, private route: ActivatedRoute, private printingEditionService: PrintingEditionService, private authorService: AuthorService, private  authService: AuthService) {
   }
 
   async ngOnInit() {
-    if (!this.header.isAdmin) {
+    if (!this.authService.isAdmin) {
       await this.router.navigate(['']);
     }
     this.AddAuthorForm = false;

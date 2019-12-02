@@ -30,12 +30,12 @@ export class AuthorDashboardComponent implements OnInit {
          this.Authors[i].dateBirth = '';
        }
     }
-    this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+    this.Authors = this.Authors.sort((a, b) => (a.name < b.name) ? -1 : 1);
     this.dataSource = new MatTableDataSource<AuthorModel>(this.Authors);
     this.dataSource.paginator = this.paginator;
   }
 
-  public doFilter = (value: string) => {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
+  public doFilter = (filterValue: string) => {
+    this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
   }
 }

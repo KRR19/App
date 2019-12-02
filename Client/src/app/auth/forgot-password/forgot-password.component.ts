@@ -40,6 +40,7 @@ export class ForgotPasswordComponent implements OnInit {
     };
     const response: ResponseModel = await this.auth.forgotPassword(model);
     this.auth.logout();
+
     this.success = response.isValid;
     this.message = response.message;
   }

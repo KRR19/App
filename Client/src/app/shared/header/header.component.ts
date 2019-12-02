@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {CartModel} from '../models/cart.model';
-import * as jwt_decode from 'jwt-decode';
+import {CartService} from '../../services/cart.service';
+
 
 @Component({
   selector: 'app-header',
@@ -10,49 +11,35 @@ import * as jwt_decode from 'jwt-decode';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  Auth: boolean;
-  isAdmin: boolean;
-  CartCount: number;
-  User: string;
 
-  constructor(private  auth: AuthService, private  router: Router) {
+  cartCount: number;
+  user: string;
+  isAuth = false;
+  isAdmin = false;
+
+  constructor(private  auth: AuthService, private  router: Router, private cartService: CartService) {
   }
 
   ngOnInit() {
-    this.isAdmin = localStorage.getItem('Role') === 'ADMIN';
-    this.Auth = false;
-    const token: string = localStorage.getItem('accessToken');
-    if (token ) {
-      this.Auth = true;
-      this.User = localStorage.getItem('User');
-      const jwtDecode = jwt_decode(token);
-      this.isAdmin = jwtDecode['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'ADMIN';
-    }
 
-    this.GetCartCount();
+    this.MenuLayout();
+    this.cartCount = this.cartService.GetCartCount();
+    CartService.cartCountChange.subscribe(() => {
+      this.cartCount = this.cartService.cartCount;
+    });
   }
 
-  GetCartCount() {
-    this.CartCount = 0;
-    const cartJson: string = localStorage.getItem('Cart');
-    if (cartJson === null) {
-      return;
-    }
-    const cart: CartModel[] = JSON.parse(cartJson);
-    for (const item of cart) {
-      if (item.userName === this.User && item.printingEdition !== undefined) {
-        for (const cartItem of item.printingEdition) {
-          this.CartCount += cartItem.printingEditionCount;
-        }
-      }
-    }
+
+
+  public MenuLayout() {
+    this.isAuth = this.auth.isAuth;
+    this.isAdmin = this.auth.isAdmin;
   }
 
   logout() {
     this.auth.logout();
-    this.Auth = false;
-    this.ngOnInit();
-    this.router.navigate(['']);
+    this.auth.isAuth = false;
+    this.router.navigate(['']).then(() => window.location.reload());
   }
 
   public reload() {

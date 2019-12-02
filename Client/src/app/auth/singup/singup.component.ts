@@ -14,7 +14,7 @@ export class SingupComponent implements OnInit {
   form: FormGroup;
   FormVisible: boolean;
   successReg: boolean;
-  unsuccessReg: boolean;
+  registrationError: boolean;
 
   constructor(private auth: AuthService, private router: Router) {
   }
@@ -22,7 +22,7 @@ export class SingupComponent implements OnInit {
   ngOnInit() {
     this.FormVisible = true;
     this.successReg = false;
-    this.unsuccessReg = false;
+    this.registrationError = false;
 
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
@@ -35,7 +35,7 @@ export class SingupComponent implements OnInit {
   public async SingUp() {
     this.FormVisible = true;
     this.successReg = false;
-    this.unsuccessReg = false;
+    this.registrationError = false;
 
     if (this.form.invalid) {
       return;
@@ -49,7 +49,7 @@ export class SingupComponent implements OnInit {
     const result: ResponseModel = await this.auth.SingUp(user);
 
     if (!result.isValid) {
-      this.unsuccessReg = true;
+      this.registrationError = true;
       return;
     }
     this.FormVisible = false;
