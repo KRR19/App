@@ -105,7 +105,7 @@ namespace App.BussinesLogicLayer.Services
             return logInResponse;
         }
 
-        public async Task<BaseResponseModel> Register(UserModel model)
+        public async Task<BaseResponseModel> Register(SingUpModel model)
         {
             User user = new User();
             EmailHelper email = new EmailHelper(_configuration);
@@ -130,6 +130,7 @@ namespace App.BussinesLogicLayer.Services
             await _userManager.AddToRoleAsync(user, role);
 
             resetModel.Email = model.Email;
+            resetModel.Url = model.Url;
             resetModel.Code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string confirmEmailLink = CreateLink(resetModel, "ConfirmEmail");
 

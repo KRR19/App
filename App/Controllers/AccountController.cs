@@ -21,14 +21,14 @@ namespace App.Controllers
         }
 
         [HttpGet("ConfirmEmail")]
-        public async Task<RedirectResult> ConfirmEmail(string email, string code)
+        public async Task<RedirectResult> ConfirmEmail(string email, string code, string url)
         {
             ResetPasswordModel model = new ResetPasswordModel();
             model.Email = email;
             model.Code = code;
             await _accountService.ConfirmEmail(model);
 
-            return Redirect("http://localhost:4200/auth");
+            return Redirect($"http://{url}");
         }
 
         [HttpGet("CreateRole")]
@@ -40,7 +40,7 @@ namespace App.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<BaseResponseModel> Register([FromBody] UserModel model)
+        public async Task<BaseResponseModel> Register([FromBody] SingUpModel model)
         {
             BaseResponseModel result = await _accountService.Register(model);
 
@@ -60,7 +60,7 @@ namespace App.Controllers
         {
             await _accountService.ResetPassword(model);
 
-            return Redirect("http://localhost:4200/auth");
+            return Redirect($"http://{model.Url}");
         }
 
         [HttpPost("SingIn")]

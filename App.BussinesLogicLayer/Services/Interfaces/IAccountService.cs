@@ -7,7 +7,7 @@ namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAccountService
     {
-        public Task<BaseResponseModel> Register(UserModel model);
+        public Task<BaseResponseModel> Register(SingUpModel model);
         public string CreateLink(ResetPasswordModel model, string action);
         public Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model);
         public Task<BaseResponseModel> ResetPassword(ResetPasswordModel model);

@@ -18,7 +18,6 @@ export class AuthService {
   private actionForgotPass = 'ForgotPassword';
   private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.api}/${this.control}`;
 
-  private token = '';
   public isAuth: boolean;
   public isAdmin: boolean;
   public user: string;
@@ -34,6 +33,7 @@ export class AuthService {
   }
 
   public async SingUp(user: UserModel): Promise<ResponseModel> {
+    user.url = window.location.host + '/auth';
     const urlPath = `${this.serverUrl}/${this.actionRegister}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;
@@ -57,6 +57,7 @@ export class AuthService {
   }
 
   public async forgotPassword(user: ResetPasswordModel): Promise<ResponseModel> {
+    user.url = window.location.host + '/auth';
     const urlPath = `${this.serverUrl}/${this.actionForgotPass}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;
