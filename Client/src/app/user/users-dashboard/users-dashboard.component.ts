@@ -11,8 +11,8 @@ import {RolesModel} from '../../shared/models/roles.model';
   styleUrls: ['./users-dashboard.component.scss']
 })
 export class UsersDashboardComponent implements OnInit {
-  private Users: UserInfoModel[] = [];
-  private RoleModel: ChangeRoleModel = {};
+  private users: UserInfoModel[] = [];
+  private roleModel: ChangeRoleModel = {};
   private dataSource = new MatTableDataSource<UserInfoModel>();
   private displayedColumns: string[] = ['Email', 'FirstName', 'SecondName', 'Role'];
   private roles: RolesModel[] = [];
@@ -26,30 +26,30 @@ export class UsersDashboardComponent implements OnInit {
   async ngOnInit() {
     this.edit = false;
     this.roles = await this.userService.GetAllRoles();
-    this.Users = await this.userService.GetAll();
-    this.dataSource = new MatTableDataSource<UserInfoModel>(this.Users);
+    this.users = await this.userService.GetAll();
+    this.dataSource = new MatTableDataSource<UserInfoModel>(this.users);
     this.dataSource.paginator = this.paginator;
   }
 
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
-  };
+  }
 
   Selectuser(element) {
-    this.RoleModel.id = element.id;
-    this.RoleModel.name = element.email;
-    this.RoleModel.role = element.role;
+    this.roleModel.id = element.id;
+    this.roleModel.name = element.email;
+    this.roleModel.role = element.role;
     this.edit = true;
   }
 
   ChangeRole() {
-    this.userService.ChangeRole(this.RoleModel).then(() => {
+    this.userService.ChangeRole(this.roleModel).then(() => {
       window.location.reload();
     });
   }
 
   Cancel() {
-    this.RoleModel = {};
+    this.roleModel = {};
     this.edit = false;
   }
 }

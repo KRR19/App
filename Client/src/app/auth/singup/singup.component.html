@@ -1,4 +1,4 @@
-<form class="card" [formGroup]="form" (ngSubmit)="SingUp()" *ngIf="FormVisible">
+<form class="card" [formGroup]="form" (ngSubmit)="SingUp()" *ngIf="formVisible">
   <h2>Регистрация</h2>
   <div class="form-control" [ngClass]="{invalid:form.get('email').touched && form.get('email').invalid}">
     <label for="email">email:</label>
@@ -30,7 +30,7 @@
 
 </form>
 
-<div class="RegistrationResult" *ngIf="successReg && !FormVisible">
+<div class="RegistrationResult" *ngIf="successReg && !formVisible">
   <h1>You have successfully registered.</h1>
   <h1>Please check your email!</h1>
 </div>

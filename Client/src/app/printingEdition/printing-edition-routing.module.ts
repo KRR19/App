@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {CreateComponent} from './create/create.component';
 import {PrintingEditionComponent} from './printing-edition-page/printing-edition.component';
@@ -24,4 +24,5 @@ const printingEditionRoutes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class PrintingEditionRoutingModule { }
+export class PrintingEditionRoutingModule {
+}

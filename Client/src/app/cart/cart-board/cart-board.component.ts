@@ -18,16 +18,16 @@ export class CartBoardComponent implements OnInit {
   private userIndex: number;
   private displayedColumns: string[] = ['Item', 'Count', 'Price', 'Amount', 'Controls'];
   public dataSource = new MatTableDataSource<CartItem>();
-  public CurrencySelector: string;
-  private TotalPriceUSD: number;
-  private ClientPrice: number;
-  private StripeCheckout: any;
+  public currencySelector: string;
+  private totalPriceUSD: number;
+  private clientPrice: number;
+  public StripeCheckout: any;
 
   constructor(private cartService: CartService, private exchangeService: ExchangeService, private router: Router, private header: HeaderComponent) {
   }
 
   ngOnInit() {
-    this.CurrencySelector = '1';
+    this.currencySelector = '1';
     const user = localStorage.getItem('User');
     const cartJson: string = localStorage.getItem('Cart');
     this.cart = JSON.parse(cartJson);
@@ -83,58 +83,58 @@ export class CartBoardComponent implements OnInit {
   }
 
   TotalCalc() {
-    this.TotalPriceUSD = 0;
+    this.totalPriceUSD = 0;
     for (const item of this.cart[this.userIndex].printingEdition) {
 
       if (item.printingEditionCurrency === 2) {
-        this.TotalPriceUSD += this.exchangeService.EurUsd(item.printingEditionPrice * item.printingEditionCount);
+        this.totalPriceUSD += this.exchangeService.EurUsd(item.printingEditionPrice * item.printingEditionCount);
         continue;
       }
 
       if (item.printingEditionCurrency === 3) {
-        this.TotalPriceUSD += this.exchangeService.UsdUah(item.printingEditionPrice * item.printingEditionCount);
+        this.totalPriceUSD += this.exchangeService.UsdUah(item.printingEditionPrice * item.printingEditionCount);
         continue;
       }
-      this.TotalPriceUSD += item.printingEditionPrice * item.printingEditionCount;
+      this.totalPriceUSD += item.printingEditionPrice * item.printingEditionCount;
     }
-    this.ClientCurrency(this.CurrencySelector);
+    this.ClientCurrency(this.currencySelector);
   }
 
   ClientCurrency(CurrencySelector: string) {
-    this.ClientPrice = this.TotalPriceUSD;
+    this.clientPrice = this.totalPriceUSD;
     if (CurrencySelector === '1') {
-      this.ClientPrice = this.TotalPriceUSD;
-      return this.ClientPrice;
+      this.clientPrice = this.totalPriceUSD;
+      return this.clientPrice;
     }
 
     if (CurrencySelector === '2') {
-      this.ClientPrice = this.exchangeService.UsdEur(this.TotalPriceUSD);
-      return this.ClientPrice;
+      this.clientPrice = this.exchangeService.UsdEur(this.totalPriceUSD);
+      return this.clientPrice;
     }
     if (CurrencySelector === '3') {
-      this.ClientPrice = this.exchangeService.UahUsd(this.TotalPriceUSD);
-      return this.ClientPrice;
+      this.clientPrice = this.exchangeService.UahUsd(this.totalPriceUSD);
+      return this.clientPrice;
     }
   }
 
-  Order() {
-    this.pay(this.ClientPrice, +this.CurrencySelector);
+  private Order() {
+    this.pay(this.clientPrice, +this.currencySelector);
   }
 
-  CreateOrder(payment: PaymentModel) {
+  private CreateOrder(payment: PaymentModel) {
     const order: OrderModel = {printingEdition: [{}]};
     order.userName = this.cart[this.userIndex].userName;
     order.printingEdition = this.cart[this.userIndex].printingEdition;
-    order.currency = +this.CurrencySelector;
-    order.amount = this.ClientPrice;
+    order.currency = +this.currencySelector;
+    order.amount = this.clientPrice;
     order.paymentSource = payment.id;
     order.paymentEmail = payment.email;
     this.cartService.CreateOrder(order);
   }
 
-  pay(amount: number, currencyNumber: number) {
+  private pay(amount: number, currencyNumber: number) {
     const currency = this.cartService.PriceSwitcher(currencyNumber);
-    const handler = (<any>window).StripeCheckout.configure({
+    const handler = (<any> window).StripeCheckout.configure({
       key: 'pk_test_fZaEc3bZ6qQ0J0jiNHNe75Nh00I17tMxpI',
       locale: 'auto',
       token: (token: any) => {

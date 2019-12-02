@@ -27,8 +27,8 @@ export class AuthorDashboardComponent implements OnInit {
         this.Authors[i].dateDeath = '';
       }
       if (this.Authors[i].dateBirth === '0001-01-01T00:00:00') {
-         this.Authors[i].dateBirth = '';
-       }
+        this.Authors[i].dateBirth = '';
+      }
     }
     this.Authors = this.Authors.sort((a, b) => (a.name < b.name) ? -1 : 1);
     this.dataSource = new MatTableDataSource<AuthorModel>(this.Authors);
@@ -37,5 +37,5 @@ export class AuthorDashboardComponent implements OnInit {
 
   public doFilter = (filterValue: string) => {
     this.dataSource.filter = filterValue.trim().toLocaleLowerCase();
-  }
+  };
 }

@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {AuthorDashboardComponent} from './author-dashboard/author-dashboard.component';
 import {AuthorEditComponent} from './author-edit/author-edit.component';
 import {RouterModule, Routes} from '@angular/router';
@@ -18,4 +18,5 @@ const authorRoutes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AuthorRoutingModule { }
+export class AuthorRoutingModule {
+}

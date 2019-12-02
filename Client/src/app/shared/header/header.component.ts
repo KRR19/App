@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
-import {CartModel} from '../models/cart.model';
 import {CartService} from '../../services/cart.service';
-
 
 @Component({
   selector: 'app-header',
@@ -11,7 +9,6 @@ import {CartService} from '../../services/cart.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-
   cartCount: number;
   user: string;
   isAuth = false;
@@ -21,15 +18,12 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.MenuLayout();
     this.cartCount = this.cartService.GetCartCount();
     CartService.cartCountChange.subscribe(() => {
       this.cartCount = this.cartService.cartCount;
     });
   }
-
-
 
   public MenuLayout() {
     this.isAuth = this.auth.isAuth;

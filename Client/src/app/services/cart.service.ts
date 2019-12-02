@@ -16,15 +16,15 @@ export class CartService {
 
   public static cartCountChange = new Subject();
 
-  private Api = 'api';
+  private api = 'api';
   private control = 'Order';
-  private ActionCreate = 'Create';
-  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}`;
+  private actionCreate = 'Create';
+  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.api}/${this.control}`;
 
   public cartCount: number;
 
   public async CreateOrder(model: OrderModel) {
-    const urlPath = `${this.serverUrl}/${this.ActionCreate}`;
+    const urlPath = `${this.serverUrl}/${this.actionCreate}`;
     await this.http.post<OrderModel>(urlPath, model).toPromise();
   }
 

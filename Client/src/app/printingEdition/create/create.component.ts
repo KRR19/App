@@ -12,18 +12,18 @@ import {Router} from '@angular/router';
   styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
-  DefaultValue = '1';
-  form: FormGroup;
-  printingEdition: PrintingEditionModel = {};
-  Currency = this.DefaultValue;
-  Type = this.DefaultValue;
-  Status = this.DefaultValue;
-  AddAuthorForm: boolean;
-  Authors: AuthorModel[];
-  AuthorName: string;
-  authorDeathDay: string;
-  authorBirthDay: string;
-  selectedAuthor: string[];
+  private defaultValue = '1';
+  private form: FormGroup;
+  private printingEdition: PrintingEditionModel = {};
+  private currency = this.defaultValue;
+  private type = this.defaultValue;
+  private status = this.defaultValue;
+  private addAuthorForm: boolean;
+  private authors: AuthorModel[];
+  private authorName: string;
+  private authorDeathDay: string;
+  private authorBirthDay: string;
+  private selectedAuthor: string[];
   private fileData: File;
   private previewUrl: string;
   private AuthorInvalid = false;
@@ -35,7 +35,7 @@ export class CreateComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.AddAuthorForm = false;
+    this.addAuthorForm = false;
     this.form = new FormGroup({
       publishingName: new FormControl(null, [Validators.required]),
       description: new FormControl(null, [Validators.required]),
@@ -44,33 +44,37 @@ export class CreateComponent implements OnInit {
       authorBirthDay: new FormControl(),
       authorDeathDay: new FormControl()
     });
-    this.AuthorName = '';
-    this.Authors = await this.authorService.GetAll();
-    this.Authors = this.Authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+    this.authorName = '';
+    this.authors = await this.authorService.GetAll();
+    this.authors = this.authors.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   }
 
   public Create() {
     this.printingEdition.name = this.form.value.publishingName;
     this.printingEdition.description = this.form.value.description;
     this.printingEdition.price = this.form.value.price;
-    this.printingEdition.currency = Number(this.Currency);
-    this.printingEdition.type = Number(this.Type);
-    this.printingEdition.status = Number(this.Status);
+    this.printingEdition.currency = Number(this.currency);
+    this.printingEdition.type = Number(this.type);
+    this.printingEdition.status = Number(this.status);
     this.printingEdition.authorId = this.selectedAuthor;
     this.printingEdition.image = this.previewUrl;
 
-    this.printingEditionService.Create(this.printingEdition).then(() => {this.router.navigate(['']).then(() => { window.location.reload(); } ); } );
+    this.printingEditionService.Create(this.printingEdition).then(() => {
+      this.router.navigate(['']).then(() => {
+        window.location.reload();
+      });
+    });
   }
 
   public async AddAuthor() {
-    this.AuthorName = this.AuthorName.trim();
-    if (this.AuthorName === '' || !this.AuthorName) {
+    this.authorName = this.authorName.trim();
+    if (this.authorName === '' || !this.authorName) {
       this.checkMSG = 'Please enter a valid author name!';
       return;
     }
 
     const newAuthor: AuthorModel = {
-      name: this.AuthorName
+      name: this.authorName
     };
 
     if ((new Date(this.authorDeathDay) <= new Date(this.authorBirthDay))) {
@@ -80,16 +84,17 @@ export class CreateComponent implements OnInit {
     newAuthor.dateBirth = this.authorBirthDay;
     newAuthor.dateDeath = this.authorDeathDay;
 
-    this.AddAuthorForm = false;
+    this.addAuthorForm = false;
     this.checkMSG = '';
-    this.AuthorName = '';
+    this.authorName = '';
     this.authorBirthDay = null;
     this.authorDeathDay = null;
     this.AuthorInvalid = false;
     const addedAuthor: AuthorModel = await this.authorService.AddAuthor(newAuthor);
-    this.Authors.unshift(addedAuthor);
+    this.authors.unshift(addedAuthor);
   }
-  AddCover(event: Event) {
+
+  private AddCover(event: Event) {
     const UploadImageInput: HTMLInputElement = event.target as HTMLInputElement;
     if (UploadImageInput && UploadImageInput.files.length) {
       this.fileData = UploadImageInput.files[0];

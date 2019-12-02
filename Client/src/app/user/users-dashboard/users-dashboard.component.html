@@ -4,8 +4,8 @@
   </mat-form-field>
 
   <div *ngIf="edit">
-    <h2>{{RoleModel.name}}</h2>
-    <mat-select [(value)]="RoleModel.role">
+    <h2>{{roleModel.name}}</h2>
+    <mat-select [(value)]="roleModel.role">
       <mat-option *ngFor="let role of roles" [value]="role.role">
         {{role.role}}
       </mat-option>
@@ -46,6 +46,6 @@
       <tr mat-authService-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]"  ></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
   </div>
 </div>

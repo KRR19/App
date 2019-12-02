@@ -7,17 +7,16 @@ import {environment} from '../../environments/environment';
 import {ResetPasswordModel} from '../shared/models/reset-password.model';
 import {SinginModel} from '../shared/models/singin.model';
 import * as jwt_decode from 'jwt-decode';
-import {Subject} from 'rxjs';
 
 @Injectable()
 export class AuthService {
 
-  private Api = 'api';
+  private api = 'api';
   private control = 'Account';
-  private ActionSingIn = 'SingIn';
-  private ActionRegister = 'Register';
-  private ActionForgotPass = 'ForgotPassword';
-  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}`;
+  private actionSingIn = 'SingIn';
+  private actionRegister = 'Register';
+  private actionForgotPass = 'ForgotPassword';
+  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.api}/${this.control}`;
 
   private token = '';
   public isAuth: boolean;
@@ -35,13 +34,13 @@ export class AuthService {
   }
 
   public async SingUp(user: UserModel): Promise<ResponseModel> {
-    const urlPath = `${this.serverUrl}/${this.ActionRegister}`;
+    const urlPath = `${this.serverUrl}/${this.actionRegister}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;
   }
 
   public async SingIn(user: SinginModel): Promise<LogInResponceModel> {
-    const urlPath = `${this.serverUrl}/${this.ActionSingIn}`;
+    const urlPath = `${this.serverUrl}/${this.actionSingIn}`;
     const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user).toPromise();
 
     if (response.isValid) {
@@ -58,7 +57,7 @@ export class AuthService {
   }
 
   public async forgotPassword(user: ResetPasswordModel): Promise<ResponseModel> {
-    const urlPath = `${this.serverUrl}/${this.ActionForgotPass}`;
+    const urlPath = `${this.serverUrl}/${this.actionForgotPass}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, user).toPromise();
     return result;
   }
@@ -67,9 +66,5 @@ export class AuthService {
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('User', response.user);
-  }
-
-  public isAuthenticated(): boolean {
-    return !!this.token;
   }
 }

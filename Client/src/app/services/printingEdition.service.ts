@@ -6,44 +6,44 @@ import {environment} from '../../environments/environment';
 
 @Injectable()
 export class PrintingEditionService {
-  private Api = 'api';
+  private api = 'api';
   private control = 'PrintingEdition';
-  private ActionCreate = 'Post';
-  private ActionGetAll = 'GetAll';
-  private ActionGet = 'Get';
-  private ActionDelete = 'Delete';
-  private ActionUpdate = 'Update';
-  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.Api}/${this.control}`;
+  private actionCreate = 'Post';
+  private actionGetAll = 'GetAll';
+  private actionGet = 'Get';
+  private actionDelete = 'Delete';
+  private actionUpdate = 'Update';
+  private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.api}/${this.control}`;
 
   constructor(private  http: HttpClient) {
   }
 
   public async GetAll(): Promise<PrintingEditionModel[]> {
-    const urlPath = `${this.serverUrl}/${this.ActionGetAll}`;
+    const urlPath = `${this.serverUrl}/${this.actionGetAll}`;
     const result: PrintingEditionModel[] = await this.http.get<PrintingEditionModel[]>(urlPath).toPromise();
     return result;
   }
 
   public async Get(id: string): Promise<PrintingEditionModel> {
-    const urlPath = `${this.serverUrl}/${this.ActionGet}/`;
+    const urlPath = `${this.serverUrl}/${this.actionGet}/`;
     const result: PrintingEditionModel = await this.http.get<PrintingEditionModel>(urlPath + id).toPromise();
     return result;
   }
 
   public async Create(model: PrintingEditionModel): Promise<ResponseModel> {
-    const urlPath = `${this.serverUrl}/${this.ActionCreate}`;
+    const urlPath = `${this.serverUrl}/${this.actionCreate}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, model).toPromise();
     return result;
   }
 
   public async Delete(printingEdition: PrintingEditionModel) {
-    const urlPath = `${this.serverUrl}/${this.ActionDelete}`;
+    const urlPath = `${this.serverUrl}/${this.actionDelete}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, printingEdition).toPromise();
     return result;
   }
 
   public async Update(printingEdition: PrintingEditionModel) {
-    const urlPath = `${this.serverUrl}/${this.ActionUpdate}`;
+    const urlPath = `${this.serverUrl}/${this.actionUpdate}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, printingEdition).toPromise();
     return result;
   }

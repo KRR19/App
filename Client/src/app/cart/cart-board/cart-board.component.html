@@ -45,9 +45,9 @@
   </table>
 
   <div class="TotalPrice">
-    <strong class="TotalPrice">Total: {{this.ClientPrice.toFixed(2)}}
-      <mat-select (selectionChange)="ClientCurrency(CurrencySelector)" class="currencySelector"
-                  [(value)]="CurrencySelector">
+    <strong class="TotalPrice">Total: {{this.clientPrice.toFixed(2)}}
+      <mat-select (selectionChange)="ClientCurrency(currencySelector)" class="currencySelector"
+                  [(value)]="currencySelector">
         <mat-option value="1">USD</mat-option>
         <mat-option value="2">EUR</mat-option>
         <mat-option value="3">UAH</mat-option>

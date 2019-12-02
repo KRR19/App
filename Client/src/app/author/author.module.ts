@@ -1,12 +1,12 @@
 import {NgModule, Provider} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AuthorDashboardComponent } from './author-dashboard/author-dashboard.component';
+import {CommonModule} from '@angular/common';
+import {AuthorDashboardComponent} from './author-dashboard/author-dashboard.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.modules';
 import {AuthorService} from '../services/author.service';
 import {MatDatepickerModule, MatFormFieldModule, MatNativeDateModule, MatPaginatorModule, MatTableModule} from '@angular/material';
-import { AuthorEditComponent } from './author-edit/author-edit.component';
-import { MatInputModule } from '@angular/material';
+import {AuthorEditComponent} from './author-edit/author-edit.component';
+import {MatInputModule} from '@angular/material';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
 import {AuthorRoutingModule} from './author-routing.module';
@@ -18,7 +18,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
 };
 
 @NgModule({
-  declarations: [AuthorDashboardComponent, AuthorEditComponent, ],
+  declarations: [AuthorDashboardComponent, AuthorEditComponent,],
   imports: [
     CommonModule,
     FormsModule,
@@ -37,4 +37,5 @@ const INTERCEPTOR_PROVIDER: Provider = {
   exports: [MatPaginatorModule, MatFormFieldModule,
     MatInputModule]
 })
-export class AuthorModule { }
+export class AuthorModule {
+}

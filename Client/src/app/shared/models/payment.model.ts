@@ -1,4 +1,4 @@
 export interface PaymentModel {
-  id: string;
-  email: string;
+  id?: string;
+  email?: string;
 }

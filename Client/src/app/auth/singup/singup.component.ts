@@ -12,7 +12,7 @@ import {ResponseModel} from '../../shared/models/response.model';
 })
 export class SingupComponent implements OnInit {
   form: FormGroup;
-  FormVisible: boolean;
+  formVisible: boolean;
   successReg: boolean;
   registrationError: boolean;
 
@@ -20,7 +20,7 @@ export class SingupComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.FormVisible = true;
+    this.formVisible = true;
     this.successReg = false;
     this.registrationError = false;
 
@@ -33,7 +33,7 @@ export class SingupComponent implements OnInit {
   }
 
   public async SingUp() {
-    this.FormVisible = true;
+    this.formVisible = true;
     this.successReg = false;
     this.registrationError = false;
 
@@ -52,7 +52,7 @@ export class SingupComponent implements OnInit {
       this.registrationError = true;
       return;
     }
-    this.FormVisible = false;
+    this.formVisible = false;
     this.successReg = true;
   }
 }

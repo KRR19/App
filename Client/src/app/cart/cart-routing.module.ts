@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from '@angular/router';
 import {CartBoardComponent} from './cart-board/cart-board.component';
 
-const  cartRoutes: Routes = [
+const cartRoutes: Routes = [
   {
     path: '', children: [
       {path: '', redirectTo: '/cart/cartBoard', pathMatch: 'full'},
@@ -20,4 +20,5 @@ const  cartRoutes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class CartRoutingModule { }
+export class CartRoutingModule {
+}

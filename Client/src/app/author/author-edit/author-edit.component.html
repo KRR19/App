@@ -1,10 +1,10 @@
-<label>Author name:</label>
-<input id="authorName" [(ngModel)]="Author.name" type="text">
-<label>Date of birth:</label><input [(ngModel)]="Author.dateBirth" class="DatePicker" id="authorBirthDay" type="date">
-<label>Date of death:</label><input [(ngModel)]="Author.dateDeath" class="DatePicker" id="authorDeathDay" type="date">
+<label>author name:</label>
+<input id="authorName" [(ngModel)]="author.name" type="text">
+<label>Date of birth:</label><input [(ngModel)]="author.dateBirth" class="DatePicker" id="authorBirthDay" type="date">
+<label>Date of death:</label><input [(ngModel)]="author.dateDeath" class="DatePicker" id="authorDeathDay" type="date">
 <br>
 <strong>{{checkMSG}}</strong>
 <br>
-<button *ngIf="!isEdit" type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()">Add Author</button>
+<button *ngIf="!isEdit" type="submit" class="btn AddAuthor btn-dark" (click)="AddAuthor()">Add author</button>
 <button *ngIf="isEdit" type="submit" class="btn AddAuthor btn-dark" (click)="EditAuthor()">Edit</button>
 <button *ngIf="isEdit" type="submit" class="btn AddAuthor btn-primary" (click)="DeleteAuthor()">Delete</button>

@@ -1,4 +1,4 @@
 export interface ResponseModel {
-  message: string[];
-  isValid: boolean;
+  message?: string[];
+  isValid?: boolean;
 }
