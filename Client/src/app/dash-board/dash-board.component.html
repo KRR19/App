@@ -9,8 +9,8 @@
     <mat-select  class="authorSelecter" [(value)]="selectedAuthor" (selectionChange)="filtred()" multiple placeholder="Authors filter">
       <mat-option *ngFor="let item of allAuthors" [value]="item.id">{{item.name}}</mat-option>
     </mat-select>
-    <input class="minPrice" type="number" (focus)="errorMsg=''" placeholder="min"onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"  [(ngModel)]="minFilterPrice"/>
-    <input class="maxPrice" type="number" (focus)="errorMsg=''" placeholder="max" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57" [(ngModel)]="maxFilterPrice" />
+    <input class="minPrice" type="number" min="0" step="0.01" (focus)="errorMsg=''" placeholder="min"onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57"  [(ngModel)]="minFilterPrice"/>
+    <input class="maxPrice" type="number" min="0" step="0.01" (focus)="errorMsg=''" placeholder="max" onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 46 && event.charCode <= 57" [(ngModel)]="maxFilterPrice" />
     <input type="button"  value="Filter" (click)="filtred()"/>
   </div>
   <strong class="ErrorMsg">{{errorMsg}}</strong>

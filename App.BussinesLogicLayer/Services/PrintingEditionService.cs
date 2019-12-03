@@ -94,10 +94,13 @@ namespace App.BussinesLogicLayer.Services
             List<PrintingEditionModel> printingEditionModels = await GetAll();
             List<PrintingEditionModel> FiltredPrintingEdition = new List<PrintingEditionModel>();
             printingEditionModels = printingEditionModels.Where(w => ((w.Price <= filterModel.maxPrice) && (w.Price >= filterModel.minPrice))).ToList();
-            foreach(var authors in filterModel.AuthorId )
+            FiltredPrintingEdition = printingEditionModels;
+
+            if (filterModel.AuthorId.Count > 0)
             {
-                    FiltredPrintingEdition.AddRange(printingEditionModels.Where(x => x.AuthorId.Any(w => w == authors)));
+                FiltredPrintingEdition = printingEditionModels.Where(x => x.AuthorId.Intersect(filterModel.AuthorId).Any()).ToList();
             }
+
             return FiltredPrintingEdition;
         }
 

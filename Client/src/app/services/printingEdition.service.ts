@@ -38,10 +38,9 @@ export class PrintingEditionService {
     return result;
   }
 
-  public async Filter(model: FilterModel): Promise<PrintingEditionModel> {
-    debugger;
+  public async Filter(model: FilterModel): Promise<PrintingEditionModel[]> {
     const urlPath = `${this.serverUrl}/${this.actionFilter}`;
-    const result: PrintingEditionModel = await this.http.post<PrintingEditionModel>(urlPath, model).toPromise();
+    const result: PrintingEditionModel[] = await this.http.post<PrintingEditionModel[]>(urlPath, model).toPromise();
     return result;
   }
 

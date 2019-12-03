@@ -47,7 +47,8 @@ export class DashBoardComponent implements OnInit {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
 
-  private filtred() {
+  private async filtred() {
+    let data: PrintingEditionModel[] = this.printingEdition;
     let min: number = this.minFilterPrice;
     let max: number = this.maxFilterPrice;
 
@@ -62,18 +63,13 @@ export class DashBoardComponent implements OnInit {
       this.errorMsg = this.priceFilterMsg;
       return;
     }
-
-    if (!this.selectedAuthor) {
-
-      this.filtredModel.authorId.push('all');
-    } else {
-      this.filtredModel.authorId = this.selectedAuthor;
-    }
+    this.filtredModel.authorId = this.selectedAuthor;
 
     this.filtredModel.minPrice = min;
     this.filtredModel.maxPrice = max;
 
-    this.printingEditionService.Filter(this.filtredModel);
+    data = await this.printingEditionService.Filter(this.filtredModel);
+    this.dataSource = new MatTableDataSource<PrintingEditionModel>(data);
 
   }
 
