@@ -96,7 +96,7 @@ namespace App.BussinesLogicLayer.Services
             printingEditionModels = printingEditionModels.Where(w => ((w.Price <= filterModel.maxPrice) && (w.Price >= filterModel.minPrice))).ToList();
             FiltredPrintingEdition = printingEditionModels;
 
-            if (filterModel.AuthorId.Count > 0)
+            if (filterModel.AuthorId != null && filterModel.AuthorId.Count > 0)
             {
                 FiltredPrintingEdition = printingEditionModels.Where(x => x.AuthorId.Intersect(filterModel.AuthorId).Any()).ToList();
             }
