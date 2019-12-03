@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.DataAccessLayer.Repository.EFRepository
 {
@@ -25,10 +26,19 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
         public List<PrintingEdition> GetAll()
         {
-            var printingEdition = _context.PrintingEditions.Where(p => (p.IsRemoved == false));
+            List<PrintingEdition> printingEditions = _context.PrintingEditions.Where(p => (p.IsRemoved == false)).Include(i => i.AuthorInPrintingEditions).ToList();
+            for(int i=0; i < printingEditions.Count; i++)
+            {
+                for(int a = 0; a < printingEditions[i].AuthorInPrintingEditions.Count; a++)
+                {
+                    printingEditions[i].AuthorInPrintingEditions[a].Author = _context.Authors.Where(w => w.Id == printingEditions[i].AuthorInPrintingEditions[a].AuthorId).FirstOrDefault();
+                }
+            }
 
-            return printingEdition.ToList();
+            return printingEditions;
         }
+
+
         public async Task<PrintingEdition> Create(PrintingEdition item)
         {
             await _context.PrintingEditions.AddAsync(item);

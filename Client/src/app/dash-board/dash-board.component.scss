@@ -1,0 +1,13 @@
+.PriceFilter {
+  display: flex;
+  justify-content: right;
+}
+
+.minPrice,
+.maxPrice {
+  width: 100px;
+}
+
+.ErrorMsg {
+  color: red;
+}

@@ -6,13 +6,23 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AlertsModule} from 'angular-alert-module';
 import {HeaderComponent} from './shared/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatFormFieldModule, MatInputModule, MatPaginatorModule, MatSliderModule, MatTableModule} from '@angular/material';
+import {
+  MatFormFieldModule,
+  MatInputModule,
+  MatOptionModule,
+  MatPaginatorModule,
+  MatSelectModule,
+  MatSliderModule,
+  MatTableModule
+} from '@angular/material';
 import {AuthService} from './services/auth.service';
 import {DashBoardComponent} from './dash-board/dash-board.component';
 import {PrintingEditionService} from './services/printingEdition.service';
 import {Interceptor} from './core/interceptor';
 import {ErrorRouteComponent} from './error-route/error-route.component';
 import { MainLayoutComponent } from './shared/main-layout/main-layout.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AuthorService} from './services/author.service';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -39,10 +49,14 @@ const INTERCEPTOR_PROVIDER: Provider = {
     MatInputModule,
     MatFormFieldModule,
     MatPaginatorModule,
-    MatTableModule
+    MatTableModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatOptionModule,
+    MatSelectModule
   ],
 
-  providers: [INTERCEPTOR_PROVIDER, AuthService, PrintingEditionService, HeaderComponent],
+  providers: [INTERCEPTOR_PROVIDER, AuthService, PrintingEditionService, HeaderComponent, AuthorService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -46,13 +46,17 @@ export class PrintingEditionComponent implements OnInit {
     const userName: string = localStorage.getItem('User');
 
     if (cart === null) {
-      cart = [{printingEdition: [{}]}];
-      cart[0].userName = userName;
-      cart[0].printingEdition[0].printingEditionId = this.printingEdition.id;
-      cart[0].printingEdition[0].printingEditionCount = 1;
-      cart[0].printingEdition[0].printingEditionName = this.printingEdition.name;
-      cart[0].printingEdition[0].printingEditionPrice = this.printingEdition.price;
-      cart[0].printingEdition[0].printingEditionCurrency = this.printingEdition.currency;
+      cart = [{printingEdition:[]}]
+      const newCart: CartModel = {printingEdition: []};
+      const printingEdition: CartItem = {};
+      printingEdition.printingEditionId = this.printingEdition.id;
+      printingEdition.printingEditionCount = 1;
+      printingEdition.printingEditionName = this.printingEdition.name;
+      printingEdition.printingEditionPrice = this.printingEdition.price;
+      printingEdition.printingEditionCurrency = this.printingEdition.currency;
+      newCart.userName = userName;
+      newCart.printingEdition.push(printingEdition);
+      cart.push(newCart)
       cartJson = JSON.stringify(cart);
       localStorage.setItem('Cart', cartJson);
       this.cartService.GetCartCount();

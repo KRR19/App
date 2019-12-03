@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ResponseModel} from '../shared/models/response.model';
 import {PrintingEditionModel} from '../shared/models/printing-edition.model';
 import {environment} from '../../environments/environment';
+import {FilterModel} from '../shared/models/filter.model';
 
 @Injectable()
 export class PrintingEditionService {
@@ -13,6 +14,7 @@ export class PrintingEditionService {
   private actionGet = 'Get';
   private actionDelete = 'Delete';
   private actionUpdate = 'Update';
+  private actionFilter = 'Filter';
   private serverUrl = `${environment.protocol}://${environment.host}:${environment.port}/${this.api}/${this.control}`;
 
   constructor(private  http: HttpClient) {
@@ -33,6 +35,13 @@ export class PrintingEditionService {
   public async Create(model: PrintingEditionModel): Promise<ResponseModel> {
     const urlPath = `${this.serverUrl}/${this.actionCreate}`;
     const result: ResponseModel = await this.http.post<ResponseModel>(urlPath, model).toPromise();
+    return result;
+  }
+
+  public async Filter(model: FilterModel): Promise<PrintingEditionModel> {
+    debugger;
+    const urlPath = `${this.serverUrl}/${this.actionFilter}`;
+    const result: PrintingEditionModel = await this.http.post<PrintingEditionModel>(urlPath, model).toPromise();
     return result;
   }
 

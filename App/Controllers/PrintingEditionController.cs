@@ -1,4 +1,5 @@
 ﻿using App.BussinesLogicLayer;
+using App.BussinesLogicLayer.Models;
 using App.BussinesLogicLayer.Models.PrintingEdition;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
@@ -29,11 +30,18 @@ namespace App.Controllers
         }
 
         [HttpGet("GetAll")]
-        public List<PrintingEdition> GetAll()
+        public async Task<List<PrintingEditionModel>> GetAll()
         {
-            List<PrintingEdition> printingEdition = _service.GetAll();
+            List<PrintingEditionModel> printingEdition = await _service.GetAll();
 
             return printingEdition;
+        }
+
+        [HttpPost("Filter")]
+        public async Task<List<PrintingEditionModel>> Filter([FromBody] FilterModel filterModel)
+        {
+            List<PrintingEditionModel> PrintingEditionModels = await _service.Filter(filterModel);
+            return PrintingEditionModels;
         }
 
         [HttpPost("Post")]
@@ -62,5 +70,6 @@ namespace App.Controllers
 
             return report;
         }
+
     }
 }

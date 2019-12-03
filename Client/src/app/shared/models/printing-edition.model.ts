@@ -1,3 +1,5 @@
+import {AuthorModel} from './author.model';
+
 export interface PrintingEditionModel {
   id?: string;
   name?: string;
@@ -7,6 +9,6 @@ export interface PrintingEditionModel {
   currency?: number;
   type?: number;
   authorId?: string[];
-  authorName?: string;
+  authorName?: string[];
   image?: string;
 }
