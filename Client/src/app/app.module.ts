@@ -56,7 +56,7 @@ const INTERCEPTOR_PROVIDER: Provider = {
     MatSelectModule
   ],
 
-  providers: [INTERCEPTOR_PROVIDER, AuthService, PrintingEditionService, HeaderComponent, AuthorService],
+  providers: [ AuthService, PrintingEditionService, HeaderComponent, AuthorService, INTERCEPTOR_PROVIDER],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -7,6 +7,8 @@ import {environment} from '../../environments/environment';
 import {ResetPasswordModel} from '../shared/models/reset-password.model';
 import {SinginModel} from '../shared/models/singin.model';
 import * as jwt_decode from 'jwt-decode';
+import {JwtHelperService} from '@auth0/angular-jwt';
+
 
 @Injectable()
 export class AuthService {
@@ -43,6 +45,10 @@ export class AuthService {
     const urlPath = `${this.serverUrl}/${this.actionSingIn}`;
     const response: LogInResponceModel = await this.http.post<LogInResponceModel>(urlPath, user).toPromise();
 
+
+    const helper = new JwtHelperService()
+    const isExpiredDate = helper.getTokenExpirationDate(response.refreshToken);
+
     if (response.isValid) {
       this.setToken(response);
     }
@@ -67,5 +73,15 @@ export class AuthService {
     localStorage.setItem('accessToken', response.accessToken);
     localStorage.setItem('refreshToken', response.refreshToken);
     localStorage.setItem('User', response.user);
+  }
+
+  isExpired(refreshToken: string) {
+    const helper = new JwtHelperService();
+    const expDate: Date = helper.getTokenExpirationDate(refreshToken);
+    const now: Date = new Date();
+    if (expDate < now) {
+      return false;
+    }
+    return  true;
   }
 }

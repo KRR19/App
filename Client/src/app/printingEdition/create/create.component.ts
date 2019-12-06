@@ -34,7 +34,6 @@ export class CreateComponent implements OnInit {
   }
 
   async ngOnInit() {
-
     this.addAuthorForm = false;
     this.form = new FormGroup({
       publishingName: new FormControl(null, [Validators.required]),
