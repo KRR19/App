@@ -28,6 +28,7 @@ export class CreateComponent implements OnInit {
   private previewUrl: string;
   private AuthorInvalid = false;
   private checkMSG: string;
+  pth: any;
 
   constructor(private printingEditionService: PrintingEditionService, private authorService: AuthorService, private router: Router) {
     this.selectedAuthor = [];

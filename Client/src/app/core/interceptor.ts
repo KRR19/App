@@ -4,9 +4,6 @@ import {catchError} from 'rxjs/operators';
 import {AuthService} from '../services/auth.service';
 
 export class Interceptor implements HttpInterceptor {
-   constructor() {
-   }
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const accessToken: string = localStorage.getItem('accessToken');
     const refreshToken: string = localStorage.getItem('refreshToken');
