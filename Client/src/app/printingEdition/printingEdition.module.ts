@@ -19,6 +19,7 @@ import {EditComponent} from './edit/edit.component';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {Interceptor} from '../core/interceptor';
 import {PrintingEditionRoutingModule} from './printing-edition-routing.module';
+import {AddDialogComponent} from '../add-dialog/add-dialog.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -41,7 +42,8 @@ const INTERCEPTOR_PROVIDER: Provider = {
     MatOptionModule,
     MatSelectModule,
     MatListModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+
   ],
   exports: [RouterModule],
   providers: [INTERCEPTOR_PROVIDER, PrintingEditionService, AuthorService]

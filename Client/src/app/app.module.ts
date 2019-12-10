@@ -7,6 +7,7 @@ import {AlertsModule} from 'angular-alert-module';
 import {HeaderComponent} from './shared/header/header.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
+  MatDialogModule,
   MatFormFieldModule,
   MatInputModule,
   MatOptionModule,
@@ -23,6 +24,7 @@ import {ErrorRouteComponent} from './error-route/error-route.component';
 import { MainLayoutComponent } from './shared/main-layout/main-layout.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {AuthorService} from './services/author.service';
+import { AddDialogComponent } from './add-dialog/add-dialog.component';
 
 const INTERCEPTOR_PROVIDER: Provider = {
   provide: HTTP_INTERCEPTORS,
@@ -36,7 +38,8 @@ const INTERCEPTOR_PROVIDER: Provider = {
     HeaderComponent,
     DashBoardComponent,
     ErrorRouteComponent,
-    MainLayoutComponent
+    MainLayoutComponent,
+    AddDialogComponent
   ],
 
   imports: [
@@ -53,11 +56,13 @@ const INTERCEPTOR_PROVIDER: Provider = {
     ReactiveFormsModule,
     FormsModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDialogModule
   ],
 
   providers: [ AuthService, PrintingEditionService, HeaderComponent, AuthorService, INTERCEPTOR_PROVIDER],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AddDialogComponent]
 })
 export class AppModule {
 }

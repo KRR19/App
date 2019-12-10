@@ -5,6 +5,8 @@ import {PrintingEditionModel} from '../../shared/models/printing-edition.model';
 import {CartItem, CartModel} from '../../shared/models/cart.model';
 import {AuthService} from '../../services/auth.service';
 import {CartService} from '../../services/cart.service';
+import {MatDialog} from '@angular/material';
+import {AddDialogComponent} from '../../add-dialog/add-dialog.component';
 
 @Component({
   selector: 'app-printing-edition-page',
@@ -15,7 +17,7 @@ export class PrintingEditionComponent implements OnInit {
 
   private printingEdition: PrintingEditionModel = {};
 
-  constructor(private route: ActivatedRoute, private router: Router, private  printingEditionService: PrintingEditionService, private authService: AuthService, private  cartService: CartService) {
+  constructor(private route: ActivatedRoute, private router: Router, private  printingEditionService: PrintingEditionService, private authService: AuthService, private  cartService: CartService, private dialog: MatDialog) {
   }
 
   public async ngOnInit() {
@@ -35,7 +37,7 @@ export class PrintingEditionComponent implements OnInit {
   }
 
   private AddCart() {
-
+    this.dialog.open(AddDialogComponent);
     if (!this.authService.isAuth) {
       this.router.navigate(['/auth/SingIn']);
       return;

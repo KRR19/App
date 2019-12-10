@@ -1,0 +1,51 @@
+$size:140px;
+
+
+
+.wrapper{
+  width:$size;
+  height: 180px;
+  display:inline-block;
+  position:relative;
+  margin: 0px;
+  padding: 0px;
+}
+
+.check{
+  width:0;
+  overflow:hidden;
+  display:inline-block;
+  opacity:0;
+  animation:show 1.5s ease-out infinite alternate;
+  -webkit-animation:show 1.5s ease-out infinite alternate;
+  font-size:$size;
+  font-style:italic;
+  position:absolute;
+  color:green;
+  text-align:left;
+  top:-30px;
+  left:0;
+}
+
+@keyframes show{
+  0%{
+    width:0;
+    opacity:0;
+  }
+  100%{
+    width:$size;
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes show{
+  0%{
+    width:0;
+    opacity:0;
+  }
+  100%{
+    width:$size;
+    opacity:1;
+  }
+}
+
