@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.BussinesLogicLayer\App.BussinesLogicLayer.csproj" />
+    <ProjectReference Include="..\App.BussinesLogicLayer\App.BussinesLogic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

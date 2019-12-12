@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{469D46DF-D6AF-4508-B2D8-05CCC789A16C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.API", "App\App.API.csproj", "{469D46DF-D6AF-4508-B2D8-05CCC789A16C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.BussinesLogicLayer", "App.BussinesLogicLayer\App.BussinesLogicLayer.csproj", "{7C4EC3DE-365A-4B4B-969D-0078BFBA6C0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.BussinesLogic", "App.BussinesLogicLayer\App.BussinesLogic.csproj", "{7C4EC3DE-365A-4B4B-969D-0078BFBA6C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.DataAccessLayer", "App.DataAccessLayer\App.DataAccessLayer.csproj", "{714FE86E-AEC1-40A1-B90B-36CF230A9F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.DataAccess", "App.DataAccessLayer\App.DataAccess.csproj", "{714FE86E-AEC1-40A1-B90B-36CF230A9F44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
