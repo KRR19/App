@@ -17,7 +17,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context = context;
         }
 
-        public async Task<Author> GetById(Guid id)
+        public async Task<Author> GetByIdAsync(Guid id)
         {
             Author author = await _context.Authors.FindAsync(id);
 
@@ -31,7 +31,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return author;
         }
 
-        public async Task<Author> Create(Author author)
+        public async Task<Author> CreateAsync(Author author)
         {
             EntityEntry<Author> createdAuthor = await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
@@ -39,7 +39,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return createdAuthor.Entity;
         }
 
-        public async Task<Author> Update(Author item)
+        public async Task<Author> UpdateAsync(Author item)
         {
             _context.Authors.Update(item);
             await _context.SaveChangesAsync();
@@ -47,7 +47,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async Task<bool> Delete(Author item)
+        public async Task<bool> DeleteAsync(Author item)
         {
             bool result;
             _context.Authors.Update(item);

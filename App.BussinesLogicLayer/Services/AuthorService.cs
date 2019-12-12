@@ -17,10 +17,10 @@ namespace App.BussinesLogicLayer.Services
             _authorRepository = AuthorRepository;
         }
 
-        public async Task<AuthorModel> GetById(Guid id)
+        public async Task<AuthorModel> GetByIdAsync(Guid id)
         {
             AuthorModel authorModel = new AuthorModel();
-            Author author = await _authorRepository.GetById(id);
+            Author author = await _authorRepository.GetByIdAsync(id);
             authorModel.Id = author.Id;
             authorModel.Name = author.Name;
             authorModel.DateBirth = author.DateBirth;
@@ -37,7 +37,7 @@ namespace App.BussinesLogicLayer.Services
 
         }
 
-        public async Task<Author> Create(AuthorModel newAuthor)
+        public async Task<Author> CreateAsync(AuthorModel newAuthor)
         {
             BaseResponseModel report = ValidationAuthor(newAuthor);
             Author author = new Author();
@@ -50,7 +50,7 @@ namespace App.BussinesLogicLayer.Services
                 author.CreationDate = DateTime.Now;
                 author.IsRemoved = false;
 
-                author = await _authorRepository.Create(author);
+                author = await _authorRepository.CreateAsync(author);
             }
 
             return author;
@@ -72,16 +72,16 @@ namespace App.BussinesLogicLayer.Services
                     IsRemoved = false
                 };
 
-                _authorRepository.Update(author);
+                _authorRepository.UpdateAsync(author);
             }
 
             return UpdateAuthor;
         }
 
-        public async Task<BaseResponseModel> Delete(Guid id)
+        public async Task<BaseResponseModel> DeleteAsync(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
-            Author author = await _authorRepository.GetById(id);
+            Author author = await _authorRepository.GetByIdAsync(id);
 
             if (author == null)
             {
@@ -89,7 +89,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
             author.IsRemoved = true;
-            bool isDelete = await _authorRepository.Delete(author);
+            bool isDelete = await _authorRepository.DeleteAsync(author);
 
             if (isDelete)
             {

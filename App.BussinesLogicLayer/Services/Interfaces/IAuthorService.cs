@@ -8,10 +8,10 @@ namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAuthorService
     {
-        public Task<Author> Create(AuthorModel newAuthor);
-        public Task<BaseResponseModel> Delete(Guid id);
+        public Task<Author> CreateAsync(AuthorModel newAuthor);
+        public Task<BaseResponseModel> DeleteAsync(Guid id);
         public AuthorModel Update(AuthorModel UpdateAuthor);
-        public Task<AuthorModel> GetById(Guid id);
+        public Task<AuthorModel> GetByIdAsync(Guid id);
         public List<Author> GetAll();
     }
 }

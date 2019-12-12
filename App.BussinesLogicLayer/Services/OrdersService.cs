@@ -39,7 +39,7 @@ namespace App.BussinesLogicLayer.Services
             return order;
         }
 
-        public async Task<BaseResponseModel> Create(OrderModel orderModel)
+        public async Task<BaseResponseModel> CreateAsync(OrderModel orderModel)
         {
             BaseResponseModel report = new BaseResponseModel();
             PaymentModel paymentModel = new PaymentModel();
@@ -66,7 +66,7 @@ namespace App.BussinesLogicLayer.Services
                 OrderItem orderItem = new OrderItem();
                 orderItem.CreationDate = DateTime.Now;
                 orderItem.IsRemoved = false;
-                orderItem.PrintingEdition = await _printingEditionsRepository.GetById(item.PrintingEditionId);
+                orderItem.PrintingEdition = await _printingEditionsRepository.GetByIdAsync(item.PrintingEditionId);
                 orderItem.Count = item.PrintingEditionCount;
                 orderItem.Currency = item.PrintingEditionCurrency;
                 orderItem.Amount = item.PrintingEditionPrice * item.PrintingEditionCount;
@@ -75,12 +75,12 @@ namespace App.BussinesLogicLayer.Services
                 order.OrderItem.Add(orderItem);
             }
 
-            await _orderRepository.Create(order);
+            await _orderRepository.CreateAsync(order);
 
             return report;
         }
 
-        public async Task<BaseResponseModel> Update(OrderModel orderModel)
+        public async Task<BaseResponseModel> UpdateAsync(OrderModel orderModel)
         {
             BaseResponseModel report = new BaseResponseModel();
             Order order = new Order();
@@ -90,27 +90,27 @@ namespace App.BussinesLogicLayer.Services
             order.IsRemoved = false;
             order.Description = orderModel.Description;
             order.User = await _userManager.FindByEmailAsync(orderModel.UserName.ToString());
-            order = await _orderRepository.Update(order);
+            order = await _orderRepository.UpdateAsync(order);
 
             orderItem.CreationDate = DateTime.Now;
             orderItem.IsRemoved = false;
-            orderItem.PrintingEdition = await _printingEditionsRepository.GetById(orderModel.PrintingEdition.Last().PrintingEditionId);
+            orderItem.PrintingEdition = await _printingEditionsRepository.GetByIdAsync(orderModel.PrintingEdition.Last().PrintingEditionId);
             orderItem.Count = orderModel.PrintingEdition.Last().PrintingEditionCount;
             orderItem.Currency = orderModel.Currency;
             orderItem.Amount = orderItem.PrintingEdition.Price * orderItem.Count;
             orderItem.Order = order;
-            await _orderItemRepository.Update(orderItem);
+            await _orderItemRepository.UpdateAsync(orderItem);
 
             return report;
         }
 
-        public async Task<BaseResponseModel> Delete(Guid id)
+        public async Task<BaseResponseModel> DeleteAsync(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
-            Order order = await _orderRepository.GetById(id);
+            Order order = await _orderRepository.GetByIdAsync(id);
 
             order.IsRemoved = true;
-            bool result = await _orderRepository.Delete(order);
+            bool result = await _orderRepository.DeleteAsync(order);
 
             if (result)
             {

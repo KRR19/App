@@ -18,9 +18,9 @@ namespace App.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<List<UserInfoModel>> GetAll()
+        public async Task<List<UserInfoModel>> GetAllAsync()
         {
-            List<UserInfoModel> users = await _userService.GetAll();
+            List<UserInfoModel> users = await _userService.GetAllAsync();
 
             return users;
         }
@@ -28,16 +28,16 @@ namespace App.Controllers
         [HttpGet("GetAllRoles")]
         public List<RolesModel> GetAllRoles()
         {
-            List<RolesModel> users = _userService.GetAllRoles();
+            List<RolesModel> users = _userService.GetAllRolesAsync();
 
             return users;
         }
 
         [HttpPost("ChangeRole")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
+        public async Task<RolesModel> ChangeRoleAsync(RolesModel rolesModel)
         {
-            RolesModel user = await _userService.ChangeRole(rolesModel);
+            RolesModel user = await _userService.ChangeRoleAsync(rolesModel);
 
             return user;
         }

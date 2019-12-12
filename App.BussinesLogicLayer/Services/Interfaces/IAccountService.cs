@@ -7,12 +7,12 @@ namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IAccountService
     {
-        public Task<BaseResponseModel> Register(SingUpModel model);
+        public Task<BaseResponseModel> RegisterAsync(SingUpModel model);
         public string CreateLink(ResetPasswordModel model, string action);
-        public Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model);
-        public Task<BaseResponseModel> ResetPassword(ResetPasswordModel model);
-        public Task<IdentityResult> CreateRole(string Role);
-        public Task<BaseResponseModel> ConfirmEmail(ResetPasswordModel model);
-        public Task<LogInResponseModel> Singin(SingInModel model);
+        public Task<BaseResponseModel> ForgotPasswordAsync(ResetPasswordModel model);
+        public Task<BaseResponseModel> ResetPasswordAsync(ResetPasswordModel model);
+        public Task<IdentityResult> CreateRoleAsync(string Role);
+        public Task<BaseResponseModel> ConfirmEmailAsync(ResetPasswordModel model);
+        public Task<LogInResponseModel> SingInAsync(SingInModel model);
     }
 }

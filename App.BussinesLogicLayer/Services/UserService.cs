@@ -25,9 +25,9 @@ namespace App.BussinesLogicLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<UserModel> GetById(Guid id)
+        public async Task<UserModel> GetByIdAsync(Guid id)
         {
-            User user = await userRepository.Read(id);
+            User user = await userRepository.ReadAsync(id);
             UserModel userModel = new UserModel
             {
                 Email = user.Email,
@@ -38,7 +38,7 @@ namespace App.BussinesLogicLayer.Services
             return userModel;
         }
 
-        public async Task<List<UserInfoModel>> GetAll()
+        public async Task<List<UserInfoModel>> GetAllAsync()
         {
             List<User> users = _userManager.Users.ToList();
             List<UserInfoModel> userInfoModels = new List<UserInfoModel>();
@@ -60,7 +60,7 @@ namespace App.BussinesLogicLayer.Services
             return userInfoModels;
         }
 
-        public List<RolesModel> GetAllRoles()
+        public List<RolesModel> GetAllRolesAsync()
         {
             List<IdentityRole> identityRoles = _roleManager.Roles.ToList();
             List<RolesModel> roles = new List<RolesModel>();
@@ -75,7 +75,7 @@ namespace App.BussinesLogicLayer.Services
             return roles;
         }
 
-        public async Task<BaseResponseModel> Create(UserModel userModel)
+        public async Task<BaseResponseModel> CreateAsync(UserModel userModel)
         {
             BaseResponseModel report = new BaseResponseModel();
 
@@ -86,7 +86,7 @@ namespace App.BussinesLogicLayer.Services
                 Email = userModel.Email,
                 UserName = userModel.Email,
             };
-            await userRepository.Create(user);
+            await userRepository.CreateAsync(user);
 
             return report;
         }
@@ -101,11 +101,11 @@ namespace App.BussinesLogicLayer.Services
                 Email = userModel.Email,
                 UserName = userModel.Email,
             };
-            userRepository.Update(user);
+            userRepository.UpdateAsync(user);
 
             return report;
         }
-        public async Task<BaseResponseModel> Delete(Guid id)
+        public async Task<BaseResponseModel> DeleteAsync(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
             User user = await _userManager.FindByIdAsync(id.ToString());
@@ -121,7 +121,7 @@ namespace App.BussinesLogicLayer.Services
             return report;
         }
 
-        public async Task<RolesModel> ChangeRole(RolesModel rolesModel)
+        public async Task<RolesModel> ChangeRoleAsync(RolesModel rolesModel)
         {
             User user = _userManager.Users.Where(w => w.Id == rolesModel.Id.ToString()).FirstOrDefault();
             user.EmailConfirmed = true;

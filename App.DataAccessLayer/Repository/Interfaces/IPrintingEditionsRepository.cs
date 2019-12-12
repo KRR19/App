@@ -8,8 +8,8 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IPrintingEditionsRepository : IBaseRepository<PrintingEdition>
     {
-        public Task<PrintingEdition> GetById(Guid id);
+        public Task<PrintingEdition> GetByIdAsync(Guid id);
         public List<PrintingEdition> GetAll();
-        public Task<string> Delete(PrintingEdition item);
+        public Task<string> DeleteAsync(PrintingEdition item);
     }
 }

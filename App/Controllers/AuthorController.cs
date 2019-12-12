@@ -30,18 +30,18 @@ namespace App.Controllers
         }
 
         [HttpGet("Get/{Id}")]
-        public async Task<AuthorModel> Get(Guid Id)
+        public async Task<AuthorModel> GetAsync(Guid Id)
         {
-            AuthorModel author = await _service.GetById(Id);
+            AuthorModel author = await _service.GetByIdAsync(Id);
 
             return author;
         }
 
         [HttpPost("Create")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<Author> Create([FromBody]AuthorModel newAuthor)
+        public async Task<Author> CreateAsync([FromBody]AuthorModel newAuthor)
         {
-            Author model = await _service.Create(newAuthor);
+            Author model = await _service.CreateAsync(newAuthor);
 
             return model;
         }
@@ -57,9 +57,9 @@ namespace App.Controllers
 
         [HttpPost("Delete")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<BaseResponseModel> Delete([FromBody]AuthorModel newAuthor)
+        public async Task<BaseResponseModel> DeleteAsync([FromBody]AuthorModel newAuthor)
         {
-            BaseResponseModel report = await _service.Delete(newAuthor.Id);
+            BaseResponseModel report = await _service.DeleteAsync(newAuthor.Id);
 
             return report;
         }

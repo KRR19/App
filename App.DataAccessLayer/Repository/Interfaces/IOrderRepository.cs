@@ -8,8 +8,8 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IOrderRepository : IBaseRepository<Order>
     {
-        public Task<Order> GetById(Guid id);
+        public Task<Order> GetByIdAsync(Guid id);
         public List<Order> GetAll();
-        public Task<bool> Delete(Order item);
+        public Task<bool> DeleteAsync(Order item);
     }
 }

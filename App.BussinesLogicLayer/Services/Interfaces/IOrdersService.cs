@@ -8,9 +8,9 @@ namespace App.BussinesLogicLayer.Services.Interfaces
 {
     public interface IOrdersService
     {
-        public Task<BaseResponseModel> Create(OrderModel orderModel);
+        public Task<BaseResponseModel> CreateAsync(OrderModel orderModel);
         public List<Order> GetAll();
-        public Task<BaseResponseModel> Update(OrderModel orderModel);
-        public Task<BaseResponseModel> Delete(Guid id);
+        public Task<BaseResponseModel> UpdateAsync(OrderModel orderModel);
+        public Task<BaseResponseModel> DeleteAsync(Guid id);
     }
 }

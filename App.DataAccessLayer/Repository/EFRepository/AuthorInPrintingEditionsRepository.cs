@@ -38,7 +38,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return authorInPrintingEditions;
         }
 
-        public async Task<AuthorInPrintingEdition> Create(AuthorInPrintingEdition item)
+        public async Task<AuthorInPrintingEdition> CreateAsync(AuthorInPrintingEdition item)
         {
             await _context.AuthorInPrintingEditions.AddAsync(item);
             await _context.SaveChangesAsync();
@@ -46,7 +46,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async Task<AuthorInPrintingEdition> Update(AuthorInPrintingEdition item)
+        public async Task<AuthorInPrintingEdition> UpdateAsync(AuthorInPrintingEdition item)
         {
             _context.AuthorInPrintingEditions.Update(item);
             await _context.SaveChangesAsync();

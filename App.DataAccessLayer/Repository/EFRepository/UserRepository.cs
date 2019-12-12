@@ -26,13 +26,13 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return users;
         }
 
-        public async Task<User> Read(Guid Id)
+        public async Task<User> ReadAsync(Guid Id)
         {
             User user = await _userManager.FindByIdAsync(Id.ToString());
             return user;
         }
 
-        public async Task<User> Create(User item)
+        public async Task<User> CreateAsync(User item)
         {
             await _context.Users.AddAsync(item);
             await _context.SaveChangesAsync();
@@ -40,7 +40,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async Task<User> Update(User item)
+        public async Task<User> UpdateAsync(User item)
         {
             _context.Users.Update(item);
             await _context.SaveChangesAsync();

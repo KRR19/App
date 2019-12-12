@@ -21,52 +21,52 @@ namespace App.Controllers
         }
 
         [HttpGet("ConfirmEmail")]
-        public async Task<RedirectResult> ConfirmEmail(string email, string code, string url)
+        public async Task<RedirectResult> ConfirmEmailAsync(string email, string code, string url)
         {
             ResetPasswordModel model = new ResetPasswordModel();
             model.Email = email;
             model.Code = code;
-            await _accountService.ConfirmEmail(model);
+            await _accountService.ConfirmEmailAsync(model);
 
             return Redirect($"http://{url}");
         }
 
         [HttpGet("CreateRole")]
-        public async Task<IdentityResult> CreateRole([FromQuery]string role)
+        public async Task<IdentityResult> CreateRoleAsync([FromQuery]string role)
         {
-            IdentityResult result = await _accountService.CreateRole(role);
+            IdentityResult result = await _accountService.CreateRoleAsync(role);
 
             return result;
         }
 
         [HttpPost("Register")]
-        public async Task<BaseResponseModel> Register([FromBody] SingUpModel model)
+        public async Task<BaseResponseModel> RegisterAsync([FromBody] SingUpModel model)
         {
-            BaseResponseModel result = await _accountService.Register(model);
+            BaseResponseModel result = await _accountService.RegisterAsync(model);
 
             return result;
         }
 
         [HttpPost("ForgotPassword")]
-        public async Task<BaseResponseModel> ForgotPassword([FromBody] ResetPasswordModel model)
+        public async Task<BaseResponseModel> ForgotPasswordAsync([FromBody] ResetPasswordModel model)
         {
-            BaseResponseModel result = await _accountService.ForgotPassword(model);
+            BaseResponseModel result = await _accountService.ForgotPasswordAsync(model);
 
             return result;
         }
 
         [HttpGet("ResetPassword")]
-        public async Task<RedirectResult> ResetPassword([FromQuery] ResetPasswordModel model)
+        public async Task<RedirectResult> ResetPasswordAsync([FromQuery] ResetPasswordModel model)
         {
-            await _accountService.ResetPassword(model);
+            await _accountService.ResetPasswordAsync(model);
 
             return Redirect($"http://{model.Url}");
         }
 
         [HttpPost("SingIn")]
-        public async Task<LogInResponseModel> SingIn([FromBody] SingInModel model)
+        public async Task<LogInResponseModel> SingInAsync([FromBody] SingInModel model)
         {
-            LogInResponseModel logInResponse = await _accountService.Singin(model);
+            LogInResponseModel logInResponse = await _accountService.SingInAsync(model);
 
             return logInResponse;
         }

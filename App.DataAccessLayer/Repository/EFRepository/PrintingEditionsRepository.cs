@@ -17,7 +17,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context = context;
         }
 
-        public async Task<PrintingEdition> GetById(Guid id)
+        public async Task<PrintingEdition> GetByIdAsync(Guid id)
         {
             PrintingEdition printingEdition = await _context.PrintingEditions.FindAsync(id);
 
@@ -39,7 +39,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
         }
 
 
-        public async Task<PrintingEdition> Create(PrintingEdition item)
+        public async Task<PrintingEdition> CreateAsync(PrintingEdition item)
         {
             await _context.PrintingEditions.AddAsync(item);
             await _context.SaveChangesAsync();
@@ -47,14 +47,14 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async Task<PrintingEdition> Update(PrintingEdition item)
+        public async Task<PrintingEdition> UpdateAsync(PrintingEdition item)
         {
             _context.PrintingEditions.Update(item);
             await _context.SaveChangesAsync();
 
             return item;
         }
-        public async Task<string> Delete(PrintingEdition item)
+        public async Task<string> DeleteAsync(PrintingEdition item)
         {
             string result;
             _context.PrintingEditions.Update(item);

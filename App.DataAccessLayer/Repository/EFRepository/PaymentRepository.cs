@@ -23,7 +23,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
 
             return payment;
         }
-        public async Task<Payment> GetById(Guid id)
+        public async Task<Payment> GetByIdAsync(Guid id)
         {
             Payment payment = await _context.Payments.FindAsync(id);
 
@@ -36,7 +36,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return payment;
         }
 
-        public async Task<Payment> Create(Payment payment)
+        public async Task<Payment> CreateAsync(Payment payment)
         {
             EntityEntry<Payment> createdPayment = await _context.Payments.AddAsync(payment);
             await _context.SaveChangesAsync();

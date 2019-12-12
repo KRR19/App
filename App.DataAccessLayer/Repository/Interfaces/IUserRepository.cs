@@ -7,7 +7,7 @@ namespace App.DataAccessLayer.Repository.Interfaces
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        public Task<User> Read(Guid Id);
+        public Task<User> ReadAsync(Guid Id);
         public Task<bool> Delete(User item);
     }
 }

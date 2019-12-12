@@ -27,23 +27,23 @@ namespace App.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<BaseResponseModel> Create([FromBody]OrderModel orderModel)
+        public async Task<BaseResponseModel> CreateAsync([FromBody]OrderModel orderModel)
         {
-            BaseResponseModel report = await _service.Create(orderModel);
+            BaseResponseModel report = await _service.CreateAsync(orderModel);
             return report;
         }
 
         [HttpPost("Update")]
-        public async Task<BaseResponseModel> Update([FromBody]OrderModel orderModel)
+        public async Task<BaseResponseModel> UpdateAsync([FromBody]OrderModel orderModel)
         {
-            BaseResponseModel report = await _service.Update(orderModel);
+            BaseResponseModel report = await _service.UpdateAsync(orderModel);
             return report;
         }
 
         [HttpPost("Delete")]
-        public async Task<BaseResponseModel> Delete([FromBody]Guid id)
+        public async Task<BaseResponseModel> DeleteAsync([FromBody]Guid id)
         {
-            BaseResponseModel report = await _service.Delete(id);
+            BaseResponseModel report = await _service.DeleteAsync(id);
             return report;
         }
     }

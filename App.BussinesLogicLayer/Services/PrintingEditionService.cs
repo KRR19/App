@@ -39,7 +39,7 @@ namespace App.BussinesLogicLayer.Services
             _coverRepository = coverRepository;
         }
 
-        public async Task<List<PrintingEditionModel>> GetAll()
+        public async Task<List<PrintingEditionModel>> GetAllAsync()
         {
             List<PrintingEdition> printingEditions = _printingEditionsRepository.GetAll();
             List<PrintingEditionModel> printingEditionModels = new List<PrintingEditionModel>();
@@ -57,7 +57,7 @@ namespace App.BussinesLogicLayer.Services
                 printingEditionModel.AuthorName = new List<string>();
                 foreach (var authorId in printingEditionModel.AuthorId)
                 {                    
-                    Author author = await _authorRepository.GetById(authorId);
+                    Author author = await _authorRepository.GetByIdAsync(authorId);
                     string s = author.Name;
                     printingEditionModel.AuthorName.Add(s);
                 }
@@ -67,10 +67,10 @@ namespace App.BussinesLogicLayer.Services
             return printingEditionModels;
         }
 
-        public async Task<PrintingEditionModel> GetById(Guid id)
+        public async Task<PrintingEditionModel> GetByIdAsync(Guid id)
         {
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
-            PrintingEdition printingEdition = await printingEditionsRepository.GetById(id);
+            PrintingEdition printingEdition = await printingEditionsRepository.GetByIdAsync(id);
             Cover cover = _coverRepository.GetById(printingEdition.Id);
 
             PrintingEditionModel printingEditionModel = new PrintingEditionModel();
@@ -89,9 +89,9 @@ namespace App.BussinesLogicLayer.Services
             return printingEditionModel;
         }
 
-        public async Task<List<PrintingEditionModel>> Filter(FilterModel filterModel)
+        public async Task<List<PrintingEditionModel>> FilterAsync(FilterModel filterModel)
         {
-            List<PrintingEditionModel> printingEditionModels = await GetAll();
+            List<PrintingEditionModel> printingEditionModels = await GetAllAsync();
             List<PrintingEditionModel> FiltredPrintingEdition = new List<PrintingEditionModel>();
             printingEditionModels = printingEditionModels.Where(w => ((w.Price <= filterModel.maxPrice) && (w.Price >= filterModel.minPrice))).ToList();
             FiltredPrintingEdition = printingEditionModels;
@@ -104,7 +104,7 @@ namespace App.BussinesLogicLayer.Services
             return FiltredPrintingEdition;
         }
 
-        public async Task<BaseResponseModel> Create(PrintingEditionModel newPrintingEdition)
+        public async Task<BaseResponseModel> CreateAsync(PrintingEditionModel newPrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(newPrintingEdition);
             PrintingEdition printingEdition = new PrintingEdition();
@@ -139,17 +139,17 @@ namespace App.BussinesLogicLayer.Services
 
             printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
 
-            await _printingEditionsRepository.Create(printingEdition);
+            await _printingEditionsRepository.CreateAsync(printingEdition);
 
             report.Message.Add(_publicationAddedMsg);
             return report;
         }
 
-        public async Task<BaseResponseModel> Update(PrintingEditionModel UpdatePrintingEdition)
+        public async Task<BaseResponseModel> UpdateAsync(PrintingEditionModel UpdatePrintingEdition)
         {
             BaseResponseModel report = ValidationPrintingEdition(UpdatePrintingEdition);
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
-            PrintingEdition printingEdition = await printingEditionsRepository.GetById(UpdatePrintingEdition.Id);
+            PrintingEdition printingEdition = await printingEditionsRepository.GetByIdAsync(UpdatePrintingEdition.Id);
             printingEdition.AuthorInPrintingEditions = _authorInPrintingEditionsRepository.GetById(UpdatePrintingEdition.Id);
             printingEdition.Cover = _coverRepository.GetById(UpdatePrintingEdition.Id);
 
@@ -174,7 +174,7 @@ namespace App.BussinesLogicLayer.Services
             foreach (Guid authorId in UpdatePrintingEdition.AuthorId)
             {
                 AuthorInPrintingEdition authorInPrintingEdition = new AuthorInPrintingEdition();
-                authorInPrintingEdition.Author = await _authorRepository.GetById(authorId);
+                authorInPrintingEdition.Author = await _authorRepository.GetByIdAsync(authorId);
 
                 authorInPrintingEditions.Add(authorInPrintingEdition);
             }
@@ -183,11 +183,11 @@ namespace App.BussinesLogicLayer.Services
 
             printingEdition.AuthorInPrintingEditions = authorInPrintingEditions;
 
-            await printingEditionsRepository.Update(printingEdition);
+            await printingEditionsRepository.UpdateAsync(printingEdition);
             return report;
         }
 
-        public async Task<BaseResponseModel> Delete(Guid id)
+        public async Task<BaseResponseModel> DeleteAsync(Guid id)
         {
             BaseResponseModel report = new BaseResponseModel();
             IPrintingEditionsRepository printingEditionsRepository = new PrintingEditionsRepository(_context);
@@ -199,7 +199,7 @@ namespace App.BussinesLogicLayer.Services
                 return report;
             }
             printingEdition.IsRemoved = true;
-            report.Message.Add(await printingEditionsRepository.Delete(printingEdition));
+            report.Message.Add(await printingEditionsRepository.DeleteAsync(printingEdition));
 
             return report;
         }

@@ -50,7 +50,7 @@ namespace App.BussinesLogicLayer.Services
             _roleManager = roleManager;
         }
 
-        public async Task<LogInResponseModel> Singin(SingInModel model)
+        public async Task<LogInResponseModel> SingInAsync(SingInModel model)
         {
             LogInResponseModel logInResponse = new LogInResponseModel();
             List<Claim> accessClaims = new List<Claim>();
@@ -105,7 +105,7 @@ namespace App.BussinesLogicLayer.Services
             return logInResponse;
         }
 
-        public async Task<BaseResponseModel> Register(SingUpModel model)
+        public async Task<BaseResponseModel> RegisterAsync(SingUpModel model)
         {
             User user = new User();
             EmailHelper email = new EmailHelper(_configuration);
@@ -140,7 +140,7 @@ namespace App.BussinesLogicLayer.Services
             return responseModel;
         }
 
-        public async Task<BaseResponseModel> ForgotPassword(ResetPasswordModel model)
+        public async Task<BaseResponseModel> ForgotPasswordAsync(ResetPasswordModel model)
         {
             User user = await _userManager.FindByEmailAsync(model.Email);
             model.Code = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -156,7 +156,7 @@ namespace App.BussinesLogicLayer.Services
             return response;
         }
 
-        public async Task<BaseResponseModel> ResetPassword(ResetPasswordModel model)
+        public async Task<BaseResponseModel> ResetPasswordAsync(ResetPasswordModel model)
         {
             BaseResponseModel report = new BaseResponseModel();
 
@@ -198,7 +198,7 @@ namespace App.BussinesLogicLayer.Services
             return callbackUrl;
         }
 
-        public async Task<IdentityResult> CreateRole(string name)
+        public async Task<IdentityResult> CreateRoleAsync(string name)
         {
             IdentityRole role = new IdentityRole(name);
             IdentityResult result = await _roleManager.CreateAsync(role);
@@ -206,7 +206,7 @@ namespace App.BussinesLogicLayer.Services
             return result;
         }
 
-        public async Task<BaseResponseModel> ConfirmEmail(ResetPasswordModel model)
+        public async Task<BaseResponseModel> ConfirmEmailAsync(ResetPasswordModel model)
         {
             BaseResponseModel response = new BaseResponseModel();
             var user = await _userManager.FindByEmailAsync(model.Email);

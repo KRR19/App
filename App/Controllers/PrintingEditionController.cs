@@ -22,51 +22,51 @@ namespace App.Controllers
             _service = service;
         }
         [HttpGet("Get/{Id}")]
-        public async Task<PrintingEditionModel> Get(Guid Id)
+        public async Task<PrintingEditionModel> GetAsync(Guid Id)
         {
-            PrintingEditionModel printingEdition = await _service.GetById(Id);
+            PrintingEditionModel printingEdition = await _service.GetByIdAsync(Id);
 
             return printingEdition;
         }
 
         [HttpGet("GetAll")]
-        public async Task<List<PrintingEditionModel>> GetAll()
+        public async Task<List<PrintingEditionModel>> GetAllAsync()
         {
-            List<PrintingEditionModel> printingEdition = await _service.GetAll();
+            List<PrintingEditionModel> printingEdition = await _service.GetAllAsync();
 
             return printingEdition;
         }
 
         [HttpPost("Filter")]
-        public async Task<List<PrintingEditionModel>> Filter([FromBody] FilterModel filterModel)
+        public async Task<List<PrintingEditionModel>> FilterAsync([FromBody] FilterModel filterModel)
         {
-            List<PrintingEditionModel> PrintingEditionModels = await _service.Filter(filterModel);
+            List<PrintingEditionModel> PrintingEditionModels = await _service.FilterAsync(filterModel);
             return PrintingEditionModels;
         }
 
         [HttpPost("Post")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<BaseResponseModel> Post([FromBody]PrintingEditionModel printingEdition)
+        public async Task<BaseResponseModel> PostAsync([FromBody]PrintingEditionModel printingEdition)
         {
-            BaseResponseModel report = await _service.Create(printingEdition);
+            BaseResponseModel report = await _service.CreateAsync(printingEdition);
 
             return report;
         }
 
         [HttpPost("Update")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<BaseResponseModel> Update([FromBody]PrintingEditionModel newPrintingEdition)
+        public async Task<BaseResponseModel> UpdateAsync([FromBody]PrintingEditionModel newPrintingEdition)
         {
-            BaseResponseModel report = await _service.Update(newPrintingEdition);
+            BaseResponseModel report = await _service.UpdateAsync(newPrintingEdition);
 
             return report;
         }
 
         [HttpPost("Delete")]
         [Authorize(Roles = "ADMIN")]
-        public async Task<BaseResponseModel> Delete([FromBody]PrintingEditionModel printingEdition)
+        public async Task<BaseResponseModel> DeleteAsync([FromBody]PrintingEditionModel printingEdition)
         {
-            BaseResponseModel report = await _service.Delete(printingEdition.Id);
+            BaseResponseModel report = await _service.DeleteAsync(printingEdition.Id);
 
             return report;
         }

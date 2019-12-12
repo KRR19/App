@@ -15,21 +15,21 @@ namespace App.DataAccessLayer.Repository.EFRepository
             _context = context;
         }
 
-        public async Task<OrderItem> GetById(Guid Id)
+        public async Task<OrderItem> GetByIdAsync(Guid Id)
         {
             OrderItem orderItem = await _context.OrderItems.FindAsync(Id);
 
             return orderItem;
         }
 
-        public async Task<OrderItem> Create(OrderItem item)
+        public async Task<OrderItem> CreateAsync(OrderItem item)
         {
             await _context.OrderItems.AddAsync(item);
             await _context.SaveChangesAsync();
 
             return item;
         }
-        public async Task<List<OrderItem>> Create(List<OrderItem> item)
+        public async Task<List<OrderItem>> CreateAsync(List<OrderItem> item)
         {
             await _context.OrderItems.AddRangeAsync(item);
             await _context.SaveChangesAsync();
@@ -37,7 +37,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async Task<OrderItem> Update(OrderItem item)
+        public async Task<OrderItem> UpdateAsync(OrderItem item)
         {
             _context.OrderItems.Update(item);
             await _context.SaveChangesAsync();
@@ -45,7 +45,7 @@ namespace App.DataAccessLayer.Repository.EFRepository
             return item;
         }
 
-        public async Task<bool> Delete(OrderItem item)
+        public async Task<bool> DeleteAsync(OrderItem item)
         {
             bool result;
             _context.OrderItems.Update(item);
