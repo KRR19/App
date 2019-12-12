@@ -1,10 +1,10 @@
-﻿using App.BussinesLogicLayer.Models.Orders;
+﻿using App.BussinesLogic.Services.Interfaces;
+using App.BussinesLogicLayer.Models.Orders;
 using App.BussinesLogicLayer.Models.Payments;
 using App.BussinesLogicLayer.Services.Interfaces;
 using App.DataAccessLayer.Entities;
 using App.DataAccessLayer.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +19,19 @@ namespace App.BussinesLogicLayer.Services
         private readonly IOrderRepository _orderRepository;
         private readonly IPrintingEditionsRepository _printingEditionsRepository;
         private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IPaymentService _paymentService;
         private readonly UserManager<User> _userManager;
 
         private readonly string _successDeletMsg = "You have successfully deleted";
 
         public OrdersService(IOrderRepository orderRepository, IPrintingEditionsRepository printingEditionsRepository,
-                             IOrderItemRepository orderItemRepository, UserManager<User> userManager)
+                             IOrderItemRepository orderItemRepository, UserManager<User> userManager, IPaymentService paymentService)
         {
             _orderRepository = orderRepository;
             _printingEditionsRepository = printingEditionsRepository;
             _orderItemRepository = orderItemRepository;
             _userManager = userManager;
+            _paymentService = paymentService;
         }
 
         public List<Order> GetAll()
@@ -53,7 +55,7 @@ namespace App.BussinesLogicLayer.Services
             paymentModel.Email = orderModel.PaymentEmail;
             paymentModel.Source = orderModel.PaymentSource;
 
-            order.Payment.TransactionId = Charge(paymentModel);
+            order.Payment.TransactionId = _paymentService.Pay(paymentModel);
             order.Payment.CreationDate = DateTime.Now;
 
             order.CreationDate = order.Date = DateTime.Now;
@@ -118,29 +120,6 @@ namespace App.BussinesLogicLayer.Services
             }
 
             return report;
-        }
-
-        public string Charge(PaymentModel model)
-        {
-            var customerService = new CustomerService();
-            var chargeService = new ChargeService();
-
-            var customer = customerService.Create(new CustomerCreateOptions
-            {
-                Email = model.Email,
-                Source = model.Source
-            });
-
-            var charge = chargeService.Create(new ChargeCreateOptions
-            {
-                Amount = Convert.ToInt64(model.Amount),
-                Description = model.Description,
-                Currency = model.Currency.ToString(),
-                Customer = customer.Id
-
-            });
-
-            return charge.BalanceTransactionId;
         }
     }
 }

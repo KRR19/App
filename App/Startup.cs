@@ -1,3 +1,5 @@
+using App.BussinesLogic.Services;
+using App.BussinesLogic.Services.Interfaces;
 using App.BussinesLogicLayer.Middleware;
 using App.BussinesLogicLayer.Models.Payments;
 using App.BussinesLogicLayer.Services;
@@ -83,6 +85,7 @@ namespace App
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IActionContextAccessor, ActionContextAccessor>();
 
+            services.AddTransient<IPaymentService, PaymentService>();
             services.Configure<PaymentModel>(Configuration.GetSection("Stripe"));
 
             services.AddSwaggerGen(c =>
